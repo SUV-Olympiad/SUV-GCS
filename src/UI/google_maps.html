@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCgkD5SYk07THvTUv1ZqCg6nzIjy8u0YaA&sensor=false">
+    </script>
+    <script type="text/javascript">
+      var map;
+      var markers = [];
+      var rectangle;
+      var polygon;
+      var infoWindow;
+      var curPosition = [36.37395, 127.352818];
+      var droneTargetCircles = [];
+      var droneTargetPositions = []; //[{lat: 36.375, lng: 127.352818}, {lat: 36.376, lng: 127.352818}];
+      var droneCurCircles = [];
+      var droneCurPositions = [];
+
+      function initialize() {
+        var myOptions = {
+          center: new google.maps.LatLng(36.37395, 127.352818),
+          zoom: 16,
+          mapTypeId: google.maps.MapTypeId.SATELLITE,
+          disableDefaultUI: true,
+          panControl: true
+        };
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+        map.addListener('mousemove', function(e) {
+          window.curPosition = getPosition(e);
+        })
+
+        map.addListener('mousedown', function(e) {
+          window.curPosition = getPosition(e);
+        })
+
+        map.addListener('mouseup', function(e) {
+          window.curPosition = getPosition(e);
+        })
+      }
+
+      function getPosition(event) {
+        return [event.latLng.lat(), event.latLng.lng()];
+      }
+
+      function getCurPosition() {
+        return curPosition;
+      }
+
+      function getCurMapBounds() {
+        var ne = map.getBounds().getNorthEast();
+        var sw = map.getBounds().getSouthWest();
+        // Nost East South West
+        return [ne.lat(), ne.lng(), sw.lat(), sw.lng()];
+      }
+
+      function getCurRect() {
+        var ne = rectangle.getBounds().getNorthEast();
+        var sw = rectangle.getBounds().getSouthWest();
+        // Nost East South West
+        return [ne.lat(), ne.lng(), sw.lat(), sw.lng()];
+      }
+
+      function getCurPolygon() {
+        var positions = []
+        for (var i in polygon.getPath().getArray()) {
+          positions.push(polygon.getPath().getAt(i).lat());
+          positions.push(polygon.getPath().getAt(i).lng());
+        };
+        return positions;
+      }
+
+      function drawTargetDrones() {
+        for (var i in droneTargetCircles) {
+          droneTargetCircles[i].setMap(null);
+        }
+        droneTargetCircles = [];
+
+        for (var i in droneTargetPositions) {
+          var droneCircle = new google.maps.Circle({
+            strokeColor: '#0000FF',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#0000FF',
+            fillOpacity: 0.35,
+            map: map,
+            center: droneTargetPositions[i],
+            radius: 2
+          });
+          droneTargetCircles.push(droneTargetCircle);
+        }
+      }
+
+      function drawCurDrones() {
+        for (var i in droneCurCircles) {
+          droneCurCircles[i].setMap(null);
+        }
+        droneCurCircles = [];
+
+        for (var i in droneCurPositions) {
+          var droneCurCircle = new google.maps.Circle({
+            strokeColor: '#00FF00',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#00FF00',
+            fillOpacity: 0.35,
+            map: map,
+            center: droneCurPositions[i],
+            radius: 1
+          });
+          droneCurCircles.push(droneCurCircle);
+        }
+      }
+
+      function showNewRect(event) {
+        var ne = rectangle.getBounds().getNorthEast();
+        var sw = rectangle.getBounds().getSouthWest();
+
+        var contentString = '<b>Rectangle moved.</b><br>' +
+            'New north-east corner: ' + ne.lat() + ', ' + ne.lng() + '<br>' +
+            'New south-west corner: ' + sw.lat() + ', ' + sw.lng();
+
+        // Set the info window's content and position.
+        infoWindow.setContent(contentString);
+        infoWindow.setPosition(ne);
+
+        infoWindow.open(map);
+      }
+    </script>
+  </head>
+  <body onload="initialize()">
+    <div id="map_canvas" style="width:100%; height:100%"></div>
+  </body>
+</html>
+

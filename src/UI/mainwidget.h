@@ -1,0 +1,119 @@
+#ifndef MAINWIDGET_H
+#define MAINWIDGET_H
+
+#include "qcustomplot.h"
+#include "ardronegraphicsitem.h"
+#include "paramdialog.h"
+#include "calibdialog.h"
+#include "monitoringdialog.h"
+#include "emscenariodialog.h"
+#include "controldialog.h"
+#include "qhac_mapview.h"
+
+#include <QWidget>
+#include <QGraphicsScene>
+#include <QTimer>
+#include <QThread>
+#include <QLabel>
+#include <QLabel>
+#include <QImage>
+#include "opencv2/core/core_c.h"
+#include "opencv2/imgproc/imgproc_c.h"
+#include "opencv2/photo/photo.hpp"
+#include <QWebView>
+#include <QWebFrame>
+#include <QWebElement>
+#include <QRubberBand>
+#include <QApplication>
+#include <QGeoCoordinate>
+#include <QMutex>
+
+#include <rclcpp/rclcpp.hpp>
+
+
+namespace Ui {
+class MainWidget;
+}
+
+class CManager;
+class CController;
+
+static const QGeoCoordinate   refPos(REF_LAT, REF_LON, REF_ALT);
+
+class MainWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit MainWidget(QWidget *parent = 0);
+    virtual ~MainWidget();
+
+public:
+    bool                    processImage;
+    QLabel                  *mImageLabel, *mInformationLabel, *mMapSelectionLabel;
+    QGeoCoordinate getNewPositionDiff(QGeoCoordinate oldPosition, double x, double y, double z);
+    static QVector3D LLH2NED(QGeoCoordinate pos);
+    static QGeoCoordinate NED2LLH(QVector3D pos);
+
+protected:
+    bool event(QEvent * event);
+    void keyEvent(QKeyEvent * event);
+
+private:    
+    void initManager();
+    void subscribeROS2Topics();
+    void procInitTreeWidget();
+    void procInitMainPanelWidget();    
+    void updateTreeData();	
+    void updateDronesInMap();
+    void updateStatusText();
+    void updateNotifier();
+
+private:    // ROS2 Topic
+    rclcpp::Node::SharedPtr _ros2node;
+
+private Q_SLOTS:
+    void updateUI();
+    void runScenario();
+    void stopScenario();
+    void loadConfigFile();
+    void checkFlight();
+    void runParamDialog();
+    void runCalibration();
+    void runMonitoringDialog();
+    void onAlarm(bool aCheckable);    
+    void onControl();
+    void onScenarioMode(bool aMode);
+    void on_actionsendSC_triggered();
+
+private slots:
+
+
+private:
+    Ui::MainWidget*         ui;
+    QLabel*                 mRemaingTimeLabel;
+
+    CParamDialog*           mParamDialog;
+    CCalibDialog*           mCalibDialog;
+    CMonitoringDialog*      mMonitorDialog;
+    CEmScenarioDialog*      mEmScenarioDialog;
+    CControlDialog*         mControlDialog;
+    QGraphicsScene*         mMainPanelScene;
+    QTimer                  mTimer;
+    CManager*               mManager;
+    QThread                 mManagerThread;
+    QMap<int, QString>      mPrevStatusText;
+    bool                    mReadyAlarm;
+
+    qhac_mapview            *mMapView;
+    QRubberBand             *mRubberBand;
+    bool                    mRubberBandDrawing, mPolygonDrawing;
+    QPoint                  mWindowPos;
+    QGeoCoordinate          _base_latlng = QGeoCoordinate(36.374108, 127.352697, 82);
+
+    float                   HEADING = 270;
+    float                   TARGET_Z = 10;
+    float                   DEPLOY_MINIMUM_DIST = 5.0;      // in meter
+};
+
+#endif // MAINWIDGET_H

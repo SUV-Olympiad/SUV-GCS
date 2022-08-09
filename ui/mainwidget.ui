@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWidget</class>
+ <widget class="QWidget" name="MainWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1026</width>
+    <height>797</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>QHAC3</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>:/icon/Src/UI/icon/title.png</normaloff>:/icon/Src/UI/icon/title.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1010</width>
+     <height>779</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>16777215</height>
+    </size>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetMinimumSize</enum>
+    </property>
+    <property name="topMargin">
+     <number>100</number>
+    </property>
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="handleWidth">
+       <number>6</number>
+      </property>
+      <widget class="QSplitter" name="splitter">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="handleWidth">
+        <number>6</number>
+       </property>
+       <widget class="QTreeWidget" name="treeWidget">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>500</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="indentation">
+         <number>20</number>
+        </property>
+        <property name="columnCount">
+         <number>1</number>
+        </property>
+        <attribute name="headerDefaultSectionSize">
+         <number>100</number>
+        </attribute>
+        <column>
+         <property name="text">
+          <string notr="true">1</string>
+         </property>
+        </column>
+       </widget>
+       <widget class="QWidget" name="gridLayoutWidget">
+        <layout class="QGridLayout" name="gridLayout">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetNoConstraint</enum>
+         </property>
+         <property name="horizontalSpacing">
+          <number>1</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>6</number>
+         </property>
+         <item row="0" column="1">
+          <widget class="qhac_mapview" name="mapView" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>500</width>
+             <height>500</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <kerning>true</kerning>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QListWidget" name="statusListWidget">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>100</height>
+        </size>
+       </property>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1026</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuOption">
+    <property name="title">
+     <string>Option</string>
+    </property>
+    <addaction name="actionParameter"/>
+    <addaction name="actionCalibration"/>
+   </widget>
+   <addaction name="menuOption"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>20</y>
+     <width>787</width>
+     <height>75</height>
+    </rect>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>60</width>
+     <height>60</height>
+    </size>
+   </property>
+   <addaction name="actionLoadConf"/>
+   <addaction name="actionCheckFlight"/>
+   <addaction name="actionRunScenario"/>
+   <addaction name="actionStopScenario"/>
+   <addaction name="separator"/>
+   <addaction name="separator"/>
+   <addaction name="actionParameter"/>
+   <addaction name="actionCalibration"/>
+   <addaction name="actionAlarm"/>
+   <addaction name="actionGraph"/>
+   <addaction name="actionControl"/>
+   <addaction name="actionMode"/>
+   <addaction name="actionsendSC"/>
+   <addaction name="separator"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>3</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <action name="actionLoadConf">
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icon/src/UI/icon/configure.png</normaloff>:/icon/src/UI/icon/configure.png</iconset>
+   </property>
+   <property name="text">
+    <string>LoadConf</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionRunScenario">
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icon/src/UI/icon/play.png</normaloff>:/icon/src/UI/icon/play.png</iconset>
+   </property>
+   <property name="text">
+    <string>RunScenario</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionCheckFlight">
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icon/src/UI/icon/check.png</normaloff>:/icon/src/UI/icon/check.png</iconset>
+   </property>
+   <property name="text">
+    <string>checkFlight</string>
+   </property>
+  </action>
+  <action name="actionParameter">
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icon/src/UI/icon/parameters.png</normaloff>:/icon/src/UI/icon/parameters.png</iconset>
+   </property>
+   <property name="text">
+    <string>Parameter</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionCalibration">
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icon/src/UI/icon/calibration.png</normaloff>:/icon/src/UI/icon/calibration.png</iconset>
+   </property>
+   <property name="text">
+    <string>Calibration</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionStopScenario">
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icon/src/UI/icon/stop.png</normaloff>:/icon/src/UI/icon/stop.png</iconset>
+   </property>
+   <property name="text">
+    <string>StopScenario</string>
+   </property>
+  </action>
+  <action name="actionAlarm">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icon/src/UI/icon/alarm.png</normaloff>:/icon/src/UI/icon/alarm.png</iconset>
+   </property>
+   <property name="text">
+    <string>Alarm</string>
+   </property>
+   <property name="toolTip">
+    <string>Alarm</string>
+   </property>
+  </action>
+  <action name="actionGraph">
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icon/src/UI/icon/graph.png</normaloff>:/icon/src/UI/icon/graph.png</iconset>
+   </property>
+   <property name="text">
+    <string>graph</string>
+   </property>
+  </action>
+  <action name="actionControl">
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icon/src/UI/icon/controller.png</normaloff>:/icon/src/UI/icon/controller.png</iconset>
+   </property>
+   <property name="text">
+    <string>Control</string>
+   </property>
+   <property name="toolTip">
+    <string>Control</string>
+   </property>
+  </action>
+  <action name="actionMode">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icon/src/UI/icon/scenario_mode.png</normaloff>
+     <normalon>:/icon/src/UI/icon/test.png</normalon>:/icon/src/UI/icon/scenario_mode.png</iconset>
+   </property>
+   <property name="text">
+    <string>actionMode</string>
+   </property>
+  </action>
+  <action name="actionsendSC">
+   <property name="icon">
+    <iconset resource="../icons.qrc">
+     <normaloff>:/icon/src/UI/icon/ftp.png</normaloff>:/icon/src/UI/icon/ftp.png</iconset>
+   </property>
+   <property name="text">
+    <string>sendSC</string>
+   </property>
+   <property name="toolTip">
+    <string>Send SC</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>qhac_mapview</class>
+   <extends>QWidget</extends>
+   <header>qhac_mapview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../icons.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>actionLoadConf</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>loadConfigFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>559</x>
+     <y>361</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRunScenario</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>runScenario()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>559</x>
+     <y>361</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCheckFlight</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>checkFlight()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>547</x>
+     <y>420</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionParameter</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>runParamDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>547</x>
+     <y>471</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCalibration</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>runCalibration()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>547</x>
+     <y>471</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionStopScenario</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>stopScenario()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>547</x>
+     <y>471</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAlarm</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWidget</receiver>
+   <slot>onAlarm(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>547</x>
+     <y>471</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionGraph</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>runMonitoringDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>547</x>
+     <y>471</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionControl</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>onControl()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>699</x>
+     <y>471</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMode</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWidget</receiver>
+   <slot>onScenarioMode(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>699</x>
+     <y>471</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>loadConfigFile()</slot>
+  <slot>runScenario()</slot>
+  <slot>checkFlight()</slot>
+  <slot>takeoff()</slot>
+  <slot>land()</slot>
+  <slot>runParamDialog()</slot>
+  <slot>runCalibration()</slot>
+  <slot>stopScenario()</slot>
+  <slot>onAlarm(bool)</slot>
+  <slot>runMonitoringDialog()</slot>
+  <slot>onControl()</slot>
+  <slot>onScenarioMode(bool)</slot>
+ </slots>
+</ui>

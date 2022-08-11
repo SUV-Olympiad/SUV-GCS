@@ -503,7 +503,17 @@ void MainWidget::keyEvent(QKeyEvent *event)
         }
 	}
         break;
-
+    case Qt::Key_N:
+	{
+        QVector3D target_pos = QVector3D(0, 0, -10);
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            IVehicle* agent = agentsIterator.value();
+            qDebug() << "MISSION_PLAN......";
+            agent->cmd("MISSION_PLAN");
+        }
+	}
     default:
         break;
     };

@@ -28,6 +28,7 @@ public:
     virtual ~CCModelCmdSender();
 
 public:
+    void mission_plan();
     void arm();
     void disarm();
     void lock();

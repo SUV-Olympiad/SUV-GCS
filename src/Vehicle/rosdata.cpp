@@ -57,6 +57,10 @@ void CROSData::initSubscription()
     mVehicleLocalPositionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleLocalPosition>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateVehicleLocalPosition, this, _1));
     topic = QString("/vehicle%1/out/VehicleGlobalPosition").arg(sysid); 
     mVehicleGlobalPositionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleGlobalPosition>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateVehicleGlobalPosition, this, _1));
+    // topic = QString("/vehicle%1/out/Mission").arg(sysid); 
+    // mMissionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::Mission>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMission, this, _1));
+    // topic = QString("/vehicle%1/out/NavigatorMissionItem").arg(sysid); 
+    // mMissionItemSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::NavigatorMissionItem>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionItem, this, _1));
 
     mVehicleCommandAckSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleCommandAck>(topic_prefix + "/vehicle_command_ack", qos, std::bind(&CROSData::updateVehicleCommandAck, this, _1));
     mLogMessageSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::LogMessage>(topic_prefix + "/log_message", qos, std::bind(&CROSData::updateLogMessage, this, _1));
@@ -350,6 +354,18 @@ void CROSData::updateVehicleGlobalPosition(const px4_msgs::msg::VehicleGlobalPos
 {
     mVehicleGlobalPosition = *msg;
 }
+
+// void CROSData::updateMission(const px4_msgs::msg::Mission::SharedPtr msg)
+// {
+//     mMission = *msg;
+//     qDebug() << "updateMission......";
+// }
+
+// void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::SharedPtr msg)
+// {
+//     mMissionItem = *msg;
+//     qDebug() << "updateMissionItem......";
+// }
 
 void CROSData::updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg)
 {

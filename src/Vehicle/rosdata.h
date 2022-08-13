@@ -12,6 +12,8 @@
 #include <px4_msgs/msg/vehicle_status.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
 #include <px4_msgs/msg/vehicle_global_position.hpp>
+#include <px4_msgs/msg/mission.hpp>
+#include <px4_msgs/msg/navigator_mission_item.hpp>
 #include <px4_msgs/msg/vehicle_command.hpp>
 #include <px4_msgs/msg/vehicle_command_ack.hpp>
 #include <px4_msgs/msg/uavcan_parameter_request.hpp>
@@ -155,6 +157,8 @@ private:
     px4_msgs::msg::VehicleStatus                mVehicleStatus;
     px4_msgs::msg::VehicleLocalPosition         mVehicleLocalPosition;
     px4_msgs::msg::VehicleGlobalPosition        mVehicleGlobalPosition;
+    // px4_msgs::msg::Mission                      mMission;
+    // px4_msgs::msg::Navigator_mission_item       mMissionItem;
     px4_msgs::msg::VehicleCommandAck            mVehicleCommandAck;
     bool                                        mGstRunning;
 
@@ -164,7 +168,8 @@ private:
     rclcpp::Subscription<px4_msgs::msg::VehicleStatus>::SharedPtr mVehicleStatusSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr mVehicleLocalPositionSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleGlobalPosition>::SharedPtr mVehicleGlobalPositionSub_;
-
+    rclcpp::Subscription<px4_msgs::msg::Mission>::SharedPtr mMissionSub_;
+    rclcpp::Subscription<px4_msgs::msg::Navigator_mission_item>::SharedPtr mMissionItemSub_;
 
     rclcpp::Subscription<px4_msgs::msg::VehicleCommandAck>::SharedPtr mVehicleCommandAckSub_;
     rclcpp::Subscription<px4_msgs::msg::LogMessage>::SharedPtr mLogMessageSub_;

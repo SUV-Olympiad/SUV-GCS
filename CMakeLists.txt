@@ -34,7 +34,6 @@ get_default_rmw_implementation(rmw_implementation)
 find_package("${rmw_implementation}" REQUIRED)
 
 find_package(px4_msgs REQUIRED)
-find_package(agent_msg REQUIRED)
 
 find_package(PythonInterp 3 REQUIRED)
 find_package(OpenCV REQUIRED)
@@ -173,7 +172,6 @@ ament_target_dependencies(suvgcs
     "rclcpp"
     "px4_msgs"
     "std_msgs"
-    "agent_msg"
     "OpenCV")
 target_link_libraries(suvgcs)
 

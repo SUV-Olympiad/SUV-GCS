@@ -19,9 +19,7 @@
 #include <px4_msgs/msg/log_message.hpp>
 
 #include <px4_msgs/msg/log_message.hpp>
-#include <agent_msg/srv/command.hpp>
-#include <agent_msg/msg/agent_status.hpp>
-#include <agent_msg/msg/osmo2_status.hpp>
+
 #include <spinworker.h>
 
 class IVehicle;

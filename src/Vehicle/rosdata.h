@@ -7,12 +7,13 @@
 #include <QStringList>
 #include <QMap>
 #include <QVariant>
+#include <QVector>
 
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/vehicle_status.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
 #include <px4_msgs/msg/vehicle_global_position.hpp>
-#include <px4_msgs/msg/mission.hpp>
+#include <px4_msgs/msg/mission_result.hpp>
 #include <px4_msgs/msg/navigator_mission_item.hpp>
 #include <px4_msgs/msg/vehicle_command.hpp>
 #include <px4_msgs/msg/vehicle_command_ack.hpp>
@@ -81,6 +82,28 @@ public:
     virtual ~CROSData();
 
 public:
+    class MissionItem
+    {
+    public:
+        quint32     instance_count;
+        quint16     seq_cur;
+        float       lat;
+        float       lng;
+        float       alt;
+        float       yaw;
+    public:
+        MissionItem(quint32 instance, quint16 seq_cur, float lat, float lng, float alt, float yaw)
+        {
+            this->instance_count = instance;
+            this->seq_cur = seq_cur;
+            this->lat = lat;
+            this->lng = lng;
+            this->alt = alt;
+            this->yaw = yaw;
+        }
+    };
+
+public:
     void initSubscription();
 
 public Q_SLOTS:
@@ -114,7 +137,8 @@ public:
     void updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg);
     void updateVehicleLocalPosition(const px4_msgs::msg::VehicleLocalPosition::SharedPtr msg);
     void updateVehicleGlobalPosition(const px4_msgs::msg::VehicleGlobalPosition::SharedPtr msg);
-
+    void updateMissionResult(const px4_msgs::msg::MissionResult::SharedPtr msg);
+    void updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::SharedPtr msg);
 
     // void parameterValueCallback(const px4_msgs::msg::UavcanParameterValue::SharedPtr msg);
     QList<QString> getParamRequested();
@@ -151,12 +175,18 @@ private:
     double                      mTargetLat, mTargetLng, mTargetAlt, mTargetYaw;
     double                      agentBaseAltDiff = 0;
 
+
+    // Total count of mission items
+    qint16                      mMissionItemCount = -1;
+    quint32                     mMissionInstance = -1;
+    QList<MissionItem>          mMission;
+
     QMap< QString, QVariant >           mParams;
     px4_msgs::msg::VehicleStatus                mVehicleStatus;
     px4_msgs::msg::VehicleLocalPosition         mVehicleLocalPosition;
     px4_msgs::msg::VehicleGlobalPosition        mVehicleGlobalPosition;
-    // px4_msgs::msg::Mission                      mMission;
-    // px4_msgs::msg::Navigator_mission_item       mMissionItem;
+    px4_msgs::msg::MissionResult                mMissionResult;
+    px4_msgs::msg::NavigatorMissionItem         mMissionItem;
     px4_msgs::msg::VehicleCommandAck            mVehicleCommandAck;
     bool                                        mGstRunning;
 
@@ -166,8 +196,8 @@ private:
     rclcpp::Subscription<px4_msgs::msg::VehicleStatus>::SharedPtr mVehicleStatusSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr mVehicleLocalPositionSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleGlobalPosition>::SharedPtr mVehicleGlobalPositionSub_;
-    rclcpp::Subscription<px4_msgs::msg::Mission>::SharedPtr mMissionSub_;
-    rclcpp::Subscription<px4_msgs::msg::Navigator_mission_item>::SharedPtr mMissionItemSub_;
+    rclcpp::Subscription<px4_msgs::msg::MissionResult>::SharedPtr mMissionResultSub_;
+    rclcpp::Subscription<px4_msgs::msg::NavigatorMissionItem>::SharedPtr mMissionItemSub_;
 
     rclcpp::Subscription<px4_msgs::msg::VehicleCommandAck>::SharedPtr mVehicleCommandAckSub_;
     rclcpp::Subscription<px4_msgs::msg::LogMessage>::SharedPtr mLogMessageSub_;

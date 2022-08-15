@@ -109,8 +109,8 @@ void MainWidget::procInitTreeWidget()
                 << "ISARMED"
                 << "Battery"
                 << "LLH_STR"
-                << "LPOS_STR"
-                << "MISSION";
+                << "LPOS_STR";
+                
 
 
     ui->treeWidget->setColumnCount(2);
@@ -166,7 +166,6 @@ void MainWidget::updateTreeData()
             }
 
             value = QString("%1").arg((agentsIterator.value()->data(item->text(0))).toString());
-            qDebug() << value << item->text(0) << "\n";
             subitem->setText(1, value);
 
             if ( item->text(0) == "MONITORING_STATUS1_HEX" ) {
@@ -506,7 +505,6 @@ void MainWidget::keyEvent(QKeyEvent *event)
         break;
     case Qt::Key_N:
 	{
-        QVector3D target_pos = QVector3D(0, 0, -10);
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
         QMap<int, IVehicle*>::const_iterator agentsIterator;
         for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
@@ -515,6 +513,7 @@ void MainWidget::keyEvent(QKeyEvent *event)
             agent->cmd("MISSION_PLAN");
         }
 	}
+        break;
     default:
         break;
     };

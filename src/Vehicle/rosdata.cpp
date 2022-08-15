@@ -228,7 +228,6 @@ QVariant CROSData::data(const QString &aItem)
         return QVector3D(mVehicleLocalPosition.ref_lat, mVehicleLocalPosition.ref_lon, mVehicleLocalPosition.ref_alt);
     }
     else if (item == "LLH_STR" ) {
-        qDebug() << "LLH_STR";
 		return QString("(%1, %2, %3)")
 				.arg(mVehicleGlobalPosition.lat,6,'f',2)
 				.arg(mVehicleGlobalPosition.lon,6,'f',2)
@@ -383,18 +382,18 @@ void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::Shar
     
     if (item->instance_count != mMissionInstance){
         mMission.clear();
-        qDebug() << mMissionItem.sequence_current;
         mMission.insert(mMissionItem.sequence_current, *item);    
     } else{
         mMission[mMissionItem.sequence_current] = *item;
     }
 
-    // for (int i = 0; i < mMission.size(); i++){
-    //     qDebug() << "instance : " << mMission[i].instance_count
-    //     << " cur : " << mMission[i].seq_cur <<" lat : " << mMission[i].lat
-    //     << " lng : " << mMission[i].lng << " alt : " << mMission[i].alt
-    //     << " yaw : " << mMission[i].yaw;
-    // }
+    delete item;
+    for (int i = 0; i < mMission.size(); i++){
+            qDebug() << "instance : " << mMission[i].instance_count
+            << " cur : " << mMission[i].seq_cur <<" lat : " << mMission[i].lat
+            << " lng : " << mMission[i].lng << " alt : " << mMission[i].alt
+            << " yaw : " << mMission[i].yaw;
+        }
 }
 
 void CROSData::updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg)

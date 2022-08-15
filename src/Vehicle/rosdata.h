@@ -7,7 +7,7 @@
 #include <QStringList>
 #include <QMap>
 #include <QVariant>
-#include <QVector>
+#include <QList>
 
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/vehicle_status.hpp>

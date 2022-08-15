@@ -228,24 +228,16 @@ QVariant CROSData::data(const QString &aItem)
         return QVector3D(mVehicleLocalPosition.ref_lat, mVehicleLocalPosition.ref_lon, mVehicleLocalPosition.ref_alt);
     }
     else if (item == "LLH_STR" ) {
+        qDebug() << "LLH_STR";
 		return QString("(%1, %2, %3)")
 				.arg(mVehicleGlobalPosition.lat,6,'f',2)
-				.arg(mVehicleGlobalPosition.lat,6,'f',2)
+				.arg(mVehicleGlobalPosition.lon,6,'f',2)
 				.arg(mVehicleGlobalPosition.alt,6,'f',2);        
     }
-    else if (item == "Mission" ) {
-        qDebug("WTF");
+    else if (item == "MISSION" ) {
+        // TODO 
         QString str;
-        for (int i = 0; i < mMissionItemCount; i++){
-            str.append(QString("(%1, %2, %3)")
-            .arg(mMission[i].seq_cur)
-            .arg(mMission[i].lat,6,'f',4)
-            .arg(mMission[i].lng,6,'f',4)
-            .arg(mMission[i].alt,6,'f',4)
-            .arg(mMission[i].yaw,6,'f',4))
-            .append("\n");
-        }
-		return str;
+        return str;
     }
     else if ( item == "MSG_INTERVAL_TIME") {
         qint64 t = QDateTime::currentMSecsSinceEpoch();
@@ -397,12 +389,12 @@ void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::Shar
         mMission[mMissionItem.sequence_current] = *item;
     }
 
-    for (int i = 0; i < mMission.size(); i++){
-        qDebug() << "instance : " << mMission[i].instance_count
-        << " cur : " << mMission[i].seq_cur <<" lat : " << mMission[i].lat
-        << " lng : " << mMission[i].lng << " alt : " << mMission[i].alt
-        << " yaw : " << mMission[i].yaw;
-    }
+    // for (int i = 0; i < mMission.size(); i++){
+    //     qDebug() << "instance : " << mMission[i].instance_count
+    //     << " cur : " << mMission[i].seq_cur <<" lat : " << mMission[i].lat
+    //     << " lng : " << mMission[i].lng << " alt : " << mMission[i].alt
+    //     << " yaw : " << mMission[i].yaw;
+    // }
 }
 
 void CROSData::updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg)

@@ -109,7 +109,8 @@ void MainWidget::procInitTreeWidget()
                 << "ISARMED"
                 << "Battery"
                 << "LLH_STR"
-                << "LPOS_STR";
+                << "LPOS_STR"
+                << "MISSION";
 
 
     ui->treeWidget->setColumnCount(2);
@@ -165,7 +166,7 @@ void MainWidget::updateTreeData()
             }
 
             value = QString("%1").arg((agentsIterator.value()->data(item->text(0))).toString());
-
+            qDebug() << value << item->text(0) << "\n";
             subitem->setText(1, value);
 
             if ( item->text(0) == "MONITORING_STATUS1_HEX" ) {
@@ -177,7 +178,7 @@ void MainWidget::updateTreeData()
         }
     }
 }
-
+        
 void MainWidget::updateDronesInMap()
 {
     QMap<int, IVehicle*> agentsMap = mManager->agents();

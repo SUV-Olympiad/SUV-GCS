@@ -15,6 +15,7 @@ public:
     explicit DepartureControl(QWidget *parent = nullptr);
     ~DepartureControl();
 
+
 private:
     Ui::DepartureControl *ui;
 };

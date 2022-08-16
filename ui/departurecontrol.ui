@@ -43,27 +43,17 @@ QTableWidget QTableCornerButton::section {
      </property>
      <column>
       <property name="text">
+       <string>No</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
        <string>SSID</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Airline</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>State</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Command</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Code</string>
+       <string>Approval Time</string>
       </property>
      </column>
     </widget>

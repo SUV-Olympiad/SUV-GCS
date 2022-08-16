@@ -6,7 +6,13 @@ DepartureControl::DepartureControl(QWidget *parent) :
     ui(new Ui::DepartureControl)
 {
     ui->setupUi(this);
+    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
 }
+
+// DepartureControl::additem()
+// {
+//     ui->tableWidget->insertRow( ui->tableWidget->rowCount() );
+// }
 
 DepartureControl::~DepartureControl()
 {

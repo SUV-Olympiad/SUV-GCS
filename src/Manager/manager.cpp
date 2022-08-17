@@ -65,6 +65,7 @@ int CManager::loadAgentFile(const QString &aFilePath)
                     continue;
                 }
 
+
                 this->addAgent(properties);
             }
             else if ( xml.name() == "emdscen") {
@@ -94,6 +95,8 @@ void CManager::addAgent(const QMap<QString, QString> aProperty)
     QString type = aProperty["type"];
     int id = aProperty["id"].toInt();
 
+    QString time = aProperty["time"];
+
     // create agent object
     if ( type == "CMODEL" ) {
         agent = new CUAV(aProperty, this);
@@ -105,6 +108,7 @@ void CManager::addAgent(const QMap<QString, QString> aProperty)
 
     // insert agent object to manager
     mAgents.insert(id, agent);
+    mAgents_time.insert(id, time);
 }
 
 
@@ -133,6 +137,12 @@ QMap<int, IVehicle *> CManager::agents() const
 {
     return mAgents;
 }
+
+QMap<int, QString> CManager::agentsTime() const
+{
+    return mAgents_time;
+}
+
 
 QString CManager::property(const QString &aGroup, const QString &aKey)
 {

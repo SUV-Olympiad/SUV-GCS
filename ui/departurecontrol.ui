@@ -48,12 +48,37 @@ QTableWidget QTableCornerButton::section {
      </column>
      <column>
       <property name="text">
-       <string>SSID</string>
+       <string>SYSID</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Approval Time</string>
+       <string>Vehicles Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Battery</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>X, Y, Z</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Deaprture Time</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Arrival Time</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Error</string>
       </property>
      </column>
     </widget>

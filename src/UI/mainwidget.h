@@ -27,6 +27,7 @@
 #include <QApplication>
 #include <QGeoCoordinate>
 #include <QMutex>
+#include <QListWidgetItem>
 
 #include <rclcpp/rclcpp.hpp>
 
@@ -88,6 +89,8 @@ private Q_SLOTS:
 
 private slots:
 
+
+    void on_sysList_itemClicked(QListWidgetItem *item);
 
 private:
     Ui::MainWidget*         ui;

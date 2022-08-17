@@ -37,7 +37,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1010</width>
+     <width>1086</width>
      <height>779</height>
     </rect>
    </property>
@@ -77,12 +77,18 @@
       <property name="handleWidth">
        <number>6</number>
       </property>
-      <widget class="QSplitter" name="splitter">
+      <widget class="QSplitter" name="splitter2">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>200</height>
+        </size>
        </property>
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
@@ -93,41 +99,21 @@
        <property name="handleWidth">
         <number>6</number>
        </property>
-       <widget class="QTreeWidget" name="treeWidget">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>500</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
-        </property>
-        <property name="indentation">
-         <number>20</number>
-        </property>
-        <property name="columnCount">
-         <number>1</number>
-        </property>
-        <attribute name="headerDefaultSectionSize">
-         <number>100</number>
-        </attribute>
-        <column>
-         <property name="text">
-          <string notr="true">1</string>
+       <widget class="QWidget" name="verticalLayoutWidget">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="leftMargin">
+          <number>0</number>
          </property>
-        </column>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QListWidget" name="flightList"/>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="flightInfo"/>
+         </item>
+        </layout>
        </widget>
        <widget class="QWidget" name="gridLayoutWidget">
         <layout class="QGridLayout" name="gridLayout">
@@ -140,7 +126,7 @@
          <property name="verticalSpacing">
           <number>6</number>
          </property>
-         <item row="0" column="1">
+         <item row="0" column="0">
           <widget class="qhac_mapview" name="mapView" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">

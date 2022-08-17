@@ -67,6 +67,7 @@ MainWidget::MainWidget(QWidget *parent) :
     mImageLabel->setPalette(sample_palette);
 
     this->subscribeROS2Topics();
+
 }
 
 MainWidget::~MainWidget()
@@ -103,43 +104,55 @@ void MainWidget::subscribeROS2Topics()
 
 void MainWidget::procInitTreeWidget()
 {
-    QStringList strItemList;
+    // QStringList strItemList;
 
-    strItemList << "MODE"
-                << "ISARMED"
-                << "Battery"
-                << "LLH_STR"
-                << "LPOS_STR";
+    // strItemList << "MODE"
+    //             << "ISARMED"
+    //             << "Battery"
+    //             << "LLH_STR"
+    //             << "LPOS_STR";
 
 
-    ui->treeWidget->setColumnCount(2);
-    QStringList headers;
-    headers << tr("Subject") << tr("Value");
-    ui->treeWidget->setHeaderLabels(headers);
-    ui->treeWidget->header()->resizeSection(0, 150);
+    // ui->treeWidget->setColumnCount(2);
+    // QStringList headers;
+    // headers << tr("Subject") << tr("Value");
+    // ui->treeWidget->setHeaderLabels(headers);
+    // ui->treeWidget->header()->resizeSection(0, 150);
 
-    QList<QTreeWidgetItem *> items;
-    int numItem = strItemList.size();
-    for (int i = 0; i < numItem ; i++ ) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget);
-        item->setText(0, strItemList[i]);
-        item->setExpanded(true);
+    // QList<QTreeWidgetItem *> items;
+    // int numItem = strItemList.size();
+    // for (int i = 0; i < numItem ; i++ ) {
+    //     QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget);
+    //     item->setText(0, strItemList[i]);
+    //     item->setExpanded(true);
 
-        const QMap<int, IVehicle*> agentsMap = mManager->agents();
-        QMap<int, IVehicle*>::const_iterator agentsIterator;
-        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
-            QTreeWidgetItem *subitem = new QTreeWidgetItem(item);
-            int sysid = agentsIterator.value()->data("SYSID").toInt();
-            subitem->setText(0, QString("ID:%1[%2]").arg(agentsIterator.value()->id()).arg(sysid));
-            subitem->setText(1, QString("---"));
-            item->addChild(subitem);
-        }        
+    //     const QMap<int, IVehicle*> agentsMap = mManager->agents();
+    //     QMap<int, IVehicle*>::const_iterator agentsIterator;
+    //     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+    //         QTreeWidgetItem *subitem = new QTreeWidgetItem(item);
+    //         int sysid = agentsIterator.value()->data("SYSID").toInt();
+    //         subitem->setText(0, QString("ID:%1[%2]").arg(agentsIterator.value()->id()).arg(sysid));
+    //         subitem->setText(1, QString("---"));
+    //         item->addChild(subitem);
+    //     }        
 
-        items.append(item);
+    //     items.append(item);
 
+    // }
+
+    // ui->treeWidget->insertTopLevelItems(0, items);
+
+    //List Add
+    const QMap<int, IVehicle*> agentsMap = mManager->agents();
+    QMap<int, IVehicle*>::const_iterator agentsIterator;
+    int cnt;
+    for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+        int sysid = agentsIterator.value()->data("SYSID").toInt();
+        QString str = QString("ID : %1\tSYSID : %2").arg(agentsIterator.value()->id()).arg(sysid);
+        ui->flightList->insertItem(cnt, str);
+        cnt += 1;
     }
 
-    ui->treeWidget->insertTopLevelItems(0, items);
 }
 
 void MainWidget::procInitMainPanelWidget()
@@ -151,31 +164,31 @@ void MainWidget::updateTreeData()
 {
     QMap<int, IVehicle*> agentsMap = mManager->agents();
 
-    for ( int i = 0 ; i < ui->treeWidget->topLevelItemCount() ; i++ ) {
-        QTreeWidgetItem* item = ui->treeWidget->topLevelItem(i);
+    // for ( int i = 0 ; i < ui->treeWidget->topLevelItemCount() ; i++ ) {
+    //     QTreeWidgetItem* item = ui->treeWidget->topLevelItem(i);
 
-        int count = 0;
-        QMap<int, IVehicle*>::iterator agentsIterator;
-        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
-            QTreeWidgetItem* subitem = item->child(count);
-            QString value;
-            if ( agentsIterator.value() == NULL )  {
-                qDebug("Error: agent == NULL");
-                continue;
-            }
+    //     int count = 0;
+    //     QMap<int, IVehicle*>::iterator agentsIterator;
+    //     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+    //         QTreeWidgetItem* subitem = item->child(count);
+    //         QString value;
+    //         if ( agentsIterator.value() == NULL )  {
+    //             qDebug("Error: agent == NULL");
+    //             continue;
+    //         }
 
-            value = QString("%1").arg((agentsIterator.value()->data(item->text(0))).toString());
+    //         value = QString("%1").arg((agentsIterator.value()->data(item->text(0))).toString());
 
-            subitem->setText(1, value);
+    //         subitem->setText(1, value);
 
-            if ( item->text(0) == "MONITORING_STATUS1_HEX" ) {
-                QString tooltip = agentsIterator.value()->data("MONITORING_STR").toString();
-                subitem->setToolTip(1, tooltip);
-            }
+    //         if ( item->text(0) == "MONITORING_STATUS1_HEX" ) {
+    //             QString tooltip = agentsIterator.value()->data("MONITORING_STR").toString();
+    //             subitem->setToolTip(1, tooltip);
+    //         }
 
-            count++;
-        }
-    }
+    //         count++;
+    //     }
+    // }
 }
 
 void MainWidget::updateDronesInMap()
@@ -257,9 +270,14 @@ void MainWidget::loadConfigFile()
         // wait for initializing manager thread
         // TODO: reduce sleep and check init Manager is finished.
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
-        QMap<int, IVehicle*>::const_iterator agentsIterator;
-        bool isAllAgentsReady = true;
+        const QMap<int, QString> agentsTimeMap = mManager->agentsTime();
 
+
+
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        QMap<int, QString>::const_iterator agentsTimeIterator;
+        bool isAllAgentsReady = true;
+        
         do{
             CSleeper::msleep(500);
             isAllAgentsReady = true;
@@ -509,4 +527,12 @@ void MainWidget::keyEvent(QKeyEvent *event)
     };
 
     QWidget::keyPressEvent(event);
+}
+void MainWidget::on_sysList_itemClicked(QListWidgetItem *item)
+{
+    QStringList list1 = item->text().split('\t');
+    int id   = list1[0].replace("ID : ","").toInt();
+    qDebug() << id;
+
+    // Todo : show flight info
 }

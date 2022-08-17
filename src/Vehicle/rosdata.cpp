@@ -57,6 +57,10 @@ void CROSData::initSubscription()
     mVehicleLocalPositionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleLocalPosition>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateVehicleLocalPosition, this, _1));
     topic = QString("/vehicle%1/out/VehicleGlobalPosition").arg(sysid); 
     mVehicleGlobalPositionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleGlobalPosition>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateVehicleGlobalPosition, this, _1));
+    topic = QString("/vehicle%1/out/MissionResult").arg(sysid); 
+    mMissionResultSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::MissionResult>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionResult, this, _1));
+    topic = QString("/vehicle%1/out/NavigatorMissionItem").arg(sysid); 
+    mMissionItemSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::NavigatorMissionItem>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionItem, this, _1));
 
     mVehicleCommandAckSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleCommandAck>(topic_prefix + "/vehicle_command_ack", qos, std::bind(&CROSData::updateVehicleCommandAck, this, _1));
     mLogMessageSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::LogMessage>(topic_prefix + "/log_message", qos, std::bind(&CROSData::updateLogMessage, this, _1));
@@ -226,8 +230,22 @@ QVariant CROSData::data(const QString &aItem)
     else if (item == "LLH_STR" ) {
 		return QString("(%1, %2, %3)")
 				.arg(mVehicleGlobalPosition.lat,6,'f',2)
-				.arg(mVehicleGlobalPosition.lat,6,'f',2)
+				.arg(mVehicleGlobalPosition.lon,6,'f',2)
 				.arg(mVehicleGlobalPosition.alt,6,'f',2);        
+    }
+    else if (item == "MISSION" ) {
+        // TODO 
+        // for (int i = 0; i < mMission.size(); i++){
+        //     qDebug() << "instance : " << mMission[i]->instance_count
+        //     << " cur : " << mMission[i]->seq_cur <<" lat : " << mMission[i]->lat
+        //     << " lng : " << mMission[i]->lng << " alt : " << mMission[i]->alt
+        //     << " yaw : " << mMission[i]->yaw;
+        // }
+    
+        QVariant varParams;
+    
+        varParams.setValue<QList<MissionItem*>>(mMission);
+        return varParams;
     }
     else if ( item == "MSG_INTERVAL_TIME") {
         qint64 t = QDateTime::currentMSecsSinceEpoch();
@@ -349,6 +367,42 @@ void CROSData::updateVehicleLocalPosition(const px4_msgs::msg::VehicleLocalPosit
 void CROSData::updateVehicleGlobalPosition(const px4_msgs::msg::VehicleGlobalPosition::SharedPtr msg)
 {
     mVehicleGlobalPosition = *msg;
+}
+
+void CROSData::updateMissionResult(const px4_msgs::msg::MissionResult::SharedPtr msg)
+{
+    mMissionResult = *msg;
+    mMissionItemCount = mMissionResult.seq_total;
+    mMissionInstance = mMissionResult.instance_count;
+    mMission.clear();
+    qDebug() << "updateMission......";
+}
+
+void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::SharedPtr msg)
+{
+    mMissionItem = *msg;
+    CROSData::MissionItem *item = new CROSData::MissionItem(
+        mMissionItem.instance_count,
+        mMissionItem.sequence_total,
+        mMissionItem.sequence_current,
+        mMissionItem.latitude,
+        mMissionItem.longitude,
+        mMissionItem.altitude,
+        mMissionItem.yaw
+    );
+
+    if (mMission.size() < item->seq_total){
+        mMission.insert(mMissionItem.sequence_current, item);
+    } else {
+        mMission[mMissionItem.sequence_current] = item;
+    }
+
+    // for (int i = 0; i < mMission.size(); i++){
+    //     qDebug() << "instance : " << mMission[i]->instance_count
+    //     << " cur : " << mMission[i]->seq_cur <<" lat : " << mMission[i]->lat
+    //     << " lng : " << mMission[i]->lng << " alt : " << mMission[i]->alt
+    //     << " yaw : " << mMission[i]->yaw;
+    // }
 }
 
 void CROSData::updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg)

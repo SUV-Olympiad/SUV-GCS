@@ -139,6 +139,9 @@ int CUAV::cmd(const char *aCmd, QVariant aArg1, QVariant aArg2, QVariant aArg3, 
 	else if ( item == "REBOOT") {
 		mSender->reboot();
 	}
+    else if ( item == "MISSION_PLAN") {
+		mSender->mission_plan();
+	}
     else {
         qDebug("ERROR: Not determined command (%s)", aCmd);
         return -1;

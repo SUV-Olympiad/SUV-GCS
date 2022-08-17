@@ -83,7 +83,7 @@ public:
     virtual ~CROSData();
 
 public:
-    class MissionItem
+    class MissionItem : public QObject
     {
     public:
         quint32     instance_count;

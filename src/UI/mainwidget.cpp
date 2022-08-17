@@ -2,6 +2,7 @@
 #include "ui_mainwidget.h"
 #include "manager.h"
 #include "sleeper.h"
+#include "rosdata.h"
 
 #include <QKeyEvent>
 #include <QFileDialog>
@@ -10,6 +11,7 @@
 #include <QPixmap>
 #include <QImage>
 #include <QtMath>
+#include <QList>
 
 #include <opencv2/imgcodecs.hpp>
 #include <cv_bridge/cv_bridge.h>
@@ -511,6 +513,24 @@ void MainWidget::keyEvent(QKeyEvent *event)
             IVehicle* agent = agentsIterator.value();
             qDebug() << "MISSION_PLAN......";
             agent->cmd("MISSION_PLAN");
+        }
+	}
+        break;
+
+    // Sample use Mission
+    case Qt::Key_T:
+	{
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            IVehicle* agent = agentsIterator.value();
+            qDebug() << "MISSION......";
+            qDebug() << "Vehicle : " <<agent->data("SYSID").toInt();
+            QList<QVariant> list = agent->data("MISSION").toList();
+            for (int i = 0; i < list.size(); ++i) {
+                CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
+                qDebug() << item->toString();
+            }
         }
 	}
         break;

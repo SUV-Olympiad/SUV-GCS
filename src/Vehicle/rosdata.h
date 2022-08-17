@@ -83,7 +83,7 @@ public:
     virtual ~CROSData();
 
 public:
-    class MissionItem : public QObject
+    class MissionItem
     {
     public:
         quint32     instance_count;
@@ -94,6 +94,10 @@ public:
         float       alt;
         float       yaw;
     public:
+        MissionItem() = default;
+        ~MissionItem() = default;
+        MissionItem(const MissionItem &) = default;
+        MissionItem &operator=(const MissionItem &) = default; 
         MissionItem(quint32 instance, quint16 seq_total, quint16 seq_cur, float lat, float lng, float alt, float yaw)
         {
             this->instance_count = instance;
@@ -103,6 +107,11 @@ public:
             this->lng = lng;
             this->alt = alt;
             this->yaw = yaw;
+        }
+        QString toString() const
+        {
+            QString str = QString("%1/%2: (%3,%4,%5,%6)").arg(seq_cur).arg(seq_total).arg(lat).arg(lng).arg(alt).arg(yaw);
+            return str;
         }
     };
 
@@ -217,4 +226,5 @@ private:
      double                     init_pos_x = 0, init_pos_y = 0;
 };
 
+Q_DECLARE_METATYPE(CROSData::MissionItem*);
 #endif // CROSDATA_H

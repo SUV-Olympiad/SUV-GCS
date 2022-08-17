@@ -234,18 +234,13 @@ QVariant CROSData::data(const QString &aItem)
 				.arg(mVehicleGlobalPosition.alt,6,'f',2);        
     }
     else if (item == "MISSION" ) {
-        // TODO 
-        // for (int i = 0; i < mMission.size(); i++){
-        //     qDebug() << "instance : " << mMission[i]->instance_count
-        //     << " cur : " << mMission[i]->seq_cur <<" lat : " << mMission[i]->lat
-        //     << " lng : " << mMission[i]->lng << " alt : " << mMission[i]->alt
-        //     << " yaw : " << mMission[i]->yaw;
-        // }
     
-        QVariant varParams;
-    
-        varParams.setValue<QList<MissionItem*>>(mMission);
-        return varParams;
+        QVariantList varLst;
+
+        for (auto v: mMission){
+            varLst.append(QVariant::fromValue(v));
+        }
+        return varLst;
     }
     else if ( item == "MSG_INTERVAL_TIME") {
         qint64 t = QDateTime::currentMSecsSinceEpoch();
@@ -396,13 +391,6 @@ void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::Shar
     } else {
         mMission[mMissionItem.sequence_current] = item;
     }
-
-    // for (int i = 0; i < mMission.size(); i++){
-    //     qDebug() << "instance : " << mMission[i]->instance_count
-    //     << " cur : " << mMission[i]->seq_cur <<" lat : " << mMission[i]->lat
-    //     << " lng : " << mMission[i]->lng << " alt : " << mMission[i]->alt
-    //     << " yaw : " << mMission[i]->yaw;
-    // }
 }
 
 void CROSData::updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg)

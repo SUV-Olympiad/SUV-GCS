@@ -469,6 +469,11 @@ void qhac_mapview::updateDrone(int id, qreal lat, qreal lon, float heading)
     _objectView->updateDrone(id, QPointF(lat, lon), heading);
 }
 
+void qhac_mapview::updateColor(QMap<int, QColor> colorList)
+{
+    _objectView->updateColor(colorList);
+}
+
 void qhac_mapview::updateImage(QRectF region, QImage image, qreal rot, int num)
 {
     _objectView->updateImage(region, image, rot, num);
@@ -622,8 +627,18 @@ ObjectView::ObjectView(qhac_mapview *parent) : QLabel (parent)
     connect(parent, SIGNAL (Mapview_Resized(QResizeEvent*)), SLOT (resize_event(QResizeEvent*)));
 }
 
+void ObjectView::updateColor(QMap<int, QColor> colorList)
+{
+    _colorList = colorList;
+}
+
 void ObjectView::updateDrone(int id, QPointF llh, float heading)
 {
+    
+    
+    
+    
+    
     if ( _droneList.contains(id) ) {
         _droneList[id].update(llh, heading);
     }
@@ -708,13 +723,19 @@ void ObjectView::paintEvent(QPaintEvent *event)
 
     paint.setOpacity(1.0);
 
+    // Todo. 경로 표시
+    QLineF line(10.0, 80.0, 90.0, 20.0);
+    QPen pen(Qt::red,10);
+    paint.setPen(pen);
+    paint.drawLine(line);
+
     // draw drones
     foreach (DroneObject drone, _droneList) {
         QPointF drone_pos = _mapview->LLH2TilePos(drone.llh());
         QPointF pos = drone_pos - origin_pos;
         float heading = drone.heading();
 
-        //qDebug("drone pos[%d] : %.9f %.9f (%.9f, %.9f)", drone.id(), pos.x(), pos.y(), drone.llh().x(), drone.llh().y());
+        // qDebug("drone pos[%d] : %.9f %.9f (%.9f, %.9f)", drone.id(), pos.x(), pos.y(), drone.llh().x(), drone.llh().y());
 
         QRectF rect = QRectF(pos.x(), pos.y(), 50, 50);
         QPainterPath path;

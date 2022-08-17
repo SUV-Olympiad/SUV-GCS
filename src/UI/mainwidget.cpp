@@ -150,14 +150,23 @@ void MainWidget::procInitTreeWidget()
     //List Add
     const QMap<int, IVehicle*> agentsMap = mManager->agents();
     QMap<int, IVehicle*>::const_iterator agentsIterator;
-    int cnt;
+    QMap<int, QColor> colorList;
+    
+    qsrand(time(0));
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         int sysid = agentsIterator.value()->data("SYSID").toInt();
+        QColor color = QColor(qrand()%255, qrand()%255, qrand()%255);
         QString str = QString("ID : %1\tSYSID : %2").arg(agentsIterator.value()->id()).arg(sysid);
-        ui->flightList->insertItem(cnt, str);
-        cnt += 1;
+        QListWidgetItem* pItem =new QListWidgetItem(str);
+        pItem->setForeground(color);
+        ui->flightList->addItem(pItem);
+        colorList[agentsIterator.value()->id()] = color;
+        mMapView->updateColor(colorList);
+
     }
 
+
+    //Show table
     QStringList strItemList;
     strItemList << "MODE"
                 << "ISARMED"

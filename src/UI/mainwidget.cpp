@@ -514,9 +514,28 @@ void MainWidget::keyEvent(QKeyEvent *event)
         }
 	}
         break;
+    // case Qt::Key_T:
+	// {
+    //     const QMap<int, IVehicle*> agentsMap = mManager->agents();
+    //     QMap<int, IVehicle*>::const_iterator agentsIterator;
+    //     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+    //         IVehicle* agent = agentsIterator.value();
+    //         qDebug() << "MISSION......";
+    //         // qDebug() << agent->data("MISSION").toList();
+    //         QVariant var = agent->data("MISSION");
+    //         // qDebug() << val.canConvert<QList<mMission*>>();
+    //         if(var.canConvert<QList<mMission*>>()){
+    //             qDebug() <<"FUCK";
+    //         } else{
+    //             qDebug() <<"WTF";
+    //         }
+    //         // lst = varLst.value<QList<double>>();
+    //     }
+	// }
+    //     break;
     default:
         break;
-    };
+    }; 
 
     QWidget::keyPressEvent(event);
 }

@@ -111,7 +111,18 @@
           <widget class="QListWidget" name="flightList"/>
          </item>
          <item>
-          <widget class="QTableWidget" name="flightInfo"/>
+          <widget class="QTableWidget" name="flightInfo">
+           <column>
+            <property name="text">
+             <string>Type</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Data</string>
+            </property>
+           </column>
+          </widget>
          </item>
         </layout>
        </widget>

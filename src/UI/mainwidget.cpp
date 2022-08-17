@@ -68,6 +68,11 @@ MainWidget::MainWidget(QWidget *parent) :
 
     this->subscribeROS2Topics();
 
+
+    selectVehicleId = -1;
+    ui->flightInfo->horizontalHeader()->setStretchLastSection(true);
+    connect(ui->flightList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(on_sysList_itemClicked(QListWidgetItem*)));
+
 }
 
 MainWidget::~MainWidget()
@@ -153,6 +158,18 @@ void MainWidget::procInitTreeWidget()
         cnt += 1;
     }
 
+    QStringList strItemList;
+    strItemList << "MODE"
+                << "ISARMED"
+                << "Battery"
+                << "LLH_STR"
+                << "LPOS_STR";
+    int numItem = strItemList.size();
+
+    for (int i = 0; i < numItem ; i++ ) {
+        ui->flightInfo->insertRow(ui->flightInfo->rowCount() );
+        ui->flightInfo->setItem(i,0,new QTableWidgetItem(strItemList[i]));
+    }
 }
 
 void MainWidget::procInitMainPanelWidget()
@@ -160,35 +177,30 @@ void MainWidget::procInitMainPanelWidget()
 
 }
 
-void MainWidget::updateTreeData()
-{
-    QMap<int, IVehicle*> agentsMap = mManager->agents();
+void MainWidget::updateVehicleData(){
+    if(selectVehicleId != -1){
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            int agentId = agentsIterator.value()->id();
 
-    // for ( int i = 0 ; i < ui->treeWidget->topLevelItemCount() ; i++ ) {
-    //     QTreeWidgetItem* item = ui->treeWidget->topLevelItem(i);
+            if(agentId == selectVehicleId){
+                for (int i = 0; i < ui->flightInfo->rowCount() ; i++ ) {
+                
+                    QString type = ui->flightInfo->item(i, 0)->text();
+                    QString value;
 
-    //     int count = 0;
-    //     QMap<int, IVehicle*>::iterator agentsIterator;
-    //     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
-    //         QTreeWidgetItem* subitem = item->child(count);
-    //         QString value;
-    //         if ( agentsIterator.value() == NULL )  {
-    //             qDebug("Error: agent == NULL");
-    //             continue;
-    //         }
-
-    //         value = QString("%1").arg((agentsIterator.value()->data(item->text(0))).toString());
-
-    //         subitem->setText(1, value);
-
-    //         if ( item->text(0) == "MONITORING_STATUS1_HEX" ) {
-    //             QString tooltip = agentsIterator.value()->data("MONITORING_STR").toString();
-    //             subitem->setToolTip(1, tooltip);
-    //         }
-
-    //         count++;
-    //     }
-    // }
+                    if ( agentsIterator.value() == NULL )  {
+                        qDebug("Error: agent == NULL");
+                        continue;
+                    }
+                    value = QString("%1").arg((agentsIterator.value()->data(type)).toString());
+                    
+                    ui->flightInfo->setItem(i,1,new QTableWidgetItem(value));
+                }
+            }
+        }
+    }
 }
 
 void MainWidget::updateDronesInMap()
@@ -371,7 +383,7 @@ void MainWidget::onScenarioMode(bool aMode)
 
 void MainWidget::updateUI()
 {	    
-    updateTreeData();
+    updateVehicleData();
     updateStatusText();
     rclcpp::spin_some(_ros2node);
     updateDronesInMap();
@@ -532,7 +544,5 @@ void MainWidget::on_sysList_itemClicked(QListWidgetItem *item)
 {
     QStringList list1 = item->text().split('\t');
     int id   = list1[0].replace("ID : ","").toInt();
-    qDebug() << id;
-
-    // Todo : show flight info
-}
+    selectVehicleId = id;
+}   

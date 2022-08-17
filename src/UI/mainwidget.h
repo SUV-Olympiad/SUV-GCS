@@ -50,6 +50,7 @@ public:
     virtual ~MainWidget();
 
 public:
+    int                     selectVehicleId;
     bool                    processImage;
     QLabel                  *mImageLabel, *mInformationLabel, *mMapSelectionLabel;
     QGeoCoordinate getNewPositionDiff(QGeoCoordinate oldPosition, double x, double y, double z);
@@ -65,7 +66,7 @@ private:
     void subscribeROS2Topics();
     void procInitTreeWidget();
     void procInitMainPanelWidget();    
-    void updateTreeData();	
+    void updateVehicleData();	
     void updateDronesInMap();
     void updateStatusText();
     void updateNotifier();

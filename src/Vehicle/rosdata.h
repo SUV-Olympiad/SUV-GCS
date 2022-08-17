@@ -8,6 +8,7 @@
 #include <QMap>
 #include <QVariant>
 #include <QList>
+#include <QVector>
 
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/vehicle_status.hpp>
@@ -86,15 +87,17 @@ public:
     {
     public:
         quint32     instance_count;
+        quint16     seq_total;
         quint16     seq_cur;
         float       lat;
         float       lng;
         float       alt;
         float       yaw;
     public:
-        MissionItem(quint32 instance, quint16 seq_cur, float lat, float lng, float alt, float yaw)
+        MissionItem(quint32 instance, quint16 seq_total, quint16 seq_cur, float lat, float lng, float alt, float yaw)
         {
             this->instance_count = instance;
+            this->seq_total = seq_total;
             this->seq_cur = seq_cur;
             this->lat = lat;
             this->lng = lng;
@@ -178,8 +181,8 @@ private:
 
     // Total count of mission items
     qint16                      mMissionItemCount = -1;
-    quint32                     mMissionInstance = -1;
-    QList<MissionItem>          mMission;
+    quint32                     mMissionInstance = 1;
+    QList<MissionItem*>         mMission;
 
     QMap< QString, QVariant >           mParams;
     px4_msgs::msg::VehicleStatus                mVehicleStatus;

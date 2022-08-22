@@ -50,6 +50,7 @@ public:
     explicit ObjectView(qhac_mapview *parent);
     void updateDrone(int id, QPointF llh, float heading=0);
     void updateColor(QMap<int, QColor>);
+    void updateRoad(QMap<int, QString>);
     void updateImage(QRectF region, QImage image, qreal rot=0.0, int num=0);
 
 protected:
@@ -67,6 +68,7 @@ private:
     QList<QPointF>              _regionLLH;
     QMap<int,DroneObject>       _droneList;
     QMap<int, QColor>           _colorList;
+    QMap<int, QString>          _roadList;
 
     QRectF                      _img_region[4];    // region of drone image
     qreal                       _img_rot[4];       // rotation of drone image
@@ -159,6 +161,7 @@ public:
     void moveByGPS(double lat, double lon, int zoom);
     void updateDrone(int id, qreal lat, qreal lon, float heading=0);
     void updateColor(QMap<int, QColor>);
+    void updateRoad(QMap<int, QString>);
     void updateImage(QRectF region, QImage image, qreal rot=0, int num=0);
 
 

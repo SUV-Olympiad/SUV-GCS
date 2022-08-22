@@ -474,6 +474,11 @@ void qhac_mapview::updateColor(QMap<int, QColor> colorList)
     _objectView->updateColor(colorList);
 }
 
+void qhac_mapview::updateRoad(QMap<int, QString> roadList)
+{
+    _objectView->updateRoad(roadList);
+}
+
 void qhac_mapview::updateImage(QRectF region, QImage image, qreal rot, int num)
 {
     _objectView->updateImage(region, image, rot, num);
@@ -632,6 +637,11 @@ void ObjectView::updateColor(QMap<int, QColor> colorList)
     _colorList = colorList;
 }
 
+void ObjectView::updateRoad(QMap<int, QString> roadList)
+{
+    _roadList = roadList;
+}
+
 void ObjectView::updateDrone(int id, QPointF llh, float heading)
 {
     
@@ -718,19 +728,28 @@ void ObjectView::paintEvent(QPaintEvent *event)
     size = img_pos2 - img_pos;
     region = QRect(pos.x(), pos.y(),  size.x(), size.y());
     paint.drawPixmap(region, QPixmap::fromImage(_image[3]));
-
-
-
     paint.setOpacity(1.0);
-
-    // Todo. 경로 표시
-    QLineF line(10.0, 80.0, 90.0, 20.0);
-    QPen pen(Qt::red,10);
-    paint.setPen(pen);
-    paint.drawLine(line);
 
     // draw drones
     foreach (DroneObject drone, _droneList) {
+
+        // draw Lines
+        QPen pen(_colorList[drone.id()],1);
+        paint.setPen(pen);
+        QStringList list = _roadList[drone.id()].split("//");
+
+        for(int i=0; i<list.size() - 2; i++){
+            if(list[i+1].size() >= 4){
+                QStringList startPos = list[i].split(":");
+                QStringList endPos = list[i+1].split(":");
+
+                QPointF startPosTile = _mapview->LLH2TilePos(QPointF(startPos[0].toDouble(),startPos[1].toDouble())) - origin_pos;
+                QPointF endPosTile = _mapview->LLH2TilePos(QPointF(endPos[0].toDouble(),endPos[1].toDouble())) - origin_pos;
+                paint.drawLine(startPosTile.x(), startPosTile.y(), endPosTile.x() + 50.0, endPosTile.y() + 50.0);
+            }
+        }
+
+
         QPointF drone_pos = _mapview->LLH2TilePos(drone.llh());
         QPointF pos = drone_pos - origin_pos;
         float heading = drone.heading();
@@ -749,9 +768,9 @@ void ObjectView::paintEvent(QPaintEvent *event)
         path.lineTo(rotate(p2, pos, heading));
         path.lineTo(rotate(p3, pos, heading));
         path.lineTo(rotate(p4, pos, heading));
-        paint.fillPath(path, QBrush(Qt::blue));
-        paint.setBrush(QBrush(Qt::red));
-        paint.drawEllipse(pos, 5, 5);
+        paint.fillPath(path, QBrush(_colorList[drone.id()]));
+        // paint.setBrush(QBrush(Qt::red));
+        // paint.drawEllipse(pos, 5, 5);
 
         QFont font = paint.font();
         font.setPixelSize(20);

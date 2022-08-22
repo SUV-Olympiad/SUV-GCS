@@ -70,6 +70,7 @@ private:
     void updateDronesInMap();
     void updateStatusText();
     void updateNotifier();
+    void updateDroneRoad();
 
 private:    // ROS2 Topic
     rclcpp::Node::SharedPtr _ros2node;
@@ -114,6 +115,7 @@ private:
     bool                    mRubberBandDrawing, mPolygonDrawing;
     QPoint                  mWindowPos;
     QGeoCoordinate          _base_latlng = QGeoCoordinate(36.374108, 127.352697, 82);
+    QMap<int, QString>      roadList;
 
     float                   HEADING = 270;
     float                   TARGET_Z = 10;

@@ -158,11 +158,13 @@ void MainWidget::procInitTreeWidget()
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         int sysid = agentsIterator.value()->data("SYSID").toInt();
         QColor color = QColor(qrand()%255, qrand()%255, qrand()%255);
+        QString roadData{""};
         QString str = QString("ID : %1\tSYSID : %2").arg(agentsIterator.value()->id()).arg(sysid);
         QListWidgetItem* pItem =new QListWidgetItem(str);
         pItem->setForeground(color);
         ui->flightList->addItem(pItem);
         colorList[agentsIterator.value()->id()] = color;
+        roadList[agentsIterator.value()->id()] = roadData;
         mMapView->updateColor(colorList);
 
     }
@@ -214,6 +216,29 @@ void MainWidget::updateVehicleData(){
     }
 }
         
+void MainWidget::updateDroneRoad()
+{
+    const QMap<int, IVehicle*> agentsMap = mManager->agents();
+    QMap<int, IVehicle*>::const_iterator agentsIterator;
+    for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+        IVehicle* agent = agentsIterator.value();
+        agent->cmd("MISSION_PLAN");
+
+        int droneId = agent->data("SYSID").toInt();
+        QList<QVariant> list = agent->data("MISSION").toList();
+        roadList[droneId] = QString("");
+        for (int i = 0; i < list.size(); ++i) {
+            CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
+            QString roadData = item->toString();
+            roadList[droneId].append(roadData);
+            roadList[droneId].append("//");
+        }
+    }
+    mMapView->updateRoad(roadList);
+
+}
+
+
 void MainWidget::updateDronesInMap()
 {
     QMap<int, IVehicle*> agentsMap = mManager->agents();
@@ -395,6 +420,7 @@ void MainWidget::onScenarioMode(bool aMode)
 void MainWidget::updateUI()
 {	    
     updateVehicleData();
+    updateDroneRoad();
     updateStatusText();
     rclcpp::spin_some(_ros2node);
     updateDronesInMap();
@@ -541,35 +567,6 @@ void MainWidget::keyEvent(QKeyEvent *event)
         for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
             IVehicle* agent = agentsIterator.value();
             agent->cmd("MOVE_NED", target_pos, HEADING);
-        }
-	}
-        break;
-    case Qt::Key_N:
-	{
-        const QMap<int, IVehicle*> agentsMap = mManager->agents();
-        QMap<int, IVehicle*>::const_iterator agentsIterator;
-        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
-            IVehicle* agent = agentsIterator.value();
-            qDebug() << "MISSION_PLAN......";
-            agent->cmd("MISSION_PLAN");
-        }
-	}
-        break;
-
-    // Sample use Mission
-    case Qt::Key_T:
-	{
-        const QMap<int, IVehicle*> agentsMap = mManager->agents();
-        QMap<int, IVehicle*>::const_iterator agentsIterator;
-        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
-            IVehicle* agent = agentsIterator.value();
-            qDebug() << "MISSION......";
-            qDebug() << "Vehicle : " <<agent->data("SYSID").toInt();
-            QList<QVariant> list = agent->data("MISSION").toList();
-            for (int i = 0; i < list.size(); ++i) {
-                CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
-                qDebug() << item->toString();
-            }
         }
 	}
         break;

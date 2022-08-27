@@ -17,8 +17,8 @@
 //#define REF_ALT             (85.4)
 
 // For Real environment (Daejeon Drone Park)
-#define REF_LAT             (36.45368170854026)
-#define REF_LON             (127.40617645756762)
+#define REF_LAT             (36.766559)
+#define REF_LON             (127.281290)
 #define REF_ALT             (53.5)
 
 #define CMDSENDER_RATE      (50)    // Hz

@@ -54,7 +54,8 @@ public:
     QGeoCoordinate getNewPositionDiff(QGeoCoordinate oldPosition, double x, double y, double z);
     static QVector3D LLH2NED(QGeoCoordinate pos);
     static QGeoCoordinate NED2LLH(QVector3D pos);
-
+    static QGeoCoordinate ENU2LLH(QVector3D pos);
+    
 protected:
     bool event(QEvent * event);
     void keyEvent(QKeyEvent * event);

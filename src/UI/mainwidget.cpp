@@ -413,6 +413,15 @@ QGeoCoordinate MainWidget::NED2LLH(QVector3D pos)
     return LLHPosition;
 }
 
+QGeoCoordinate MainWidget::ENU2LLH(QVector3D pos)
+{
+    // Calc lat, lon, alt of pos with refPos
+    QGeoCoordinate LLHPosition = QGeoCoordinate(refPos.latitude(), refPos.longitude(), refPos.altitude());
+    LLHPosition = LLHPosition.atDistanceAndAzimuth(pos.y(), 0, pos.z());
+    LLHPosition = LLHPosition.atDistanceAndAzimuth(pos.x(), 90);
+    return LLHPosition;
+}
+
 void MainWidget::keyEvent(QKeyEvent *event)
 {
 	
@@ -505,6 +514,7 @@ void MainWidget::keyEvent(QKeyEvent *event)
         }
 	}
         break;
+    // Get mission item
     case Qt::Key_N:
 	{
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
@@ -516,7 +526,18 @@ void MainWidget::keyEvent(QKeyEvent *event)
         }
 	}
         break;
-
+    // Start mission
+    case Qt::Key_B:
+	{
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            IVehicle* agent = agentsIterator.value();
+            qDebug() << "MISSION_START......";
+            agent->cmd("MISSION_START");
+        }
+	}
+        break;
     // Sample use Mission
     case Qt::Key_T:
 	{
@@ -532,6 +553,60 @@ void MainWidget::keyEvent(QKeyEvent *event)
                 qDebug() << item->toString();
             }
         }
+	}
+        break;
+    case Qt::Key_C:
+	{
+        QList<QVector3D> list0 = {QVector3D(-1290.2, -524.9, 0), QVector3D(-1290.2, -524.9, 50), 
+                        QVector3D(-1028.9, -165.8, 50), QVector3D(-877.8, -46.37, 50),
+                        QVector3D(-726.7, 73.06, 50),QVector3D(-575.6, 192.5, 50), QVector3D(-575.6, 228.5, 50),QVector3D(-575.6, 228.5, 0)};
+        QList<QVector3D> list1 = {QVector3D(170, -398.14, 0), QVector3D(170, -398.14, 50), 
+                        QVector3D(170, -308.44, 50), QVector3D(-619.6, -22.84, 50),
+                        QVector3D(-643, 249.1, 50),QVector3D(-643, 249.1, 0)};
+        QList<QVector3D> list2 = {QVector3D(173, -398.14, 0), QVector3D(173, -398.14, 50), 
+                        QVector3D(168.74, -303.8, 50), QVector3D(-257.4, -262.8, 50),
+                        QVector3D(-974.6, -344.4, 50),QVector3D(-1227.3, -939.8, 50), 
+                        QVector3D(-1504.3, -938, 50), QVector3D(-1504.3, -914.24, 50), QVector3D(-1504.3, -914.24, 0)};
+        QList<QVector3D> list3 = {QVector3D(-358.25, 104.8, 0), QVector3D(-358.25, 104.8, 50), 
+                        QVector3D(-358.25, -56.7, 50), QVector3D(-822.86, -290.42, 50), QVector3D(-1287.47, -524.15, 50),
+                        QVector3D(-1287.47, -524.15, 0)};
+        QList<QVector3D> list4 = {QVector3D(-361.25, 104.8, 0), QVector3D(-361.25, 104.8, 50), 
+                        QVector3D(-361.25, -58.7, 50), QVector3D(-29.2, -869.35, 50),
+                        QVector3D(15.5, -764.76, 50),QVector3D(15.5, -764.76, 0)};
+        QList<QVector3D> list5 = {QVector3D(-364.25, 104.8, 0), QVector3D(-364.25, 104.8, 50), 
+                        QVector3D(-364.25, -60.7, 50), QVector3D(-83.3, -659.6, 50),
+                        QVector3D(154.24, -658.8, 50),QVector3D(154.9, -622, 50), QVector3D(154.9, -622, 0)};
+
+        QList<QGeoCoordinate> res0;           
+        QList<QGeoCoordinate> res1;
+        QList<QGeoCoordinate> res2;
+        QList<QGeoCoordinate> res3;
+        QList<QGeoCoordinate> res4;
+        QList<QGeoCoordinate> res5;
+        for(QVector3D point: list0){
+            res0.append(ENU2LLH(point));
+        }
+        for(QVector3D point: list1){
+            res1.append(ENU2LLH(point));
+        }
+        for(QVector3D point: list2){
+            res2.append(ENU2LLH(point));
+        }
+        for(QVector3D point: list3){
+            res3.append(ENU2LLH(point));
+        }
+        for(QVector3D point: list4){
+            res4.append(ENU2LLH(point));
+        }
+        for(QVector3D point: list5){
+            res5.append(ENU2LLH(point));
+        }
+        qDebug() << "iris_0\n"<<res0;
+        qDebug() << "iris_1\n"<<res1;
+        qDebug() << "iris_2\n"<<res2;
+        qDebug() << "iris_3\n"<<res3;
+        qDebug() << "iris_4\n"<<res4;
+        qDebug() << "iris_5\n"<<res5;
 	}
         break;
     default:

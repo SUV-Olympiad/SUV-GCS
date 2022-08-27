@@ -111,20 +111,24 @@ void CCModelCmdSender::reposition(double lat, double lng, double altitude, doubl
     mAgent->dataROS()->publishCommand(reposition_cmd);
 }
 
-void CCModelCmdSender::mission_plan()
+void CCModelCmdSender::planMission()
 {
     auto mission_plan_cmd = px4_msgs::msg::VehicleCommand();
     mission_plan_cmd.target_system = mAgent->sysID();
     mission_plan_cmd.command = MAV_CMD_NAV_MISSION_PLAN;
-    // mission_plan_cmd.param1 = -1.0;
-    // mission_plan_cmd.param2 = 1.0;
-    // mission_plan_cmd.param3 = 0.0;
-    // mission_plan_cmd.param4 = yaw * DEG2RAD;
-    // mission_plan_cmd.param5 = lat;
-    // mission_plan_cmd.param6 = lng;
-    // mission_plan_cmd.param7 = altitude;
     mission_plan_cmd.from_external = true;
     mAgent->dataROS()->publishCommand(mission_plan_cmd);
+}
+
+void CCModelCmdSender::startMission()
+{
+    auto mission_start_cmd = px4_msgs::msg::VehicleCommand();
+    mission_start_cmd.target_system = mAgent->sysID();
+    mission_start_cmd.command = MAV_CMD_MISSION_START;
+    // mission_start_cmd.confirmation = true;
+    // mission_start_cmd.from_external = true;
+
+    mAgent->dataROS()->publishCommand(mission_start_cmd);
 }
 
 void CCModelCmdSender::arm()

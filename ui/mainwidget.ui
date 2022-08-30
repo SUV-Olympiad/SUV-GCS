@@ -61,116 +61,142 @@
      <number>100</number>
     </property>
     <item>
-     <widget class="QSplitter" name="splitter">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Traffic Control&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
+      <property name="currentIndex">
+       <number>0</number>
       </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="handleWidth">
-       <number>6</number>
-      </property>
-      <widget class="QSplitter" name="splitter2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>200</height>
-        </size>
-       </property>
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="handleWidth">
-        <number>6</number>
-       </property>
-       <widget class="QWidget" name="verticalLayoutWidget">
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <property name="leftMargin">
-          <number>0</number>
+      <widget class="QWidget" name="trafficControl">
+       <attribute name="title">
+        <string>Tab 1</string>
+       </attribute>
+       <widget class="QSplitter" name="splitter_3">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1084</width>
+          <height>625</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="handleWidth">
+         <number>6</number>
+        </property>
+        <widget class="QSplitter" name="splitter2_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="topMargin">
-          <number>0</number>
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>200</height>
+          </size>
          </property>
-         <item>
-          <widget class="QListWidget" name="flightList"/>
-         </item>
-         <item>
-          <widget class="QTableWidget" name="flightInfo">
-           <column>
-            <property name="text">
-             <string>Type</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Data</string>
-            </property>
-           </column>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="gridLayoutWidget">
-        <layout class="QGridLayout" name="gridLayout">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetNoConstraint</enum>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
          </property>
-         <property name="horizontalSpacing">
-          <number>1</number>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="verticalSpacing">
+         <property name="handleWidth">
           <number>6</number>
          </property>
-         <item row="0" column="0">
-          <widget class="qhac_mapview" name="mapView" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+         <widget class="QWidget" name="verticalLayoutWidget_3">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="leftMargin">
+            <number>0</number>
            </property>
-           <property name="minimumSize">
-            <size>
-             <width>500</width>
-             <height>500</height>
-            </size>
+           <property name="topMargin">
+            <number>0</number>
            </property>
-           <property name="font">
-            <font>
-             <kerning>true</kerning>
-            </font>
+           <item>
+            <widget class="QListWidget" name="flightList"/>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="flightInfo">
+             <column>
+              <property name="text">
+               <string>Type</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Data</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="gridLayoutWidget_3">
+          <layout class="QGridLayout" name="gridLayout">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetNoConstraint</enum>
            </property>
-           <property name="styleSheet">
-            <string notr="true"/>
+           <property name="horizontalSpacing">
+            <number>1</number>
            </property>
-          </widget>
-         </item>
-        </layout>
+           <property name="verticalSpacing">
+            <number>6</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="qhac_mapview" name="mapView" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>500</width>
+               <height>500</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <kerning>true</kerning>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QListWidget" name="statusListWidget">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>100</height>
+          </size>
+         </property>
+        </widget>
        </widget>
       </widget>
-      <widget class="QListWidget" name="statusListWidget">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>100</height>
-        </size>
-       </property>
+      <widget class="DepartureControl" name="departureControl">
+       <attribute name="title">
+        <string>Page</string>
+       </attribute>
       </widget>
      </widget>
     </item>
@@ -371,6 +397,12 @@
    <class>qhac_mapview</class>
    <extends>QWidget</extends>
    <header>qhac_mapview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>DepartureControl</class>
+   <extends>QWidget</extends>
+   <header location="global">departurecontrol.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

@@ -9,6 +9,7 @@
 #include "emscenariodialog.h"
 #include "controldialog.h"
 #include "qhac_mapview.h"
+#include "departurecontrol.h"
 
 #include <QWidget>
 #include <QGraphicsScene>
@@ -71,6 +72,7 @@ private:
     void updateStatusText();
     void updateNotifier();
     void updateDroneRoad();
+    void updateDeparture();
 
 private:    // ROS2 Topic
     rclcpp::Node::SharedPtr _ros2node;
@@ -111,6 +113,7 @@ private:
     bool                    mReadyAlarm;
 
     qhac_mapview            *mMapView;
+    DepartureControl        *mDepartureControl;
     QRubberBand             *mRubberBand;
     bool                    mRubberBandDrawing, mPolygonDrawing;
     QPoint                  mWindowPos;

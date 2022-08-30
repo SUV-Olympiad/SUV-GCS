@@ -14,26 +14,7 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-    background:#333;
-    color: #fff;
-}
-
-QHeaderView::section {
-   background:rgba(0,0,0,0);
-    padding: 2px;
-    border: 1px solid #fff;
-    font-size: 10pt;
-}
-
-QTableWidget {
-   background:rgba(0,0,0,0);
-    font-size: 12pt;
-}
-
-QTableWidget QTableCornerButton::section {
-    border: 1px solid #fffff8;
-}</string>
+   <string notr="true"></string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>

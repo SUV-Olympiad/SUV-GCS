@@ -3,6 +3,7 @@
 #include "manager.h"
 #include "sleeper.h"
 #include "rosdata.h"
+#include "departurecontrol.h"
 
 #include <QKeyEvent>
 #include <QFileDialog>
@@ -75,6 +76,10 @@ MainWidget::MainWidget(QWidget *parent) :
     ui->flightInfo->horizontalHeader()->setStretchLastSection(true);
     connect(ui->flightList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(on_sysList_itemClicked(QListWidgetItem*)));
 
+    ui->tabWidget->setTabText(0, "Traffic Control");
+    ui->tabWidget->setTabText(1, "Departure Control");
+
+    
 }
 
 MainWidget::~MainWidget()
@@ -111,50 +116,13 @@ void MainWidget::subscribeROS2Topics()
 
 void MainWidget::procInitTreeWidget()
 {
-    // QStringList strItemList;
-
-    // strItemList << "MODE"
-    //             << "ISARMED"
-    //             << "Battery"
-    //             << "LLH_STR"
-    //             << "LPOS_STR";
-
-
-    // ui->treeWidget->setColumnCount(2);
-    // QStringList headers;
-    // headers << tr("Subject") << tr("Value");
-    // ui->treeWidget->setHeaderLabels(headers);
-    // ui->treeWidget->header()->resizeSection(0, 150);
-
-    // QList<QTreeWidgetItem *> items;
-    // int numItem = strItemList.size();
-    // for (int i = 0; i < numItem ; i++ ) {
-    //     QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget);
-    //     item->setText(0, strItemList[i]);
-    //     item->setExpanded(true);
-
-    //     const QMap<int, IVehicle*> agentsMap = mManager->agents();
-    //     QMap<int, IVehicle*>::const_iterator agentsIterator;
-    //     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
-    //         QTreeWidgetItem *subitem = new QTreeWidgetItem(item);
-    //         int sysid = agentsIterator.value()->data("SYSID").toInt();
-    //         subitem->setText(0, QString("ID:%1[%2]").arg(agentsIterator.value()->id()).arg(sysid));
-    //         subitem->setText(1, QString("---"));
-    //         item->addChild(subitem);
-    //     }        
-
-    //     items.append(item);
-
-    // }
-
-    // ui->treeWidget->insertTopLevelItems(0, items);
-
     //List Add
     const QMap<int, IVehicle*> agentsMap = mManager->agents();
     QMap<int, IVehicle*>::const_iterator agentsIterator;
     QMap<int, QColor> colorList;
     
     qsrand(time(0));
+    QString departureData{""};
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         int sysid = agentsIterator.value()->data("SYSID").toInt();
         QColor color = QColor(qrand()%255, qrand()%255, qrand()%255);
@@ -167,7 +135,13 @@ void MainWidget::procInitTreeWidget()
         roadList[agentsIterator.value()->id()] = roadData;
         mMapView->updateColor(colorList);
 
+
+        QString str2 = QString("%1\t%2").arg(agentsIterator.value()->id()).arg(sysid);
+        departureData.append(str2);
+        departureData.append("//");
     }
+
+    ui->departureControl->initData(departureData);
 
 
     //Show table
@@ -424,6 +398,7 @@ void MainWidget::updateUI()
     updateStatusText();
     rclcpp::spin_some(_ros2node);
     updateDronesInMap();
+    updateDeparture();
 }
 
 bool MainWidget::event(QEvent *event)
@@ -582,3 +557,39 @@ void MainWidget::on_sysList_itemClicked(QListWidgetItem *item)
     int id   = list1[0].replace("ID : ","").toInt();
     selectVehicleId = id;
 }   
+
+
+void MainWidget::updateDeparture()
+{
+    QStringList strItemList;
+    strItemList << "MODE"
+                << "Battery"
+                << "LPOS_STR";
+    int numItem = strItemList.size();
+
+    const QMap<int, IVehicle*> agentsMap = mManager->agents();
+    QMap<int, IVehicle*>::const_iterator agentsIterator;
+    
+
+    for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+        QString departureData{""};
+        QString sysid = agentsIterator.value()->data("SYSID").toString();
+        departureData.append(sysid);
+        departureData.append("\t");
+
+        for (int i = 0; i < numItem ; i++ ) {
+            QString value;
+
+            if ( agentsIterator.value() == NULL )  {
+                qDebug("Error: agent == NULL");
+                continue;
+            }
+
+            value = QString("%1").arg((agentsIterator.value()->data(strItemList[i])).toString());
+
+            departureData.append(value);
+            departureData.append("\t");
+        }
+        ui->departureControl->updateData(departureData);
+    }
+}

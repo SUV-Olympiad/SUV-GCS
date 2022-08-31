@@ -79,7 +79,7 @@ MainWidget::MainWidget(QWidget *parent) :
     ui->tabWidget->setTabText(0, "Traffic Control");
     ui->tabWidget->setTabText(1, "Unmanned Traffic Management");
 
-    
+
 }
 
 MainWidget::~MainWidget()
@@ -209,7 +209,7 @@ void MainWidget::updateDroneRoad()
         }
     }
     mMapView->updateRoad(roadList);
-
+    
 }
 
 
@@ -318,6 +318,10 @@ void MainWidget::loadConfigFile()
         mTimer.setInterval(33);
         mTimer.start();
 
+
+        connect(&mRoadTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
+        mRoadTimer.setInterval(200);
+        mRoadTimer.start();
     }
 
     _base_latlng.setLatitude(mManager->property("base", "latitude").toDouble());
@@ -391,10 +395,16 @@ void MainWidget::onScenarioMode(bool aMode)
 
 }
 
+void MainWidget::updateMap()
+{
+    updateDroneRoad();
+}
+
+
+
 void MainWidget::updateUI()
 {	    
     updateVehicleData();
-    updateDroneRoad();
     updateStatusText();
     rclcpp::spin_some(_ros2node);
     updateDronesInMap();

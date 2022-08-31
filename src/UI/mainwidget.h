@@ -79,6 +79,7 @@ private:    // ROS2 Topic
 
 private Q_SLOTS:
     void updateUI();
+    void updateMap();
     void runScenario();
     void stopScenario();
     void loadConfigFile();
@@ -107,6 +108,7 @@ private:
     CControlDialog*         mControlDialog;
     QGraphicsScene*         mMainPanelScene;
     QTimer                  mTimer;
+    QTimer                  mRoadTimer;
     CManager*               mManager;
     QThread                 mManagerThread;
     QMap<int, QString>      mPrevStatusText;

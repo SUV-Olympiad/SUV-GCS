@@ -389,7 +389,7 @@ void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::Shar
     if (mMission.size() < item->seq_total){
         mMission.insert(mMissionItem.sequence_current, item);
     } else {
-        mMission[mMissionItem.sequence_current] = item;
+        delete item;
     }
 }
 

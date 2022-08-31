@@ -29,7 +29,6 @@ void DepartureControl::updateData(QString data)
 {
     int rowCount = ui->tableWidget->rowCount();
     QStringList list = data.split("\t");
-    qDebug() << data;
     for(int i=0; i<rowCount; i++){
         if(ui->tableWidget->item(i,1)->text() == list[0]){
             ui->tableWidget->setItem(i,2,new QTableWidgetItem(list[1]));

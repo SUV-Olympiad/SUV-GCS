@@ -77,7 +77,7 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(ui->flightList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(on_sysList_itemClicked(QListWidgetItem*)));
 
     ui->tabWidget->setTabText(0, "Traffic Control");
-    ui->tabWidget->setTabText(1, "Departure Control");
+    ui->tabWidget->setTabText(1, "Unmanned Traffic Management");
 
     
 }

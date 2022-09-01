@@ -61,6 +61,8 @@ void CROSData::initSubscription()
     mMissionResultSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::MissionResult>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionResult, this, _1));
     topic = QString("/vehicle%1/out/NavigatorMissionItem").arg(sysid); 
     mMissionItemSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::NavigatorMissionItem>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionItem, this, _1));
+    topic = QString("/vehicle%1/out/BatteryStatus").arg(sysid); 
+    mBatteryStatusSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::BatteryStatus>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateBatteryStatus, this, _1));
 
     mVehicleCommandAckSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleCommandAck>(topic_prefix + "/vehicle_command_ack", qos, std::bind(&CROSData::updateVehicleCommandAck, this, _1));
     mLogMessageSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::LogMessage>(topic_prefix + "/log_message", qos, std::bind(&CROSData::updateLogMessage, this, _1));
@@ -134,7 +136,7 @@ QVariant CROSData::data(const QString &aItem)
         return mGstRunning;
     }
     else if ( item == "BATTERY") {
-        return 0;
+        return mBatteryStatus.remaining;
     }
     else if ( item == "DISTANCE") {
         return 0;
@@ -391,6 +393,11 @@ void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::Shar
     } else {
         delete item;
     }
+}
+
+void CROSData::updateBatteryStatus(const px4_msgs::msg::BatteryStatus::SharedPtr msg)
+{
+    mBatteryStatus = *msg;
 }
 
 void CROSData::updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg)

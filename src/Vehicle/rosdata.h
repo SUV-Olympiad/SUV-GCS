@@ -21,6 +21,7 @@
 #include <px4_msgs/msg/uavcan_parameter_request.hpp>
 #include <px4_msgs/msg/uavcan_parameter_value.hpp>
 #include <px4_msgs/msg/log_message.hpp>
+#include <px4_msgs/msg/battery_status.hpp>
 
 #include <px4_msgs/msg/log_message.hpp>
 
@@ -151,6 +152,7 @@ public:
     void updateVehicleGlobalPosition(const px4_msgs::msg::VehicleGlobalPosition::SharedPtr msg);
     void updateMissionResult(const px4_msgs::msg::MissionResult::SharedPtr msg);
     void updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::SharedPtr msg);
+    void updateBatteryStatus(const px4_msgs::msg::BatteryStatus::SharedPtr msg);
 
     // void parameterValueCallback(const px4_msgs::msg::UavcanParameterValue::SharedPtr msg);
     QList<QString> getParamRequested();
@@ -200,6 +202,7 @@ private:
     px4_msgs::msg::MissionResult                mMissionResult;
     px4_msgs::msg::NavigatorMissionItem         mMissionItem;
     px4_msgs::msg::VehicleCommandAck            mVehicleCommandAck;
+    px4_msgs::msg::BatteryStatus                mBatteryStatus;
     bool                                        mGstRunning;
 
     QList<QString>                      param_requested;
@@ -210,6 +213,7 @@ private:
     rclcpp::Subscription<px4_msgs::msg::VehicleGlobalPosition>::SharedPtr mVehicleGlobalPositionSub_;
     rclcpp::Subscription<px4_msgs::msg::MissionResult>::SharedPtr mMissionResultSub_;
     rclcpp::Subscription<px4_msgs::msg::NavigatorMissionItem>::SharedPtr mMissionItemSub_;
+    rclcpp::Subscription<px4_msgs::msg::BatteryStatus>::SharedPtr mBatteryStatusSub_;
 
     rclcpp::Subscription<px4_msgs::msg::VehicleCommandAck>::SharedPtr mVehicleCommandAckSub_;
     rclcpp::Subscription<px4_msgs::msg::LogMessage>::SharedPtr mLogMessageSub_;

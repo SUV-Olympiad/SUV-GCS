@@ -33,6 +33,7 @@ public:
 
     IVehicle* agent(int aID);
     QMap<int, IVehicle*> agents() const;
+    QMap<int, QString> agentsTime() const;
 
     QString property(const QString& aGroup, const QString& aKey);
 
@@ -53,6 +54,7 @@ private:
     QMap< QString, QString >        mBase;
 
     QMap<int, IVehicle*>              mAgents;
+    QMap<int, QString>              mAgents_time;
     QList<Eigen::Vector3f>          mUnknownMark;
 };
 

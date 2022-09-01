@@ -114,6 +114,8 @@ public:
             QString str = QString("%1 - %2/%3: (%4,%5,%6,%7)").arg(instance_count).arg(seq_cur).arg(seq_total).arg(lat).arg(lng).arg(alt).arg(yaw);
             return str;
         }
+
+
     };
 
 public:

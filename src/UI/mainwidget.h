@@ -120,7 +120,7 @@ private:
     QRubberBand             *mRubberBand;
     bool                    mRubberBandDrawing, mPolygonDrawing;
     QPoint                  mWindowPos;
-    QGeoCoordinate          _base_latlng = QGeoCoordinate(36.374108, 127.352697, 82);
+    QGeoCoordinate          _base_latlng = QGeoCoordinate(36.766559, 127.281290, 82);
     QMap<int, QString>      roadList;
 
     float                   HEADING = 270;

@@ -734,18 +734,19 @@ void ObjectView::paintEvent(QPaintEvent *event)
     foreach (DroneObject drone, _droneList) {
 
         // draw Lines
-        QPen pen(_colorList[drone.id()],1);
+        QPen pen(_colorList[drone.id()],2);
         paint.setPen(pen);
         QStringList list = _roadList[drone.id()].split("//");
 
         for(int i=0; i<list.size() - 2; i++){
             if(list[i+1].size() >= 4){
-                QStringList startPos = list[i].split(":");
-                QStringList endPos = list[i+1].split(":");
-
+                QStringList startPos = list[i].split("(");
+                startPos = startPos[1].split(",");
+                QStringList endPos = list[i+1].split("(");
+                endPos = endPos[1].split(",");
                 QPointF startPosTile = _mapview->LLH2TilePos(QPointF(startPos[0].toDouble(),startPos[1].toDouble())) - origin_pos;
                 QPointF endPosTile = _mapview->LLH2TilePos(QPointF(endPos[0].toDouble(),endPos[1].toDouble())) - origin_pos;
-                paint.drawLine(startPosTile.x(), startPosTile.y(), endPosTile.x() + 50.0, endPosTile.y() + 50.0);
+                paint.drawLine(startPosTile.x(), startPosTile.y(), endPosTile.x(), endPosTile.y());
             }
         }
 

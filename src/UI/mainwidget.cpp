@@ -47,7 +47,7 @@ MainWidget::MainWidget(QWidget *parent) :
     ui->mapView->init(6,6);
 
     // FIXME: dynamic change according to the drone position
-    ui->mapView->moveByGPS(36.37501576001398, 127.35263774974969, 19);
+    ui->mapView->moveByGPS(36.766559, 127.281290, 19);
 
     mMapView = ui->mapView;
     mRubberBand = NULL;
@@ -204,6 +204,7 @@ void MainWidget::updateDroneRoad()
         for (int i = 0; i < list.size(); ++i) {
             CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
             QString roadData = item->toString();
+            qDebug() << roadData;
             roadList[droneId].append(roadData);
             roadList[droneId].append("//");
         }
@@ -626,7 +627,7 @@ void MainWidget::updateDeparture()
     QStringList strItemList;
     strItemList << "MODE"
                 << "Battery"
-                << "LPOS_STR";
+                << "LLH_STR";
     int numItem = strItemList.size();
 
     const QMap<int, IVehicle*> agentsMap = mManager->agents();

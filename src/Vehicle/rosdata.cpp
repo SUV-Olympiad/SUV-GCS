@@ -184,9 +184,9 @@ QVariant CROSData::data(const QString &aItem)
     }
     else if (item == "LPOS_STR" ) {
 		return QString("(%1, %2, %3)")
-				.arg(mVehicleLocalPosition.x,6,'f',2)
-				.arg(mVehicleLocalPosition.y,6,'f',2)
-				.arg(mVehicleLocalPosition.z,6,'f',2);        
+				.arg(mVehicleLocalPosition.x,6,'f',6)
+				.arg(mVehicleLocalPosition.y,6,'f',6)
+				.arg(mVehicleLocalPosition.z,6,'f',6);        
     }
     else if ( item == "POSVX" ) {
         return mVehicleLocalPosition.vx;
@@ -257,9 +257,9 @@ QVariant CROSData::data(const QString &aItem)
     }
     else if (item == "LLH_STR" ) {
 		return QString("(%1, %2, %3)")
-				.arg(mVehicleGlobalPosition.lat,6,'f',2)
-				.arg(mVehicleGlobalPosition.lon,6,'f',2)
-				.arg(mVehicleGlobalPosition.alt,6,'f',2);        
+				.arg(mVehicleGlobalPosition.lat,6,'f',6)
+				.arg(mVehicleGlobalPosition.lon,6,'f',6)
+				.arg(mVehicleGlobalPosition.alt,6,'f',6);        
     }
     else if (item == "MISSION" ) {
     

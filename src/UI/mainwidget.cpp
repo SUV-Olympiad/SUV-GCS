@@ -44,7 +44,7 @@ MainWidget::MainWidget(QWidget *parent) :
     mEmScenarioDialog = new CEmScenarioDialog(mManager, this);
     mControlDialog = new CControlDialog(mManager, this);
 
-    ui->mapView->init(6,6);
+    ui->mapView->init(mManager, 6, 6);
 
     // FIXME: dynamic change according to the drone position
     ui->mapView->moveByGPS(36.766559, 127.281290, 19);
@@ -189,30 +189,6 @@ void MainWidget::updateVehicleData(){
         }
     }
 }
-        
-void MainWidget::updateDroneRoad()
-{
-    const QMap<int, IVehicle*> agentsMap = mManager->agents();
-    QMap<int, IVehicle*>::const_iterator agentsIterator;
-    for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
-        IVehicle* agent = agentsIterator.value();
-        agent->cmd("MISSION_PLAN");
-
-        int droneId = agent->data("SYSID").toInt();
-        QList<QVariant> list = agent->data("MISSION").toList();
-        roadList[droneId] = QString("");
-        for (int i = 0; i < list.size(); ++i) {
-            CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
-            QString roadData = item->toString();
-            qDebug() << roadData;
-            roadList[droneId].append(roadData);
-            roadList[droneId].append("//");
-        }
-    }
-    mMapView->updateRoad(roadList);
-    
-}
-
 
 void MainWidget::updateDronesInMap()
 {
@@ -319,7 +295,6 @@ void MainWidget::loadConfigFile()
         mTimer.setInterval(33);
         mTimer.start();
 
-
         connect(&mRoadTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
         mRoadTimer.setInterval(200);
         mRoadTimer.start();
@@ -340,6 +315,16 @@ void MainWidget::checkFlight()
         agentsIterator.value()->cmd("RESET_PARAM");
         agentsIterator.value()->cmd("CHECK_PARAM");
 	}
+}
+
+void MainWidget::updateMap()
+{
+    const QMap<int, IVehicle*> agentsMap = mManager->agents();
+    QMap<int, IVehicle*>::const_iterator agentsIterator;
+    for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+        IVehicle* agent = agentsIterator.value();
+        agent->cmd("MISSION_PLAN");
+    }
 }
 
 void MainWidget::runParamDialog()
@@ -396,10 +381,6 @@ void MainWidget::onScenarioMode(bool aMode)
 
 }
 
-void MainWidget::updateMap()
-{
-    updateDroneRoad();
-}
 
 
 
@@ -598,7 +579,7 @@ void MainWidget::keyEvent(QKeyEvent *event)
         for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
             IVehicle* agent = agentsIterator.value();
             qDebug() << "MISSION......";
-            qDebug() << "Vehicle : " <<agent->data("SYSID").toInt();
+            qDebug() << "Vehicle : " << agent->data("SYSID").toInt();
             QList<QVariant> list = agent->data("MISSION").toList();
             for (int i = 0; i < list.size(); ++i) {
                 CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
@@ -619,6 +600,7 @@ void MainWidget::on_sysList_itemClicked(QListWidgetItem *item)
     QStringList list1 = item->text().split('\t');
     int id   = list1[0].replace("ID : ","").toInt();
     selectVehicleId = id;
+    ui->mapView->selectVehicle(selectVehicleId);
 }   
 
 

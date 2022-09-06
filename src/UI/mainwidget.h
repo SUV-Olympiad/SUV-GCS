@@ -72,15 +72,14 @@ private:
     void updateDronesInMap();
     void updateStatusText();
     void updateNotifier();
-    void updateDroneRoad();
     void updateDeparture();
 
 private:    // ROS2 Topic
     rclcpp::Node::SharedPtr _ros2node;
 
 private Q_SLOTS:
-    void updateUI();
     void updateMap();
+    void updateUI();
     void runScenario();
     void stopScenario();
     void loadConfigFile();

@@ -18,6 +18,12 @@
 #include <QPainterPath>
 #include <QFileInfo>
 
+#include "manager.h"
+#include "rosdata.h"
+
+#include "qcustomplot.h"
+#include "ardronegraphicsitem.h"
+
 class qhac_mapview;
 
 class DroneObject
@@ -52,6 +58,8 @@ public:
     void updateColor(QMap<int, QColor>);
     void updateRoad(QMap<int, QString>);
     void updateImage(QRectF region, QImage image, qreal rot=0.0, int num=0);
+    void updateManager(CManager* aManager);
+    void selectVehicle(int selectId);
 
 protected:
     void paintEvent(QPaintEvent* event);
@@ -62,14 +70,15 @@ private:
     QPointF rotate(QPointF pos, QPointF base, qreal rot);
 
 private:
+    CManager*                   _manager;
     qhac_mapview*               _mapview;
     QPixmap                     _pixmap;
     QList<QPointF>              _region;
     QList<QPointF>              _regionLLH;
     QMap<int,DroneObject>       _droneList;
+    int                         _selectVehicleId;
     QMap<int, QColor>           _colorList;
     QMap<int, QString>          _roadList;
-
     QRectF                      _img_region[4];    // region of drone image
     qreal                       _img_rot[4];       // rotation of drone image
     QImage                      _image[4];         // drone image
@@ -157,12 +166,13 @@ class qhac_mapview : public QFrame
 
 public:
     explicit qhac_mapview(QWidget *parent = 0);
-    void init(int w, int h);
+    void init(CManager* aManager, int w, int h);
     void moveByGPS(double lat, double lon, int zoom);
     void updateDrone(int id, qreal lat, qreal lon, float heading=0);
     void updateColor(QMap<int, QColor>);
     void updateRoad(QMap<int, QString>);
     void updateImage(QRectF region, QImage image, qreal rot=0, int num=0);
+    void selectVehicle(int selectId);
 
 
     QPointF originTilePos() {return _origin_tile_pos;}
@@ -189,6 +199,7 @@ protected:
     void setPoint(double latitude, double longitude);
     void reset(void);
 
+    CManager*                   _manager;
     MapTile**                   _mapTile;
     QPoint                      _curTilePos;
 

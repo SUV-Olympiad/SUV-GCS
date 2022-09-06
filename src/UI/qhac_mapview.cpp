@@ -742,25 +742,17 @@ void ObjectView::paintEvent(QPaintEvent *event)
     paint.drawPixmap(region, QPixmap::fromImage(_image[3]));
     paint.setOpacity(1.0);
 
-    // draw drones
-    // _droneList[999] = _droneList[_selectVehicleId];
-
-    foreach (DroneObject drone, _droneList) {
-        if(_selectVehicleId == drone.id()){
-            _droneList[INT_MAX - 1] = drone;
-        }
-    }
     
     foreach (DroneObject drone, _droneList) {
+            
+        paint.setOpacity(0.5);
         if(_selectVehicleId == drone.id()){
-            QPen pen(_colorList[drone.id()],4);
-            paint.setPen(pen);
-        }else{
-            QPen pen(_colorList[drone.id()],2);
-            paint.setPen(pen);
+            paint.setOpacity(1.0);
         }
 
-        paint.setOpacity(0.7);
+        QPen pen(_colorList[drone.id()],4);
+        paint.setPen(pen);
+
         paint.setBrush(_colorList[drone.id()]);
 
         IVehicle* agent =  _manager->agent(drone.id());
@@ -770,6 +762,7 @@ void ObjectView::paintEvent(QPaintEvent *event)
         // Draw waypoint
         for (int i = 0; i < list.size(); ++i) {
             CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
+            qDebug() << item->toString();
             float lat = item->lat;
             float lng = item->lng;
 
@@ -790,13 +783,13 @@ void ObjectView::paintEvent(QPaintEvent *event)
             QPointF endPosTile = _mapview->LLH2TilePos(QPointF(end_lat,end_lng)) - origin_pos;
             paint.drawLine(startPosTile.x(), startPosTile.y(), endPosTile.x(), endPosTile.y());
         }
-        paint.setOpacity(1);
+
 
         QPointF drone_pos = _mapview->LLH2TilePos(drone.llh());
         QPointF pos = drone_pos - origin_pos;
         float heading = drone.heading();
 
-        // qDebug("drone pos[%d] : %.9f %.9f (%.9f, %.9f)", drone.id(), pos.x(), pos.y(), drone.llh().x(), drone.llh().y());
+        qDebug("drone pos[%d] : %.9f %.9f (%.9f, %.9f)", drone.id(), pos.x(), pos.y(), drone.llh().x(), drone.llh().y());
 
         QRectF rect = QRectF(pos.x(), pos.y(), 50, 50);
         QPainterPath path;

@@ -57,8 +57,8 @@ void CROSData::initSubscription()
     mVehicleLocalPositionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleLocalPosition>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateVehicleLocalPosition, this, _1));
     topic = QString("/vehicle%1/out/VehicleGlobalPosition").arg(sysid); 
     mVehicleGlobalPositionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleGlobalPosition>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateVehicleGlobalPosition, this, _1));
-    topic = QString("/vehicle%1/out/MissionResult").arg(sysid); 
-    mMissionResultSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::MissionResult>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionResult, this, _1));
+    topic = QString("/vehicle%1/out/Mission").arg(sysid); 
+    mMissionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::Mission>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMission, this, _1));
     topic = QString("/vehicle%1/out/NavigatorMissionItem").arg(sysid); 
     mMissionItemSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::NavigatorMissionItem>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionItem, this, _1));
     topic = QString("/vehicle%1/out/BatteryStatus").arg(sysid); 
@@ -265,10 +265,13 @@ QVariant CROSData::data(const QString &aItem)
     
         QVariantList varLst;
 
-        for (auto v: mMission){
+        for (auto v: mMissions){
             varLst.append(QVariant::fromValue(v));
         }
         return varLst;
+    }
+    else if (item == "MISSION_ITEM") {
+        return QVector3D(mMissionItem.latitude, mMissionItem.longitude, mMissionItem.altitude);
     }
     else if ( item == "MSG_INTERVAL_TIME") {
         qint64 t = QDateTime::currentMSecsSinceEpoch();
@@ -392,12 +395,11 @@ void CROSData::updateVehicleGlobalPosition(const px4_msgs::msg::VehicleGlobalPos
     mVehicleGlobalPosition = *msg;
 }
 
-void CROSData::updateMissionResult(const px4_msgs::msg::MissionResult::SharedPtr msg)
+void CROSData::updateMission(const px4_msgs::msg::Mission::SharedPtr msg)
 {
-    mMissionResult = *msg;
-    mMissionItemCount = mMissionResult.seq_total;
-    mMissionInstance = mMissionResult.instance_count;
-    mMission.clear();
+    mMission = *msg;
+    mMissionItemCount = mMission.count;
+    mMissions.clear();
     qDebug() << "updateMission......";
 }
 
@@ -414,8 +416,9 @@ void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::Shar
         mMissionItem.yaw
     );
 
-    if (mMission.size() < item->seq_total){
-        mMission.insert(mMissionItem.sequence_current, item);
+    if (mMissions.size() < item->seq_total){
+        qDebug() <<mMissionItem.sequence_current ;
+        mMissions.insert(mMissionItem.sequence_current, item);
     } else {
         delete item;
     }

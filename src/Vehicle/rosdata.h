@@ -14,7 +14,7 @@
 #include <px4_msgs/msg/vehicle_status.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
 #include <px4_msgs/msg/vehicle_global_position.hpp>
-#include <px4_msgs/msg/mission_result.hpp>
+#include <px4_msgs/msg/mission.hpp>
 #include <px4_msgs/msg/navigator_mission_item.hpp>
 #include <px4_msgs/msg/vehicle_command.hpp>
 #include <px4_msgs/msg/vehicle_command_ack.hpp>
@@ -152,7 +152,7 @@ public:
     void updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg);
     void updateVehicleLocalPosition(const px4_msgs::msg::VehicleLocalPosition::SharedPtr msg);
     void updateVehicleGlobalPosition(const px4_msgs::msg::VehicleGlobalPosition::SharedPtr msg);
-    void updateMissionResult(const px4_msgs::msg::MissionResult::SharedPtr msg);
+    void updateMission(const px4_msgs::msg::Mission::SharedPtr msg);
     void updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::SharedPtr msg);
     void updateBatteryStatus(const px4_msgs::msg::BatteryStatus::SharedPtr msg);
 
@@ -195,13 +195,13 @@ private:
     // Total count of mission items
     qint16                      mMissionItemCount = -1;
     quint32                     mMissionInstance = 1;
-    QList<MissionItem*>         mMission;
+    QList<MissionItem*>         mMissions;
 
     QMap< QString, QVariant >           mParams;
     px4_msgs::msg::VehicleStatus                mVehicleStatus;
     px4_msgs::msg::VehicleLocalPosition         mVehicleLocalPosition;
     px4_msgs::msg::VehicleGlobalPosition        mVehicleGlobalPosition;
-    px4_msgs::msg::MissionResult                mMissionResult;
+    px4_msgs::msg::Mission                      mMission;
     px4_msgs::msg::NavigatorMissionItem         mMissionItem;
     px4_msgs::msg::VehicleCommandAck            mVehicleCommandAck;
     px4_msgs::msg::BatteryStatus                mBatteryStatus;
@@ -213,7 +213,7 @@ private:
     rclcpp::Subscription<px4_msgs::msg::VehicleStatus>::SharedPtr mVehicleStatusSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr mVehicleLocalPositionSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleGlobalPosition>::SharedPtr mVehicleGlobalPositionSub_;
-    rclcpp::Subscription<px4_msgs::msg::MissionResult>::SharedPtr mMissionResultSub_;
+    rclcpp::Subscription<px4_msgs::msg::Mission>::SharedPtr mMissionSub_;
     rclcpp::Subscription<px4_msgs::msg::NavigatorMissionItem>::SharedPtr mMissionItemSub_;
     rclcpp::Subscription<px4_msgs::msg::BatteryStatus>::SharedPtr mBatteryStatusSub_;
 

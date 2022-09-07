@@ -126,7 +126,33 @@ QVariant CROSData::data(const QString &aItem)
         return "";
     }
     else if ( item == "MODE") {
-        return mVehicleStatus.nav_state;
+        int state = mVehicleStatus.nav_state;
+        QString mode = "";
+        switch (state)
+        {
+        case 0:
+            mode = "Manual mode";
+            break;
+        case 3:
+            mode = "Auto mission mode";
+            break;
+        case 4:
+            mode = "Auto loiter mode";
+            break;
+        case 5:
+            mode = "Auto return to launch mode";
+            break;
+        case 17:
+            mode = "Takeoff";
+            break;
+        case 18:
+            mode = "Land";
+            break;
+        default:
+            mode = "etc";
+            break;
+        }
+        return mode;
     }
     else if ( item == "ISARMED") {
         if (mVehicleStatus.arming_state == 2) return "ARM";
@@ -136,7 +162,7 @@ QVariant CROSData::data(const QString &aItem)
         return mGstRunning;
     }
     else if ( item == "BATTERY") {
-        return mBatteryStatus.remaining;
+        return QString("%1 %").arg(mBatteryStatus.remaining*100, 6, 'f', 2);
     }
     else if ( item == "DISTANCE") {
         return 0;
@@ -158,9 +184,9 @@ QVariant CROSData::data(const QString &aItem)
     }
     else if (item == "LPOS_STR" ) {
 		return QString("(%1, %2, %3)")
-				.arg(mVehicleLocalPosition.x,6,'f',2)
-				.arg(mVehicleLocalPosition.y,6,'f',2)
-				.arg(mVehicleLocalPosition.z,6,'f',2);        
+				.arg(mVehicleLocalPosition.x,6,'f',6)
+				.arg(mVehicleLocalPosition.y,6,'f',6)
+				.arg(mVehicleLocalPosition.z,6,'f',6);        
     }
     else if ( item == "POSVX" ) {
         return mVehicleLocalPosition.vx;
@@ -231,9 +257,9 @@ QVariant CROSData::data(const QString &aItem)
     }
     else if (item == "LLH_STR" ) {
 		return QString("(%1, %2, %3)")
-				.arg(mVehicleGlobalPosition.lat,6,'f',2)
-				.arg(mVehicleGlobalPosition.lon,6,'f',2)
-				.arg(mVehicleGlobalPosition.alt,6,'f',2);        
+				.arg(mVehicleGlobalPosition.lat,6,'f',6)
+				.arg(mVehicleGlobalPosition.lon,6,'f',6)
+				.arg(mVehicleGlobalPosition.alt,6,'f',6);        
     }
     else if (item == "MISSION" ) {
     

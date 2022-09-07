@@ -72,15 +72,14 @@ private:
     void updateDronesInMap();
     void updateStatusText();
     void updateNotifier();
-    void updateDroneRoad();
     void updateDeparture();
 
 private:    // ROS2 Topic
     rclcpp::Node::SharedPtr _ros2node;
 
 private Q_SLOTS:
-    void updateUI();
     void updateMap();
+    void updateUI();
     void runScenario();
     void stopScenario();
     void loadConfigFile();
@@ -120,7 +119,7 @@ private:
     QRubberBand             *mRubberBand;
     bool                    mRubberBandDrawing, mPolygonDrawing;
     QPoint                  mWindowPos;
-    QGeoCoordinate          _base_latlng = QGeoCoordinate(36.374108, 127.352697, 82);
+    QGeoCoordinate          _base_latlng = QGeoCoordinate(36.766559, 127.281290, 82);
     QMap<int, QString>      roadList;
 
     float                   HEADING = 270;

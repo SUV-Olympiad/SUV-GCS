@@ -4,6 +4,8 @@
 #include <QList>
 #include <QDir>
 
+#include <QPainterPath>
+
 MapCache::MapCache()
 {
 
@@ -25,7 +27,7 @@ MapCache::MapCache(int zoom, int x, int y)
         img.load(_fileInfo.absoluteFilePath());
 
         // convert color to gray
-        img = img.convertToFormat(QImage::Format_Grayscale8);
+        // img = img.convertToFormat(QImage::Format_Grayscale8);
 
         // convert QImage to QPixel
         _image.convertFromImage(img);
@@ -91,7 +93,7 @@ void MapCache::done(QNetworkReply* pReply)
     }
 
     // convert color to gray
-    img = img.convertToFormat(QImage::Format_Grayscale8);
+    // img = img.convertToFormat(QImage::Format_Grayscale8);
 
     // convert QImage to QPixel
     _image.convertFromImage(img);
@@ -198,7 +200,7 @@ qhac_mapview::qhac_mapview(QWidget *parent) : QFrame (parent)
     _offset_tile_pos = QPointF(0.0,0.0);
 }
 
-void qhac_mapview::init(int w, int h)
+void qhac_mapview::init(CManager* aManager, int w, int h)
 {
     if (_initialized) return;
     _initialized = true;
@@ -240,6 +242,9 @@ void qhac_mapview::init(int w, int h)
     // setup object view
     _objectView = new ObjectView(this);
     _objectView->show();
+
+
+    _objectView->updateManager(aManager);
 
     // setup image view
 //    _imageView = new ImageView(this);
@@ -474,6 +479,11 @@ void qhac_mapview::updateColor(QMap<int, QColor> colorList)
     _objectView->updateColor(colorList);
 }
 
+void qhac_mapview::selectVehicle(int selectId)
+{
+    _objectView->selectVehicle(selectId);
+}
+
 void qhac_mapview::updateRoad(QMap<int, QString> roadList)
 {
     _objectView->updateRoad(roadList);
@@ -632,10 +642,21 @@ ObjectView::ObjectView(qhac_mapview *parent) : QLabel (parent)
     connect(parent, SIGNAL (Mapview_Resized(QResizeEvent*)), SLOT (resize_event(QResizeEvent*)));
 }
 
+void ObjectView::updateManager(CManager* aManager){
+    _selectVehicleId = -1;
+    _manager = aManager;
+}
+
 void ObjectView::updateColor(QMap<int, QColor> colorList)
 {
     _colorList = colorList;
 }
+
+void ObjectView::selectVehicle(int selectId)
+{
+    _selectVehicleId = selectId;
+}
+
 
 void ObjectView::updateRoad(QMap<int, QString> roadList)
 {
@@ -644,11 +665,6 @@ void ObjectView::updateRoad(QMap<int, QString> roadList)
 
 void ObjectView::updateDrone(int id, QPointF llh, float heading)
 {
-    
-    
-    
-    
-    
     if ( _droneList.contains(id) ) {
         _droneList[id].update(llh, heading);
     }
@@ -667,7 +683,6 @@ void ObjectView::updateImage(QRectF region, QImage image, qreal rot, int num)
 
     this->update();
 }
-
 
 void ObjectView::paintEvent(QPaintEvent *event)
 {
@@ -707,9 +722,6 @@ void ObjectView::paintEvent(QPaintEvent *event)
     paint.rotate(5);
     paint.translate(-center);
 
-
-
-
     // draw drone image #3
     img_pos = _mapview->LLH2TilePos(QPointF(_img_region[2].x(), _img_region[2].y()));
     img_pos2 = _mapview->LLH2TilePos(QPointF(_img_region[2].x() + _img_region[2].width(), _img_region[2].y() + _img_region[2].height()));
@@ -730,23 +742,46 @@ void ObjectView::paintEvent(QPaintEvent *event)
     paint.drawPixmap(region, QPixmap::fromImage(_image[3]));
     paint.setOpacity(1.0);
 
-    // draw drones
+    
     foreach (DroneObject drone, _droneList) {
+            
+        paint.setOpacity(0.5);
+        if(_selectVehicleId == drone.id()){
+            paint.setOpacity(1.0);
+        }
 
-        // draw Lines
-        QPen pen(_colorList[drone.id()],1);
+        QPen pen(_colorList[drone.id()],4);
         paint.setPen(pen);
-        QStringList list = _roadList[drone.id()].split("//");
 
-        for(int i=0; i<list.size() - 2; i++){
-            if(list[i+1].size() >= 4){
-                QStringList startPos = list[i].split(":");
-                QStringList endPos = list[i+1].split(":");
+        paint.setBrush(_colorList[drone.id()]);
 
-                QPointF startPosTile = _mapview->LLH2TilePos(QPointF(startPos[0].toDouble(),startPos[1].toDouble())) - origin_pos;
-                QPointF endPosTile = _mapview->LLH2TilePos(QPointF(endPos[0].toDouble(),endPos[1].toDouble())) - origin_pos;
-                paint.drawLine(startPosTile.x(), startPosTile.y(), endPosTile.x() + 50.0, endPosTile.y() + 50.0);
-            }
+        IVehicle* agent =  _manager->agent(drone.id());
+        QList<QVariant> list = agent->data("MISSION").toList();
+
+
+        // Draw waypoint
+        for (int i = 0; i < list.size(); ++i) {
+            CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
+            qDebug() << item->toString();
+            float lat = item->lat;
+            float lng = item->lng;
+
+            QPointF startPosTile = _mapview->LLH2TilePos(QPointF(lat,lng)) - origin_pos;
+            paint.drawEllipse(QPointF(startPosTile.x(),startPosTile.y()), 5, 5);
+        }
+
+        // Draw Line
+        for (int i = 0; i < list.size() - 1; ++i) {
+            CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
+            CROSData::MissionItem *item2 = list[i+1].value<CROSData::MissionItem*>();
+            float start_lat = item->lat;
+            float start_lng = item->lng;
+            float end_lat = item2->lat;
+            float end_lng = item2->lng;
+
+            QPointF startPosTile = _mapview->LLH2TilePos(QPointF(start_lat,start_lng)) - origin_pos;
+            QPointF endPosTile = _mapview->LLH2TilePos(QPointF(end_lat,end_lng)) - origin_pos;
+            paint.drawLine(startPosTile.x(), startPosTile.y(), endPosTile.x(), endPosTile.y());
         }
 
 
@@ -754,7 +789,7 @@ void ObjectView::paintEvent(QPaintEvent *event)
         QPointF pos = drone_pos - origin_pos;
         float heading = drone.heading();
 
-        // qDebug("drone pos[%d] : %.9f %.9f (%.9f, %.9f)", drone.id(), pos.x(), pos.y(), drone.llh().x(), drone.llh().y());
+        qDebug("drone pos[%d] : %.9f %.9f (%.9f, %.9f)", drone.id(), pos.x(), pos.y(), drone.llh().x(), drone.llh().y());
 
         QRectF rect = QRectF(pos.x(), pos.y(), 50, 50);
         QPainterPath path;
@@ -780,7 +815,10 @@ void ObjectView::paintEvent(QPaintEvent *event)
         QPointF text_pos = pos - QPointF(6, -40);   // to locate at center
         text_pos = rotate(text_pos, pos, heading);
         paint.drawText(text_pos, QString("%1").arg(drone.id()));
-    }    
+    }
+
+
+
 
     // draw interesting region
     paint.setPen(QColor(Qt::red));

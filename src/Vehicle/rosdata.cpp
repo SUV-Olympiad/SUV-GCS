@@ -213,7 +213,7 @@ QVariant CROSData::data(const QString &aItem)
 		return mTargetZ;
 	}
     else if ( item == "HEADING") {
-        return 0;
+        return mVehicleLocalPosition.heading;
     }
 	else if ( item == "STATUSTEXT") {
         return "";
@@ -417,7 +417,7 @@ void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::Shar
     );
 
     if (mMissions.size() < item->seq_total){
-        qDebug() <<mMissionItem.sequence_current ;
+        // qDebug() <<mMissionItem.sequence_current ;
         mMissions.insert(mMissionItem.sequence_current, item);
     } else {
         delete item;

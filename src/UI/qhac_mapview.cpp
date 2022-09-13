@@ -762,7 +762,7 @@ void ObjectView::paintEvent(QPaintEvent *event)
         // Draw waypoint
         for (int i = 0; i < list.size(); ++i) {
             CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
-            qDebug() << item->toString();
+            // qDebug() << item->toString();
             float lat = item->lat;
             float lng = item->lng;
 
@@ -789,7 +789,7 @@ void ObjectView::paintEvent(QPaintEvent *event)
         QPointF pos = drone_pos - origin_pos;
         float heading = drone.heading();
 
-        qDebug("drone pos[%d] : %.9f %.9f (%.9f, %.9f)", drone.id(), pos.x(), pos.y(), drone.llh().x(), drone.llh().y());
+        // qDebug("drone pos[%d] : %.9f %.9f (%.9f, %.9f)", drone.id(), pos.x(), pos.y(), drone.llh().x(), drone.llh().y());
 
         QRectF rect = QRectF(pos.x(), pos.y(), 50, 50);
         QPainterPath path;

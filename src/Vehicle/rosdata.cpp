@@ -398,14 +398,15 @@ void CROSData::updateVehicleGlobalPosition(const px4_msgs::msg::VehicleGlobalPos
 void CROSData::updateMission(const px4_msgs::msg::Mission::SharedPtr msg)
 {
     mMission = *msg;
-    mMissionItemCount = mMission.count;
     mMissions.clear();
+    mMissionSize = 0;
     qDebug() << "updateMission......";
 }
 
 void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::SharedPtr msg)
 {
     mMissionItem = *msg;
+    
     CROSData::MissionItem *item = new CROSData::MissionItem(
         mMissionItem.instance_count,
         mMissionItem.sequence_total,
@@ -415,13 +416,14 @@ void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::Shar
         mMissionItem.altitude,
         mMissionItem.yaw
     );
-
-    if (mMissions.size() < item->seq_total){
-        // qDebug() <<mMissionItem.sequence_current ;
-        mMissions.insert(mMissionItem.sequence_current, item);
+    
+    if (mMissionSize < item->seq_total && !std::isnan(mMissionItem.altitude)){
+        qDebug() <<mMissionItem.sequence_current ;
+        mMissions.append(item);
     } else {
         delete item;
     }
+    mMissionSize ++;
 }
 
 void CROSData::updateBatteryStatus(const px4_msgs::msg::BatteryStatus::SharedPtr msg)

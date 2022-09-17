@@ -762,7 +762,7 @@ void ObjectView::paintEvent(QPaintEvent *event)
         // Draw waypoint
         for (int i = 0; i < list.size(); ++i) {
             CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
-            // qDebug() << item->toString();
+            //qDebug() << item->toString();
             float lat = item->lat;
             float lng = item->lng;
 

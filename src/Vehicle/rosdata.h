@@ -111,7 +111,7 @@ public:
         }
         QString toString() const
         {
-            QString str = QString("%1 - %2/%3: (%4,%5,%6,%7)").arg(instance_count).arg(seq_cur).arg(seq_total).arg(lat).arg(lng).arg(alt).arg(yaw);
+            QString str = QString("%1 - %2/%3: (%4,%5,%6,%7)").arg(instance_count).arg(seq_cur).arg(seq_total).arg(lat,6,'f',10).arg(lng,6,'f',10).arg(alt,6,'f',10).arg(yaw);
             return str;
         }
 
@@ -193,7 +193,7 @@ private:
 
 
     // Total count of mission items
-    qint16                      mMissionItemCount = -1;
+    int                         mMissionSize = 0;
     quint32                     mMissionInstance = 1;
     QList<MissionItem*>         mMissions;
 

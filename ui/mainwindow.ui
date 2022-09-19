@@ -13,9 +13,23 @@
   <property name="windowTitle">
    <string>SUV GCS</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color:#212121;
+color:#fff</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="maximumSize">
+    <size>
+     <width>1027</width>
+     <height>825</height>
+    </size>
+   </property>
    <property name="autoFillBackground">
     <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:#212121;
+color:#fff</string>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="leftMargin">
@@ -42,13 +56,13 @@
           <property name="styleSheet">
            <string notr="true">QTabWidget::pane {
   left:0px;
-  background: rgb(245, 245, 245);; 
+  background: #212121;
   padding:0;
   margin:0;
 } 
 
 QTabBar::tab {
-  background: rgb(230, 230, 230); 
+  background: #212121;
   border: 1px solid lightgray; 
   padding:5px 20px;
   margin-right:5px;
@@ -89,7 +103,7 @@ QTabBar::tab:selected {
      <x>0</x>
      <y>0</y>
      <width>1027</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

@@ -162,7 +162,7 @@ void MainWidget::procInitTreeWidget()
 
 void MainWidget::procInitMainPanelWidget()
 {
-
+        qDebug() << "test";
 }
 
 void MainWidget::updateVehicleData(){

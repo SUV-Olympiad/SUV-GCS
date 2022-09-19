@@ -750,7 +750,7 @@ void ObjectView::paintEvent(QPaintEvent *event)
             paint.setOpacity(1.0);
         }
 
-        QPen pen(_colorList[drone.id()],4);
+        QPen pen(_colorList[drone.id()],10);
         paint.setPen(pen);
 
         paint.setBrush(_colorList[drone.id()]);
@@ -784,7 +784,6 @@ void ObjectView::paintEvent(QPaintEvent *event)
             paint.drawLine(startPosTile.x(), startPosTile.y(), endPosTile.x(), endPosTile.y());
         }
 
-
         QPointF drone_pos = _mapview->LLH2TilePos(drone.llh());
         QPointF pos = drone_pos - origin_pos;
         float heading = drone.heading();
@@ -812,7 +811,8 @@ void ObjectView::paintEvent(QPaintEvent *event)
         font.bold();
         paint.setFont(font);
         paint.setPen(Qt::yellow);
-        QPointF text_pos = pos - QPointF(6, -40);   // to locate at center
+        
+        QPointF text_pos = p4 - QPointF(-6, -40);   // to locate at center
         text_pos = rotate(text_pos, pos, heading);
         paint.drawText(text_pos, QString("%1").arg(drone.id()));
     }
@@ -884,7 +884,7 @@ void ObjectView::wheelEvent(QWheelEvent *ev)
 
 QPointF ObjectView::rotate(QPointF pos, QPointF base, qreal rot)
 {
-    qreal theta = qDegreesToRadians(rot);
+    qreal theta = (3.14f / 180.0f) * qRadiansToDegrees(rot);
     qreal x = (pos.x() - base.x())*qCos(theta) - (pos.y()-base.y())*qSin(theta) + base.x();
     qreal y = (pos.x() - base.x())*qSin(theta) + (pos.y()-base.y())*qCos(theta) + base.y();
 

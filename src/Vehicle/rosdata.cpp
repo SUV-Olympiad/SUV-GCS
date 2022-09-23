@@ -418,7 +418,6 @@ void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::Shar
     );
     
     if (mMissionSize < item->seq_total && !std::isnan(mMissionItem.altitude)){
-        qDebug() <<mMissionItem.sequence_current ;
         mMissions.append(item);
     } else {
         delete item;

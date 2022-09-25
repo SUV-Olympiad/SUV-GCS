@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1026</width>
-    <height>797</height>
+    <width>1118</width>
+    <height>861</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -29,10 +29,6 @@
    <iconset>
     <normaloff>:/icon/Src/UI/icon/title.png</normaloff>:/icon/Src/UI/icon/title.png</iconset>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-color:#212121;
-color:#fff</string>
-  </property>
   <widget class="QWidget" name="centralWidget">
    <property name="enabled">
     <bool>true</bool>
@@ -42,7 +38,7 @@ color:#fff</string>
      <x>0</x>
      <y>0</y>
      <width>1086</width>
-     <height>779</height>
+     <height>901</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -66,11 +62,20 @@ color:#fff</string>
     </property>
     <item>
      <widget class="QTabWidget" name="tabWidget">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>1084</width>
+        <height>800</height>
+       </size>
+      </property>
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Traffic Control&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
       </property>
       <property name="currentIndex">
        <number>0</number>
@@ -85,7 +90,7 @@ color:#fff</string>
           <x>0</x>
           <y>0</y>
           <width>1084</width>
-          <height>625</height>
+          <height>711</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -134,12 +139,22 @@ color:#fff</string>
             <number>0</number>
            </property>
            <item>
-            <widget class="QListWidget" name="flightList"/>
+            <widget class="QListWidget" name="flightList">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>150</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QTableWidget" name="flightInfo">
-             <property name="styleSheet">
-              <string notr="true"/>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>180</height>
+              </size>
              </property>
              <column>
               <property name="text">
@@ -151,6 +166,22 @@ color:#fff</string>
                <string>Data</string>
               </property>
              </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="minimumSize">
+              <size>
+               <width>200</width>
+               <height>200</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">border-width: 1px; border-style: outset;</string>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Camera&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
             </widget>
            </item>
           </layout>
@@ -218,7 +249,7 @@ color:#fff</string>
      <x>0</x>
      <y>0</y>
      <width>1026</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOption">
@@ -246,6 +277,19 @@ color:#fff</string>
     </size>
    </property>
    <addaction name="actionLoadConf"/>
+   <addaction name="actionCheckFlight"/>
+   <addaction name="actionRunScenario"/>
+   <addaction name="actionStopScenario"/>
+   <addaction name="separator"/>
+   <addaction name="separator"/>
+   <addaction name="actionParameter"/>
+   <addaction name="actionCalibration"/>
+   <addaction name="actionAlarm"/>
+   <addaction name="actionGraph"/>
+   <addaction name="actionControl"/>
+   <addaction name="actionMode"/>
+   <addaction name="actionsendSC"/>
+   <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="geometry">

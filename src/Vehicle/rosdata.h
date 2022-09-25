@@ -24,6 +24,7 @@
 #include <px4_msgs/msg/battery_status.hpp>
 
 #include <px4_msgs/msg/log_message.hpp>
+#include <sensor_msgs/msg/image.hpp>
 
 #include <spinworker.h>
 
@@ -155,6 +156,7 @@ public:
     void updateMission(const px4_msgs::msg::Mission::SharedPtr msg);
     void updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::SharedPtr msg);
     void updateBatteryStatus(const px4_msgs::msg::BatteryStatus::SharedPtr msg);
+    void updateCamera(const sensor_msgs::msg::Image::SharedPtr msg);
 
     // void parameterValueCallback(const px4_msgs::msg::UavcanParameterValue::SharedPtr msg);
     QList<QString> getParamRequested();
@@ -168,6 +170,7 @@ public:
     virtual float               heading()     {return 0;}
 
     QVariant data(const QString& aItem);
+    QPixmap getCamera();
 
 private:
     uint toUInt(const QByteArray& aBuffer);
@@ -205,6 +208,7 @@ private:
     px4_msgs::msg::NavigatorMissionItem         mMissionItem;
     px4_msgs::msg::VehicleCommandAck            mVehicleCommandAck;
     px4_msgs::msg::BatteryStatus                mBatteryStatus;
+    sensor_msgs::msg::Image                     mCameraImage;
     bool                                        mGstRunning;
 
     QList<QString>                      param_requested;
@@ -216,7 +220,7 @@ private:
     rclcpp::Subscription<px4_msgs::msg::Mission>::SharedPtr mMissionSub_;
     rclcpp::Subscription<px4_msgs::msg::NavigatorMissionItem>::SharedPtr mMissionItemSub_;
     rclcpp::Subscription<px4_msgs::msg::BatteryStatus>::SharedPtr mBatteryStatusSub_;
-
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mCameraImageSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleCommandAck>::SharedPtr mVehicleCommandAckSub_;
     rclcpp::Subscription<px4_msgs::msg::LogMessage>::SharedPtr mLogMessageSub_;
     // rclcpp::Subscription<px4_msgs::msg::UavcanParameterValue>::SharedPtr mUavcanParameterValueSub_;

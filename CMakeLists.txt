@@ -34,6 +34,7 @@ get_default_rmw_implementation(rmw_implementation)
 find_package("${rmw_implementation}" REQUIRED)
 
 find_package(px4_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 find_package(PythonInterp 3 REQUIRED)
 find_package(OpenCV REQUIRED)
@@ -127,6 +128,7 @@ set(QT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/emscenariodialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/controldialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/qhac_mapview.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/cameraview.cpp
     )
 
 
@@ -154,6 +156,7 @@ set(QT_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/emscenariodialog.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/controldialog.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/qhac_mapview.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/cameraview.h
     )
 
 QT5_WRAP_CPP(QT_MOC_HPP ${QT_HEADERS})
@@ -172,6 +175,7 @@ ament_target_dependencies(suvgcs
     "rclcpp"
     "px4_msgs"
     "std_msgs"
+    "sensor_msgs"
     "OpenCV")
 target_link_libraries(suvgcs)
 

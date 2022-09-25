@@ -742,6 +742,10 @@ void ObjectView::paintEvent(QPaintEvent *event)
     paint.drawPixmap(region, QPixmap::fromImage(_image[3]));
     paint.setOpacity(1.0);
 
+
+    if(_selectVehicleId != -1){
+        _droneList[INT_MAX] = _droneList[_selectVehicleId];
+    }
     
     foreach (DroneObject drone, _droneList) {
             

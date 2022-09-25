@@ -15,6 +15,7 @@
 #include <QList>
 
 #include <opencv2/imgcodecs.hpp>
+#include <opencv2/opencv.hpp>
 #include <cv_bridge/cv_bridge.h>
 
 using std::placeholders::_1;
@@ -28,14 +29,15 @@ MainWidget::MainWidget(QWidget *parent) :
     // init alarm
     mReadyAlarm = false;
 
-    mRemaingTimeLabel = new QLabel("--  ");
-    QFont font = mRemaingTimeLabel->font();
-    font.setPointSize(25);
-    font.setBold(true);
-    mRemaingTimeLabel->setFont(font);
-    mRemaingTimeLabel->setAlignment(Qt::AlignCenter| Qt::AlignRight);
-    mRemaingTimeLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->mainToolBar->addWidget(mRemaingTimeLabel);
+
+    // mRemaingTimeLabel = new QLabel("--  ");
+    // QFont font = mRemaingTimeLabel->font();
+    // font.setPointSize(25);
+    // font.setBold(true);
+    // mRemaingTimeLabel->setFont(font);
+    // mRemaingTimeLabel->setAlignment(Qt::AlignCenter| Qt::AlignRight);
+    // mRemaingTimeLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    // ui->mainToolBar->addWidget(mRemaingTimeLabel);
 
     mManager = new CManager();
     mParamDialog = new CParamDialog(mManager, this);
@@ -47,7 +49,7 @@ MainWidget::MainWidget(QWidget *parent) :
     ui->mapView->init(mManager, 6, 6);
 
     // FIXME: dynamic change according to the drone position
-    ui->mapView->moveByGPS(36.766559, 127.281290, 19);
+    ui->mapView->moveByGPS(36.7721938,127.2696386, 15);
 
     mMapView = ui->mapView;
     mRubberBand = NULL;
@@ -98,6 +100,13 @@ MainWidget::~MainWidget()
     delete mRemaingTimeLabel;
     if ( mEmScenarioDialog !=  NULL )	delete mEmScenarioDialog;
 }
+
+//void MainWidget::showCameraPopup()
+//{
+//    cameraviews = new cameraview(this);
+//    // cameraviews->move(QApplication::desktop()->screen()->rect().center() - cameraviews->rect().center());
+//    cameraviews->show();
+//}
 
 void MainWidget::initManager()
 {
@@ -159,11 +168,6 @@ void MainWidget::procInitTreeWidget()
     }
 }
 
-void MainWidget::procInitMainPanelWidget()
-{
-
-}
-
 void MainWidget::updateVehicleData(){
     if(selectVehicleId != -1){
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
@@ -172,6 +176,9 @@ void MainWidget::updateVehicleData(){
             int agentId = agentsIterator.value()->id();
 
             if(agentId == selectVehicleId){
+                // agentsIterator.value()->getCamera();
+                // ui->label->setPixmap(img);
+
                 for (int i = 0; i < ui->flightInfo->rowCount() ; i++ ) {
                 
                     QString type = ui->flightInfo->item(i, 0)->text();
@@ -289,7 +296,6 @@ void MainWidget::loadConfigFile()
             qDebug() << "isAllAgentsReadey : " << isAllAgentsReady;
         } while(!isAllAgentsReady);
 
-        procInitMainPanelWidget();
         procInitTreeWidget();        
         connect(&mTimer, SIGNAL(timeout()), this, SLOT(updateUI()));
         mTimer.setInterval(33);

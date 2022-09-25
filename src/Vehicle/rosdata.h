@@ -14,7 +14,7 @@
 #include <px4_msgs/msg/vehicle_status.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
 #include <px4_msgs/msg/vehicle_global_position.hpp>
-#include <px4_msgs/msg/mission_result.hpp>
+#include <px4_msgs/msg/mission.hpp>
 #include <px4_msgs/msg/navigator_mission_item.hpp>
 #include <px4_msgs/msg/vehicle_command.hpp>
 #include <px4_msgs/msg/vehicle_command_ack.hpp>
@@ -24,6 +24,7 @@
 #include <px4_msgs/msg/battery_status.hpp>
 
 #include <px4_msgs/msg/log_message.hpp>
+#include <sensor_msgs/msg/image.hpp>
 
 #include <spinworker.h>
 
@@ -111,7 +112,7 @@ public:
         }
         QString toString() const
         {
-            QString str = QString("%1 - %2/%3: (%4,%5,%6,%7)").arg(instance_count).arg(seq_cur).arg(seq_total).arg(lat).arg(lng).arg(alt).arg(yaw);
+            QString str = QString("%1 - %2/%3: (%4,%5,%6,%7)").arg(instance_count).arg(seq_cur).arg(seq_total).arg(lat,6,'f',10).arg(lng,6,'f',10).arg(alt,6,'f',10).arg(yaw);
             return str;
         }
 
@@ -152,9 +153,10 @@ public:
     void updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg);
     void updateVehicleLocalPosition(const px4_msgs::msg::VehicleLocalPosition::SharedPtr msg);
     void updateVehicleGlobalPosition(const px4_msgs::msg::VehicleGlobalPosition::SharedPtr msg);
-    void updateMissionResult(const px4_msgs::msg::MissionResult::SharedPtr msg);
+    void updateMission(const px4_msgs::msg::Mission::SharedPtr msg);
     void updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::SharedPtr msg);
     void updateBatteryStatus(const px4_msgs::msg::BatteryStatus::SharedPtr msg);
+    void updateCamera(const sensor_msgs::msg::Image::SharedPtr msg);
 
     // void parameterValueCallback(const px4_msgs::msg::UavcanParameterValue::SharedPtr msg);
     QList<QString> getParamRequested();
@@ -168,6 +170,7 @@ public:
     virtual float               heading()     {return 0;}
 
     QVariant data(const QString& aItem);
+    QPixmap getCamera();
 
 private:
     uint toUInt(const QByteArray& aBuffer);
@@ -193,18 +196,19 @@ private:
 
 
     // Total count of mission items
-    qint16                      mMissionItemCount = -1;
+    int                         mMissionSize = 0;
     quint32                     mMissionInstance = 1;
-    QList<MissionItem*>         mMission;
+    QList<MissionItem*>         mMissions;
 
     QMap< QString, QVariant >           mParams;
     px4_msgs::msg::VehicleStatus                mVehicleStatus;
     px4_msgs::msg::VehicleLocalPosition         mVehicleLocalPosition;
     px4_msgs::msg::VehicleGlobalPosition        mVehicleGlobalPosition;
-    px4_msgs::msg::MissionResult                mMissionResult;
+    px4_msgs::msg::Mission                      mMission;
     px4_msgs::msg::NavigatorMissionItem         mMissionItem;
     px4_msgs::msg::VehicleCommandAck            mVehicleCommandAck;
     px4_msgs::msg::BatteryStatus                mBatteryStatus;
+    sensor_msgs::msg::Image                     mCameraImage;
     bool                                        mGstRunning;
 
     QList<QString>                      param_requested;
@@ -213,10 +217,10 @@ private:
     rclcpp::Subscription<px4_msgs::msg::VehicleStatus>::SharedPtr mVehicleStatusSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr mVehicleLocalPositionSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleGlobalPosition>::SharedPtr mVehicleGlobalPositionSub_;
-    rclcpp::Subscription<px4_msgs::msg::MissionResult>::SharedPtr mMissionResultSub_;
+    rclcpp::Subscription<px4_msgs::msg::Mission>::SharedPtr mMissionSub_;
     rclcpp::Subscription<px4_msgs::msg::NavigatorMissionItem>::SharedPtr mMissionItemSub_;
     rclcpp::Subscription<px4_msgs::msg::BatteryStatus>::SharedPtr mBatteryStatusSub_;
-
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mCameraImageSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleCommandAck>::SharedPtr mVehicleCommandAckSub_;
     rclcpp::Subscription<px4_msgs::msg::LogMessage>::SharedPtr mLogMessageSub_;
     // rclcpp::Subscription<px4_msgs::msg::UavcanParameterValue>::SharedPtr mUavcanParameterValueSub_;

@@ -1,6 +1,7 @@
 #include "vehicle.h"
 #include <Eigen/Core>
 #include <QDateTime>
+#include <QPixmap>
 #include "logger.h"
 
 IVehicle::IVehicle(QObject* parent)
@@ -22,6 +23,9 @@ IVehicle::~IVehicle()
 {
 }
 
+QPixmap IVehicle::getCamera(){
+    return getCamera();
+}
 QVariant IVehicle::data(const QString aName)
 {
     return data(aName.toLatin1().data());

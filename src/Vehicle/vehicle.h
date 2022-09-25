@@ -4,6 +4,7 @@
 #include "customconfig.h"
 #include <Eigen/Core>
 #include <QVariant>
+#include <QPixmap>
 
 class IVehicle : public QObject
 {
@@ -35,12 +36,13 @@ public:
      * @param aName defined data name
      * @return agent status information (you should know the type of information)
      */
+    virtual QPixmap getCamera();
     virtual QVariant data(const char* aName) = 0;
     virtual QVariant dataROS(const char* aName) = 0;
 
 public:
     int id();
-
+    // QPixmap getCamera();
     QVariant data(const QString aName);
     QVariant dataROS(const QString aName);
 

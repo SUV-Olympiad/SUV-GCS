@@ -10,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     this->layout()->addWidget(new MainWidget());
-
 }
 
 MainWindow::~MainWindow()

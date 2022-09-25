@@ -1,6 +1,9 @@
 #include "rosdata.h"
 #include "vehicle.h"
 
+#include <opencv2/imgcodecs.hpp>
+#include <cv_bridge/cv_bridge.h>
+
 #include <QDataStream>
 #include <QMutexLocker>
 #include <QMetaEnum>
@@ -9,6 +12,11 @@
 #include <QVector3D>
 #include <QThread>
 #include <QString>
+
+#include <QPixmap>
+#include <QImage>
+
+#include <QFile>
 
 using std::placeholders::_1;
 
@@ -46,6 +54,8 @@ void CROSData::initSubscription()
     rclcpp::QoS qos = rclcpp::SystemDefaultsQoS();
     qos.reliable();
 
+    rclcpp::QoS qos2 = rclcpp::QoS(10).reliability(RMW_QOS_POLICY_RELIABILITY_BEST_EFFORT);
+
     std::string topic_prefix = ros2Header + std::to_string(mAgent->data("SYSID").toInt());
 
     // Subscribers
@@ -57,12 +67,14 @@ void CROSData::initSubscription()
     mVehicleLocalPositionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleLocalPosition>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateVehicleLocalPosition, this, _1));
     topic = QString("/vehicle%1/out/VehicleGlobalPosition").arg(sysid); 
     mVehicleGlobalPositionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleGlobalPosition>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateVehicleGlobalPosition, this, _1));
-    topic = QString("/vehicle%1/out/MissionResult").arg(sysid); 
-    mMissionResultSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::MissionResult>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionResult, this, _1));
+    topic = QString("/vehicle%1/out/Mission").arg(sysid); 
+    mMissionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::Mission>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMission, this, _1));
     topic = QString("/vehicle%1/out/NavigatorMissionItem").arg(sysid); 
     mMissionItemSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::NavigatorMissionItem>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionItem, this, _1));
     topic = QString("/vehicle%1/out/BatteryStatus").arg(sysid); 
     mBatteryStatusSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::BatteryStatus>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateBatteryStatus, this, _1));
+    topic = QString("/vehicle%1/fpv_camera/image_raw").arg(sysid - 1);
+    mCameraImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updateCamera, this, _1));
 
     mVehicleCommandAckSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleCommandAck>(topic_prefix + "/vehicle_command_ack", qos, std::bind(&CROSData::updateVehicleCommandAck, this, _1));
     mLogMessageSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::LogMessage>(topic_prefix + "/log_message", qos, std::bind(&CROSData::updateLogMessage, this, _1));
@@ -102,6 +114,24 @@ QString CROSData::log() const
     return QString("");
 }
 
+QPixmap CROSData::getCamera()
+{
+    cv::Mat image_mat = cv::imdecode(cv::Mat(mCameraImage.data), cv::IMREAD_COLOR);
+//    qDebug() << "image_mat" << image_mat;
+    std::cout << "image_mat" << image_mat << endl;
+    qDebug() << "data" << image_mat.data;
+    qDebug() << "cols" << image_mat.cols;
+    qDebug() << "rows" << image_mat.rows;
+
+    return QPixmap::fromImage(
+        QImage(
+            (unsigned char*) image_mat.data, 
+            image_mat.cols, 
+            image_mat.rows, 
+            QImage::Format_RGB888
+        )
+    );
+}
 
 QVariant CROSData::data(const QString &aItem)
 {
@@ -213,7 +243,7 @@ QVariant CROSData::data(const QString &aItem)
 		return mTargetZ;
 	}
     else if ( item == "HEADING") {
-        return 0;
+        return mVehicleLocalPosition.heading;
     }
 	else if ( item == "STATUSTEXT") {
         return "";
@@ -265,10 +295,31 @@ QVariant CROSData::data(const QString &aItem)
     
         QVariantList varLst;
 
-        for (auto v: mMission){
+        for (auto v: mMissions){
             varLst.append(QVariant::fromValue(v));
         }
         return varLst;
+    }
+    else if (item == "MISSION_ITEM") {
+        return QVector3D(mMissionItem.latitude, mMissionItem.longitude, mMissionItem.altitude);
+    }
+    else if (item == "FPV_CAMERA") {
+        cv::Mat image_mat = cv::imdecode(cv::Mat(mCameraImage.data), cv::IMREAD_COLOR);
+
+        std::cout << "image_mat" << image_mat << endl;
+        qDebug() << "data" << image_mat.data;
+        qDebug() << "cols" << image_mat.cols;
+        qDebug() << "rows" << image_mat.rows;
+
+        QPixmap fpv_camera = QPixmap::fromImage(
+                    QImage(
+                            (unsigned char*) image_mat.data,
+                            image_mat.cols,
+                            image_mat.rows,
+                            QImage::Format_RGB888
+                    )
+                );
+        return fpv_camera;
     }
     else if ( item == "MSG_INTERVAL_TIME") {
         qint64 t = QDateTime::currentMSecsSinceEpoch();
@@ -392,18 +443,18 @@ void CROSData::updateVehicleGlobalPosition(const px4_msgs::msg::VehicleGlobalPos
     mVehicleGlobalPosition = *msg;
 }
 
-void CROSData::updateMissionResult(const px4_msgs::msg::MissionResult::SharedPtr msg)
+void CROSData::updateMission(const px4_msgs::msg::Mission::SharedPtr msg)
 {
-    mMissionResult = *msg;
-    mMissionItemCount = mMissionResult.seq_total;
-    mMissionInstance = mMissionResult.instance_count;
-    mMission.clear();
+    mMission = *msg;
+    mMissions.clear();
+    mMissionSize = 0;
     qDebug() << "updateMission......";
 }
 
 void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::SharedPtr msg)
 {
     mMissionItem = *msg;
+    
     CROSData::MissionItem *item = new CROSData::MissionItem(
         mMissionItem.instance_count,
         mMissionItem.sequence_total,
@@ -413,17 +464,30 @@ void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::Shar
         mMissionItem.altitude,
         mMissionItem.yaw
     );
-
-    if (mMission.size() < item->seq_total){
-        mMission.insert(mMissionItem.sequence_current, item);
+    
+    if (mMissionSize < item->seq_total && !std::isnan(mMissionItem.altitude)){
+        mMissions.append(item);
     } else {
         delete item;
     }
+    mMissionSize ++;
 }
 
 void CROSData::updateBatteryStatus(const px4_msgs::msg::BatteryStatus::SharedPtr msg)
 {
     mBatteryStatus = *msg;
+}
+
+void CROSData::updateCamera(const sensor_msgs::msg::Image::SharedPtr msg)
+{
+    mCameraImage = *msg;
+    getCamera();
+//    cv::Mat image_mat = cv::imdecode(cv::Mat(mCameraImage.data), cv::IMREAD_COLOR);
+//    std::cout << "image_mat" << image_mat;
+//    qDebug() << "data" << image_mat.data;
+//    qDebug() << "cols" << image_mat.cols;
+//    qDebug() << "rows" << image_mat.rows;
+////    cv::imwrite("some.jpg", image_mat);
 }
 
 void CROSData::updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg)

@@ -73,7 +73,7 @@ void CROSData::initSubscription()
     mMissionItemSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::NavigatorMissionItem>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionItem, this, _1));
     topic = QString("/vehicle%1/out/BatteryStatus").arg(sysid); 
     mBatteryStatusSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::BatteryStatus>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateBatteryStatus, this, _1));
-    topic = QString("/vehicle%1/fpv_camera/image_raw").arg(sysid); 
+    topic = QString("/vehicle%1/fpv_camera/image_raw").arg(sysid - 1);
     mCameraImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updateCamera, this, _1));
 
     mVehicleCommandAckSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleCommandAck>(topic_prefix + "/vehicle_command_ack", qos, std::bind(&CROSData::updateVehicleCommandAck, this, _1));
@@ -117,6 +117,11 @@ QString CROSData::log() const
 QPixmap CROSData::getCamera()
 {
     cv::Mat image_mat = cv::imdecode(cv::Mat(mCameraImage.data), cv::IMREAD_COLOR);
+//    qDebug() << "image_mat" << image_mat;
+    std::cout << "image_mat" << image_mat << endl;
+    qDebug() << "data" << image_mat.data;
+    qDebug() << "cols" << image_mat.cols;
+    qDebug() << "rows" << image_mat.rows;
 
     return QPixmap::fromImage(
         QImage(
@@ -298,6 +303,24 @@ QVariant CROSData::data(const QString &aItem)
     else if (item == "MISSION_ITEM") {
         return QVector3D(mMissionItem.latitude, mMissionItem.longitude, mMissionItem.altitude);
     }
+    else if (item == "FPV_CAMERA") {
+        cv::Mat image_mat = cv::imdecode(cv::Mat(mCameraImage.data), cv::IMREAD_COLOR);
+
+        std::cout << "image_mat" << image_mat << endl;
+        qDebug() << "data" << image_mat.data;
+        qDebug() << "cols" << image_mat.cols;
+        qDebug() << "rows" << image_mat.rows;
+
+        QPixmap fpv_camera = QPixmap::fromImage(
+                    QImage(
+                            (unsigned char*) image_mat.data,
+                            image_mat.cols,
+                            image_mat.rows,
+                            QImage::Format_RGB888
+                    )
+                );
+        return fpv_camera;
+    }
     else if ( item == "MSG_INTERVAL_TIME") {
         qint64 t = QDateTime::currentMSecsSinceEpoch();
         if ((t - mRecvTime_Monitoring) > 10000 ) {
@@ -458,8 +481,13 @@ void CROSData::updateBatteryStatus(const px4_msgs::msg::BatteryStatus::SharedPtr
 void CROSData::updateCamera(const sensor_msgs::msg::Image::SharedPtr msg)
 {
     mCameraImage = *msg;
-    cv::Mat image_mat = cv::imdecode(cv::Mat(mCameraImage.data), cv::IMREAD_COLOR);
-    cv::imwrite("some.jpg", image_mat);
+    getCamera();
+//    cv::Mat image_mat = cv::imdecode(cv::Mat(mCameraImage.data), cv::IMREAD_COLOR);
+//    std::cout << "image_mat" << image_mat;
+//    qDebug() << "data" << image_mat.data;
+//    qDebug() << "cols" << image_mat.cols;
+//    qDebug() << "rows" << image_mat.rows;
+////    cv::imwrite("some.jpg", image_mat);
 }
 
 void CROSData::updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg)

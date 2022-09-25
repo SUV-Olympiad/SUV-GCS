@@ -101,12 +101,12 @@ MainWidget::~MainWidget()
     if ( mEmScenarioDialog !=  NULL )	delete mEmScenarioDialog;
 }
 
-void MainWidget::showCameraPopup()
-{
-    cameraviews = new cameraview(this);
-    // cameraviews->move(QApplication::desktop()->screen()->rect().center() - cameraviews->rect().center());
-    cameraviews->show();
-}
+//void MainWidget::showCameraPopup()
+//{
+//    cameraviews = new cameraview(this);
+//    // cameraviews->move(QApplication::desktop()->screen()->rect().center() - cameraviews->rect().center());
+//    cameraviews->show();
+//}
 
 void MainWidget::initManager()
 {

@@ -10,7 +10,7 @@
 #include "controldialog.h"
 #include "qhac_mapview.h"
 #include "departurecontrol.h"
-#include "cameraview.h"
+
 
 #include <QWidget>
 #include <QGraphicsScene>
@@ -127,7 +127,7 @@ private:
     float                   TARGET_Z = 10;
     float                   DEPLOY_MINIMUM_DIST = 5.0;      // in meter
 
-    cameraview*             cameraviews;
+
 };
 
 #endif // MAINWIDGET_H

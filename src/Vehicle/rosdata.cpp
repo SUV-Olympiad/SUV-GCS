@@ -1,8 +1,6 @@
 #include "rosdata.h"
 #include "vehicle.h"
 
-#include <opencv2/imgcodecs.hpp>
-#include <cv_bridge/cv_bridge.h>
 
 #include <QDataStream>
 #include <QMutexLocker>
@@ -74,7 +72,9 @@ void CROSData::initSubscription()
     topic = QString("/vehicle%1/out/BatteryStatus").arg(sysid); 
     mBatteryStatusSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::BatteryStatus>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateBatteryStatus, this, _1));
     topic = QString("/vehicle%1/fpv_camera/image_raw").arg(sysid - 1);
-    mCameraImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updateCamera, this, _1));
+    mFpvCameraImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updateFpvCamera, this, _1));
+    topic = QString("/vehicle%1/follow_camera/image_raw").arg(sysid - 1);
+    mFollowCameraImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updateFollowCamera, this, _1));
 
     mVehicleCommandAckSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleCommandAck>(topic_prefix + "/vehicle_command_ack", qos, std::bind(&CROSData::updateVehicleCommandAck, this, _1));
     mLogMessageSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::LogMessage>(topic_prefix + "/log_message", qos, std::bind(&CROSData::updateLogMessage, this, _1));
@@ -304,14 +304,9 @@ QVariant CROSData::data(const QString &aItem)
         return QVector3D(mMissionItem.latitude, mMissionItem.longitude, mMissionItem.altitude);
     }
     else if (item == "FPV_CAMERA") {
-        cv::Mat image_mat = cv::imdecode(cv::Mat(mCameraImage.data), cv::IMREAD_COLOR);
+        cv::Mat image_mat = mFpv_Cv_ptr->image;
 
-        std::cout << "image_mat" << image_mat << endl;
-        qDebug() << "data" << image_mat.data;
-        qDebug() << "cols" << image_mat.cols;
-        qDebug() << "rows" << image_mat.rows;
-
-        QPixmap fpv_camera = QPixmap::fromImage(
+        QPixmap camera = QPixmap::fromImage(
                     QImage(
                             (unsigned char*) image_mat.data,
                             image_mat.cols,
@@ -319,7 +314,20 @@ QVariant CROSData::data(const QString &aItem)
                             QImage::Format_RGB888
                     )
                 );
-        return fpv_camera;
+        return camera;
+    }
+    else if (item == "FOLLOW_CAMERA") {
+        cv::Mat image_mat = mFollow_Cv_ptr->image;
+
+        QPixmap camera = QPixmap::fromImage(
+                QImage(
+                        (unsigned char*) image_mat.data,
+                        image_mat.cols,
+                        image_mat.rows,
+                        QImage::Format_RGB888
+                )
+        );
+        return camera;
     }
     else if ( item == "MSG_INTERVAL_TIME") {
         qint64 t = QDateTime::currentMSecsSinceEpoch();
@@ -478,16 +486,28 @@ void CROSData::updateBatteryStatus(const px4_msgs::msg::BatteryStatus::SharedPtr
     mBatteryStatus = *msg;
 }
 
-void CROSData::updateCamera(const sensor_msgs::msg::Image::SharedPtr msg)
+void CROSData::updateFpvCamera(const sensor_msgs::msg::Image::SharedPtr msg)
 {
-    mCameraImage = *msg;
-    getCamera();
-//    cv::Mat image_mat = cv::imdecode(cv::Mat(mCameraImage.data), cv::IMREAD_COLOR);
-//    std::cout << "image_mat" << image_mat;
-//    qDebug() << "data" << image_mat.data;
-//    qDebug() << "cols" << image_mat.cols;
-//    qDebug() << "rows" << image_mat.rows;
-////    cv::imwrite("some.jpg", image_mat);
+    try
+    {
+        mFpv_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+    }
+    catch (cv_bridge::Exception& e) {
+        qDebug() << "cv_bridge exception: " << e.what();
+    }
+
+}
+
+void CROSData::updateFollowCamera(const sensor_msgs::msg::Image::SharedPtr msg)
+{
+    try
+    {
+        mFollow_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+    }
+    catch (cv_bridge::Exception& e) {
+        qDebug() << "cv_bridge exception: " << e.what();
+    }
+
 }
 
 void CROSData::updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg)

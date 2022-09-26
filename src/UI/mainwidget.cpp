@@ -176,8 +176,8 @@ void MainWidget::updateVehicleData(){
             int agentId = agentsIterator.value()->id();
 
             if(agentId == selectVehicleId){
-                // agentsIterator.value()->getCamera();
-                // ui->label->setPixmap(img);
+                QPixmap img = agentsIterator.value()->data("FPV_CAMERA").value<QPixmap>();
+                ui->label->setPixmap(img);
 
                 for (int i = 0; i < ui->flightInfo->rowCount() ; i++ ) {
                 

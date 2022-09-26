@@ -35,6 +35,7 @@ find_package("${rmw_implementation}" REQUIRED)
 
 find_package(px4_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(cv_bridge REQUIRED)
 
 find_package(PythonInterp 3 REQUIRED)
 find_package(OpenCV REQUIRED)
@@ -174,6 +175,7 @@ ament_target_dependencies(suvgcs
     "px4_msgs"
     "std_msgs"
     "sensor_msgs"
+    "cv_bridge"
     "OpenCV")
 target_link_libraries(suvgcs)
 

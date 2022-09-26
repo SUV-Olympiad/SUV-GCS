@@ -10,6 +10,8 @@
 #include <QList>
 #include <QVector>
 
+#include <opencv2/imgcodecs.hpp>
+#include <cv_bridge/cv_bridge.h>
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/vehicle_status.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
@@ -156,7 +158,8 @@ public:
     void updateMission(const px4_msgs::msg::Mission::SharedPtr msg);
     void updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::SharedPtr msg);
     void updateBatteryStatus(const px4_msgs::msg::BatteryStatus::SharedPtr msg);
-    void updateCamera(const sensor_msgs::msg::Image::SharedPtr msg);
+    void updateFpvCamera(const sensor_msgs::msg::Image::SharedPtr msg);
+    void updateFollowCamera(const sensor_msgs::msg::Image::SharedPtr msg);
 
     // void parameterValueCallback(const px4_msgs::msg::UavcanParameterValue::SharedPtr msg);
     QList<QString> getParamRequested();
@@ -211,6 +214,9 @@ private:
     sensor_msgs::msg::Image                     mCameraImage;
     bool                                        mGstRunning;
 
+    cv_bridge::CvImagePtr                       mFpv_Cv_ptr;
+    cv_bridge::CvImagePtr                       mFollow_Cv_ptr;
+
     QList<QString>                      param_requested;
 
     rclcpp::Node::SharedPtr             mQHAC3Node;
@@ -220,7 +226,8 @@ private:
     rclcpp::Subscription<px4_msgs::msg::Mission>::SharedPtr mMissionSub_;
     rclcpp::Subscription<px4_msgs::msg::NavigatorMissionItem>::SharedPtr mMissionItemSub_;
     rclcpp::Subscription<px4_msgs::msg::BatteryStatus>::SharedPtr mBatteryStatusSub_;
-    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mCameraImageSub_;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mFpvCameraImageSub_;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mFollowCameraImageSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleCommandAck>::SharedPtr mVehicleCommandAckSub_;
     rclcpp::Subscription<px4_msgs::msg::LogMessage>::SharedPtr mLogMessageSub_;
     // rclcpp::Subscription<px4_msgs::msg::UavcanParameterValue>::SharedPtr mUavcanParameterValueSub_;

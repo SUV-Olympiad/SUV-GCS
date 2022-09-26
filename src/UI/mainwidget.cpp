@@ -29,14 +29,15 @@ MainWidget::MainWidget(QWidget *parent) :
     // init alarm
     mReadyAlarm = false;
 
-    mRemaingTimeLabel = new QLabel("--  ");
-    QFont font = mRemaingTimeLabel->font();
-    font.setPointSize(25);
-    font.setBold(true);
-    mRemaingTimeLabel->setFont(font);
-    mRemaingTimeLabel->setAlignment(Qt::AlignCenter| Qt::AlignRight);
-    mRemaingTimeLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->mainToolBar->addWidget(mRemaingTimeLabel);
+
+    // mRemaingTimeLabel = new QLabel("--  ");
+    // QFont font = mRemaingTimeLabel->font();
+    // font.setPointSize(25);
+    // font.setBold(true);
+    // mRemaingTimeLabel->setFont(font);
+    // mRemaingTimeLabel->setAlignment(Qt::AlignCenter| Qt::AlignRight);
+    // mRemaingTimeLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    // ui->mainToolBar->addWidget(mRemaingTimeLabel);
 
     mManager = new CManager();
     mParamDialog = new CParamDialog(mManager, this);
@@ -48,7 +49,7 @@ MainWidget::MainWidget(QWidget *parent) :
     ui->mapView->init(mManager, 6, 6);
 
     // FIXME: dynamic change according to the drone position
-    ui->mapView->moveByGPS(36.766559, 127.281290, 19);
+    ui->mapView->moveByGPS(36.7721938,127.2696386, 15);
 
     mMapView = ui->mapView;
     mRubberBand = NULL;
@@ -99,6 +100,13 @@ MainWidget::~MainWidget()
     delete mRemaingTimeLabel;
     if ( mEmScenarioDialog !=  NULL )	delete mEmScenarioDialog;
 }
+
+//void MainWidget::showCameraPopup()
+//{
+//    cameraviews = new cameraview(this);
+//    // cameraviews->move(QApplication::desktop()->screen()->rect().center() - cameraviews->rect().center());
+//    cameraviews->show();
+//}
 
 void MainWidget::initManager()
 {
@@ -160,11 +168,6 @@ void MainWidget::procInitTreeWidget()
     }
 }
 
-void MainWidget::procInitMainPanelWidget()
-{
-
-}
-
 void MainWidget::updateVehicleData(){
     if(selectVehicleId != -1){
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
@@ -173,6 +176,9 @@ void MainWidget::updateVehicleData(){
             int agentId = agentsIterator.value()->id();
 
             if(agentId == selectVehicleId){
+                QPixmap img = agentsIterator.value()->data("FPV_CAMERA").value<QPixmap>();
+                ui->label->setPixmap(img);
+
                 for (int i = 0; i < ui->flightInfo->rowCount() ; i++ ) {
                 
                     QString type = ui->flightInfo->item(i, 0)->text();
@@ -290,7 +296,6 @@ void MainWidget::loadConfigFile()
             qDebug() << "isAllAgentsReadey : " << isAllAgentsReady;
         } while(!isAllAgentsReady);
 
-        procInitMainPanelWidget();
         procInitTreeWidget();        
         connect(&mTimer, SIGNAL(timeout()), this, SLOT(updateUI()));
         mTimer.setInterval(33);
@@ -589,7 +594,60 @@ void MainWidget::keyEvent(QKeyEvent *event)
         }
 	}
         break;
+    // 
+    case Qt::Key_C:
+	{
+        QList<QVector3D> list0 = {QVector3D(-164.713669, 187.642624, 156.505997), QVector3D(-158.424179, 192.779358, 156.505692), 
+                        QVector3D(-152.753922, 185.777817, 156.505997), QVector3D(-158.962479, 180.760254, 156.505997)};
 
+        QList<QVector3D> list1 = {QVector3D(-38.623737, -340.648468, 150.481003), QVector3D(-46.685524, -340.951324, 150.481003), 
+                        QVector3D(-46.648507, -350.015503, 150.481003), QVector3D(-38.682719, -350.037427, 150.481003)};
+
+        QList<QVector3D> list2 = {QVector3D(1056.458130, 212.577347, 223.754000), QVector3D(1052.290039, 220.665695, 223.754000), 
+                        QVector3D(1059.541138, 224.356140, 223.754000), QVector3D(1063.662109, 1063.662109, 223.753998)};
+
+        QList<QVector3D> list3 = {QVector3D(831.557007, -274.773834, 176.599000), QVector3D(824.480774, -278.521759, 176.599000), 
+                        QVector3D(820.189697, -270.640656, 176.599000), QVector3D(827.296997, -266.720276, 176.599000)};
+
+        QList<QVector3D> list4 = {QVector3D(-370.155518, -215.225357, 187.679001), QVector3D(-363.531311, -210.761826, 187.679001), 
+                        QVector3D(-368.543365, -203.241669, 187.679001), QVector3D(-375.231476, -207.735855, 187.679001)};
+
+        // QList<QVector3D> list5 = {QVector3D(-364.25, 104.8, 0), QVector3D(-364.25, 104.8, 50), 
+        //                 QVector3D(-364.25, -60.7, 50), QVector3D(-83.3, -659.6, 50),
+        //                 QVector3D(154.24, -658.8, 50),QVector3D(154.9, -622, 50), QVector3D(154.9, -622, 0)};
+
+        QList<QGeoCoordinate> res0;           
+        QList<QGeoCoordinate> res1;
+        QList<QGeoCoordinate> res2;
+        QList<QGeoCoordinate> res3;
+        QList<QGeoCoordinate> res4;
+        // QList<QGeoCoordinate> res5;
+        for(QVector3D point: list0){
+            res0.append(ENU2LLH(point));
+        }
+        for(QVector3D point: list1){
+            res1.append(ENU2LLH(point));
+        }
+        for(QVector3D point: list2){
+            res2.append(ENU2LLH(point));
+        }
+        for(QVector3D point: list3){
+            res3.append(ENU2LLH(point));
+        }
+        for(QVector3D point: list4){
+            res4.append(ENU2LLH(point));
+        }
+        // for(QVector3D point: list5){
+        //     res5.append(ENU2LLH(point));
+        // }
+        qDebug() << "iris_0\n"<<res0;
+        qDebug() << "iris_1\n"<<res1;
+        qDebug() << "iris_2\n"<<res2;
+        qDebug() << "iris_3\n"<<res3;
+        qDebug() << "iris_4\n"<<res4;
+        // qDebug() << "iris_5\n"<<res5;
+	}
+        break;
     default:
         break;
     }; 

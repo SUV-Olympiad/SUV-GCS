@@ -11,6 +11,7 @@
 #include "qhac_mapview.h"
 #include "departurecontrol.h"
 
+
 #include <QWidget>
 #include <QGraphicsScene>
 #include <QTimer>
@@ -67,12 +68,12 @@ private:
     void initManager();
     void subscribeROS2Topics();
     void procInitTreeWidget();
-    void procInitMainPanelWidget();    
     void updateVehicleData();	
     void updateDronesInMap();
     void updateStatusText();
     void updateNotifier();
     void updateDeparture();
+    void showCameraPopup();
 
 private:    // ROS2 Topic
     rclcpp::Node::SharedPtr _ros2node;
@@ -125,6 +126,8 @@ private:
     float                   HEADING = 270;
     float                   TARGET_Z = 10;
     float                   DEPLOY_MINIMUM_DIST = 5.0;      // in meter
+
+
 };
 
 #endif // MAINWIDGET_H

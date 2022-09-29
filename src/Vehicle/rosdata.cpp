@@ -16,6 +16,8 @@
 
 #include <QFile>
 
+#include <math.h>
+
 using std::placeholders::_1;
 
 #define RAD2DEG		(57.0)
@@ -67,6 +69,8 @@ void CROSData::initSubscription()
     mVehicleGlobalPositionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleGlobalPosition>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateVehicleGlobalPosition, this, _1));
     topic = QString("/vehicle%1/out/Mission").arg(sysid); 
     mMissionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::Mission>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMission, this, _1));
+    topic = QString("/vehicle%1/out/MissionResult").arg(sysid);
+    mMissionResultSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::MissionResult>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updateMissionResult, this, _1));
     topic = QString("/vehicle%1/out/NavigatorMissionItem").arg(sysid); 
     mMissionItemSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::NavigatorMissionItem>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionItem, this, _1));
     topic = QString("/vehicle%1/out/BatteryStatus").arg(sysid); 
@@ -303,6 +307,12 @@ QVariant CROSData::data(const QString &aItem)
     else if (item == "MISSION_ITEM") {
         return QVector3D(mMissionItem.latitude, mMissionItem.longitude, mMissionItem.altitude);
     }
+    else if ( item == "IS_FPV_CAMERA"){
+        return is_fpv_cam;
+    }
+    else if ( item == "IS_FOLLOW_CAMERA"){
+        return is_follow_cam;
+    }
     else if (item == "FPV_CAMERA") {
         cv::Mat image_mat = mFpv_Cv_ptr->image;
 
@@ -318,7 +328,7 @@ QVariant CROSData::data(const QString &aItem)
     }
     else if (item == "FOLLOW_CAMERA") {
         cv::Mat image_mat = mFollow_Cv_ptr->image;
-
+    
         QPixmap camera = QPixmap::fromImage(
                 QImage(
                         (unsigned char*) image_mat.data,
@@ -338,6 +348,9 @@ QVariant CROSData::data(const QString &aItem)
     }
     else if ( item == "AGENT_BASE_ALT_DIFF") {
         return agentBaseAltDiff;
+    }
+    else if (item == "OFFLINE"){
+        return calculatedist();
     }
     else {
         return QString("--");
@@ -491,6 +504,7 @@ void CROSData::updateFpvCamera(const sensor_msgs::msg::Image::SharedPtr msg)
     try
     {
         mFpv_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_fpv_cam = true;
     }
     catch (cv_bridge::Exception& e) {
         qDebug() << "cv_bridge exception: " << e.what();
@@ -503,6 +517,7 @@ void CROSData::updateFollowCamera(const sensor_msgs::msg::Image::SharedPtr msg)
     try
     {
         mFollow_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_follow_cam = true;
     }
     catch (cv_bridge::Exception& e) {
         qDebug() << "cv_bridge exception: " << e.what();
@@ -540,6 +555,35 @@ void CROSData::publishCommand(px4_msgs::msg::VehicleCommand command) {
 
 void CROSData::setAgentBaseDiffAlt(double alt) {
     this->agentBaseAltDiff = alt;
+}
+
+void CROSData::updateMissionResult(const px4_msgs::msg::MissionResult::SharedPtr msg){
+    mMissionResult = *msg;
+}
+
+bool CROSData::calculatedist(){
+    bool offline = false;
+    qreal start_x, start_y, end_x, end_y, current_x, current_y, result;
+    if (mMissionResult.seq_current <= mMissionResult.seq_total - 2 && mMissionResult.seq_current % 2 == 0 && mVehicleStatus.nav_state == 3) {
+        int currentMissionindex = mMissionResult.seq_current / 2;
+        if (mMissionResult.seq_current == 0) {
+            start_x = mVehicleLocalPosition.ref_lat;
+            start_y = mVehicleLocalPosition.ref_lon;
+        } else {
+            start_x = mMissions[currentMissionindex-1]->lat;
+            start_y = mMissions[currentMissionindex-1]->lon;
+        }
+        end_x = mMissions[currentMissionindex]->lat;
+        end_y = mMissions[currentMissionindex]->lon;
+        current_x = mVehicleGlobalPosition.lat;
+        current_y = mVehicleGlobalPosition.lon;
+        qreal slope = (end_y - start_y) / (end_x - start_x);
+        qreal intercept = start_y - (slope * start_x);
+        result = abs(slope * current_x - current_y + intercept) / sqrt(pow(slope, 2) + 1);
+        if (0.000005 < result)
+            offline = true;
+    }
+    return offline;
 }
 
 void CROSData::onTimeout()

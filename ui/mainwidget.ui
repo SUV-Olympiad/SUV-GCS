@@ -82,7 +82,7 @@
       </property>
       <widget class="QWidget" name="trafficControl">
        <attribute name="title">
-        <string>Tab 1</string>
+        <string>Traffic Control</string>
        </attribute>
        <widget class="QSplitter" name="splitter_3">
         <property name="geometry">
@@ -169,18 +169,42 @@
             </widget>
            </item>
            <item>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QRadioButton" name="camera_type">
+               <property name="text">
+                <string>Fpv camera</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="camera_type2">
+               <property name="text">
+                <string>Follow camera</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
             <widget class="QLabel" name="label">
              <property name="minimumSize">
               <size>
                <width>200</width>
-               <height>200</height>
+               <height>195</height>
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">border-width: 1px; border-style: outset;</string>
+              <string notr="true">border-width: 1px; border-style: outset; background:#000; color:#fff</string>
              </property>
              <property name="text">
               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Camera&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -236,7 +260,7 @@
       </widget>
       <widget class="DepartureControl" name="departureControl">
        <attribute name="title">
-        <string>Page</string>
+        <string>Unmanned Traffic Management</string>
        </attribute>
       </widget>
      </widget>
@@ -607,6 +631,38 @@
     <hint type="destinationlabel">
      <x>699</x>
      <y>471</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>camera_type</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWidget</receiver>
+   <slot>on_camera_type_toggled()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>93</x>
+     <y>499</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>558</x>
+     <y>430</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>camera_type2</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWidget</receiver>
+   <slot>on_camera_type2_toggled()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>277</x>
+     <y>499</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>277</x>
+     <y>499</y>
     </hint>
    </hints>
   </connection>

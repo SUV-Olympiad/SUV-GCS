@@ -11,6 +11,7 @@ DepartureControl::DepartureControl(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+    ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 void DepartureControl::initData(QString data)

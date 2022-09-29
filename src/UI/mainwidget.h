@@ -98,6 +98,10 @@ private slots:
 
     void on_sysList_itemClicked(QListWidgetItem *item);
 
+    void on_camera_type_toggled(bool checked);
+
+    void on_camera_type2_toggled(bool checked);
+
 private:
     Ui::MainWidget*         ui;
     QLabel*                 mRemaingTimeLabel;
@@ -126,6 +130,8 @@ private:
     float                   HEADING = 270;
     float                   TARGET_Z = 10;
     float                   DEPLOY_MINIMUM_DIST = 5.0;      // in meter
+
+    int                     camera_type = 0;
 
 
 };

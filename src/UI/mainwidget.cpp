@@ -77,11 +77,6 @@ MainWidget::MainWidget(QWidget *parent) :
     selectVehicleId = -1;
     ui->flightInfo->horizontalHeader()->setStretchLastSection(true);
     connect(ui->flightList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(on_sysList_itemClicked(QListWidgetItem*)));
-
-    ui->tabWidget->setTabText(0, "Traffic Control");
-    ui->tabWidget->setTabText(1, "Unmanned Traffic Management");
-
-
 }
 
 MainWidget::~MainWidget()
@@ -174,10 +169,14 @@ void MainWidget::updateVehicleData(){
         QMap<int, IVehicle*>::const_iterator agentsIterator;
         for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
             int agentId = agentsIterator.value()->id();
-
+            QPixmap img;
             if(agentId == selectVehicleId){
-                QPixmap img = agentsIterator.value()->data("FPV_CAMERA").value<QPixmap>();
-                ui->label->setPixmap(img);
+                if(camera_type == 0){
+                    img = agentsIterator.value()->data("FPV_CAMERA").value<QPixmap>();
+                }else{
+                    img = agentsIterator.value()->data("FOLLOW_CAMERA").value<QPixmap>();
+                }
+                ui->label->setPixmap(img.scaled(ui->label->width(),ui->label->height(),Qt::KeepAspectRatio));
 
                 for (int i = 0; i < ui->flightInfo->rowCount() ; i++ ) {
                 
@@ -697,3 +696,18 @@ void MainWidget::updateDeparture()
         ui->departureControl->updateData(departureData);
     }
 }
+void MainWidget::on_camera_type_toggled(bool checked)
+{
+    if(checked){
+        camera_type = 0;
+    }
+}
+
+
+void MainWidget::on_camera_type2_toggled(bool checked)
+{
+    if(checked){
+        camera_type = 1;
+    }
+}
+

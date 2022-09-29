@@ -761,15 +761,20 @@ void ObjectView::paintEvent(QPaintEvent *event)
 
         IVehicle* agent =  _manager->agent(drone.id());
         QList<QVariant> list = agent->data("MISSION").toList();
+        agent->data("OFFLINE");
 
-
+        QPointF start, end;
         // Draw waypoint
         for (int i = 0; i < list.size(); ++i) {
             CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
             float lat = item->lat;
-            float lng = item->lng;
-
-            QPointF startPosTile = _mapview->LLH2TilePos(QPointF(lat,lng)) - origin_pos;
+            float lon = item->lon;
+            if (i == 0) {
+                start = QPointF(lat, lon);
+            } else if (i == 1) {
+                end = QPointF(lat, lon);
+            }
+            QPointF startPosTile = _mapview->LLH2TilePos(QPointF(lat,lon)) - origin_pos;
             paint.drawEllipse(QPointF(startPosTile.x(),startPosTile.y()), 5, 5);
         }
 
@@ -778,19 +783,18 @@ void ObjectView::paintEvent(QPaintEvent *event)
             CROSData::MissionItem *item = list[i].value<CROSData::MissionItem*>();
             CROSData::MissionItem *item2 = list[i+1].value<CROSData::MissionItem*>();
             float start_lat = item->lat;
-            float start_lng = item->lng;
+            float start_lon = item->lon;
             float end_lat = item2->lat;
-            float end_lng = item2->lng;
+            float end_lon = item2->lon;
 
-            QPointF startPosTile = _mapview->LLH2TilePos(QPointF(start_lat,start_lng)) - origin_pos;
-            QPointF endPosTile = _mapview->LLH2TilePos(QPointF(end_lat,end_lng)) - origin_pos;
+            QPointF startPosTile = _mapview->LLH2TilePos(QPointF(start_lat,start_lon)) - origin_pos;
+            QPointF endPosTile = _mapview->LLH2TilePos(QPointF(end_lat,end_lon)) - origin_pos;
             paint.drawLine(startPosTile.x(), startPosTile.y(), endPosTile.x(), endPosTile.y());
         }
 
         QPointF drone_pos = _mapview->LLH2TilePos(drone.llh());
         QPointF pos = drone_pos - origin_pos;
         float heading = drone.heading();
-
         // qDebug("drone pos[%d] : %.9f %.9f (%.9f, %.9f)", drone.id(), pos.x(), pos.y(), drone.llh().x(), drone.llh().y());
 
         QRectF rect = QRectF(pos.x(), pos.y(), 50, 50);

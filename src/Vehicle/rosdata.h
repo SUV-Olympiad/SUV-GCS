@@ -241,6 +241,8 @@ private:
      std::string                 ros2Header = "/vehicle";
 
      double                     init_pos_x = 0, init_pos_y = 0;
+     bool                       is_follow_cam = false;
+     bool                       is_fpv_cam = false;
 };
 
 Q_DECLARE_METATYPE(CROSData::MissionItem*);

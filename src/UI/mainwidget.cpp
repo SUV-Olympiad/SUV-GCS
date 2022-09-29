@@ -171,12 +171,21 @@ void MainWidget::updateVehicleData(){
             int agentId = agentsIterator.value()->id();
             QPixmap img;
             if(agentId == selectVehicleId){
+                QString type;
                 if(camera_type == 0){
-                    img = agentsIterator.value()->data("FPV_CAMERA").value<QPixmap>();
+                    type = "FPV_CAMERA";
                 }else{
-                    img = agentsIterator.value()->data("FOLLOW_CAMERA").value<QPixmap>();
+                    type = "FOLLOW_CAMERA";
                 }
-                ui->label->setPixmap(img.scaled(ui->label->width(),ui->label->height(),Qt::KeepAspectRatio));
+                QString is_camtype = QString("IS_%1").arg(type);
+
+                if(agentsIterator.value()->data(is_camtype).toBool()){
+                    img = agentsIterator.value()->data(type).value<QPixmap>();
+                    img = img.scaled(ui->label->width(),ui->label->height(),Qt::KeepAspectRatio);
+                    ui->label->setPixmap(img);
+                }else{
+                    ui->label->setText("<html><head/><body><p align='center'>No camera</p></body></html>");
+                }
 
                 for (int i = 0; i < ui->flightInfo->rowCount() ; i++ ) {
                 

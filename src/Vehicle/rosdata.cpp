@@ -303,6 +303,12 @@ QVariant CROSData::data(const QString &aItem)
     else if (item == "MISSION_ITEM") {
         return QVector3D(mMissionItem.latitude, mMissionItem.longitude, mMissionItem.altitude);
     }
+    else if ( item == "IS_FPV_CAMERA"){
+        return is_fpv_cam;
+    }
+    else if ( item == "IS_FOLLOW_CAMERA"){
+        return is_follow_cam;
+    }
     else if (item == "FPV_CAMERA") {
         cv::Mat image_mat = mFpv_Cv_ptr->image;
 
@@ -318,7 +324,7 @@ QVariant CROSData::data(const QString &aItem)
     }
     else if (item == "FOLLOW_CAMERA") {
         cv::Mat image_mat = mFollow_Cv_ptr->image;
-
+    
         QPixmap camera = QPixmap::fromImage(
                 QImage(
                         (unsigned char*) image_mat.data,
@@ -491,6 +497,7 @@ void CROSData::updateFpvCamera(const sensor_msgs::msg::Image::SharedPtr msg)
     try
     {
         mFpv_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_fpv_cam = true;
     }
     catch (cv_bridge::Exception& e) {
         qDebug() << "cv_bridge exception: " << e.what();
@@ -503,6 +510,7 @@ void CROSData::updateFollowCamera(const sensor_msgs::msg::Image::SharedPtr msg)
     try
     {
         mFollow_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_follow_cam = true;
     }
     catch (cv_bridge::Exception& e) {
         qDebug() << "cv_bridge exception: " << e.what();

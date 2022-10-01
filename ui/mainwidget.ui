@@ -277,6 +277,9 @@
         <height>100</height>
        </size>
       </property>
+      <property name="styleSheet">
+       <string notr="true">color:red; font-size:16px; </string>
+      </property>
      </widget>
     </item>
    </layout>

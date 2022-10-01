@@ -168,7 +168,6 @@ void MainWidget::updateVehicleData(){
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
         QMap<int, IVehicle*>::const_iterator agentsIterator;
         for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
-            qDebug() << agentsIterator.value()->data("OFFLINE").toString();
             int agentId = agentsIterator.value()->id();
             QPixmap img;
             if(agentId == selectVehicleId){
@@ -223,14 +222,14 @@ void MainWidget::updateStatusText()
 	QMap<int, IVehicle*> agentsMap = mManager->agents();
     QMap<int, IVehicle*>::iterator agentsIterator;
 
+    ui->statusListWidget->clear();
+
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         int id = agentsIterator.value()->id();
-		QString text = mManager->agent(id)->data("STATUSTEXT").toString();
+		bool isRoute = mManager->agent(id)->data("OFFLINE").toBool();
 
-		if ( !text.isEmpty() &&  text != mPrevStatusText[id] ) {
-			QString statusText = QString("[%1] %2")
-				.arg(id)
-				.arg(text);
+		if (isRoute) {
+			QString statusText = QString("[Group:%1\t ID:%2]\t Off path").arg(id).arg(id);
 
             ui->statusListWidget->addItem(statusText);
             ui->statusListWidget->scrollToBottom();

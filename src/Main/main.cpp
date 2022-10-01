@@ -1,5 +1,5 @@
 //#include <QtGui/QApplication>
-#include "mainwindow.h"
+#include "mainwidget.h"
 #include <QApplication>
 #include <stdio.h> 
 #include "manager.h"
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
     rclcpp::init(argc, argv);
 
-    MainWindow w;
+    MainWidget w;
     w.show();
 
     return a.exec();

@@ -21,7 +21,7 @@
 using std::placeholders::_1;
 
 MainWidget::MainWidget(QWidget *parent) :
-    QWidget(parent),
+    QMainWindow(parent),
     ui(new Ui::MainWidget)
 {
     ui->setupUi(this);
@@ -168,6 +168,7 @@ void MainWidget::updateVehicleData(){
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
         QMap<int, IVehicle*>::const_iterator agentsIterator;
         for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            qDebug() << agentsIterator.value()->data("OFFLINE").toString();
             int agentId = agentsIterator.value()->id();
             QPixmap img;
             if(agentId == selectVehicleId){

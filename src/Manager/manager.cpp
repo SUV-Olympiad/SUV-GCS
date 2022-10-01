@@ -60,8 +60,8 @@ int CManager::loadAgentFile(const QString &aFilePath)
             else if(xml.name() == "agent") {                
                 properties = this->parseAgentProperties(xml);
                 // check necessary elements
-				if ( ! properties.contains("id") || !properties.contains("type") ) {
-					qDebug("ERROR :  require necessary elements (id and type) ");
+				if ( ! properties.contains("id") || !properties.contains("type") || !properties.contains("group") || !properties.contains("vehicle") ) {
+					qDebug("ERROR :  require necessary elements (id and type and group and vehicle) ");
                     continue;
                 }
 
@@ -94,6 +94,8 @@ void CManager::addAgent(const QMap<QString, QString> aProperty)
 
     QString type = aProperty["type"];
     int id = aProperty["id"].toInt();
+    int group = aProperty["group"].toInt();
+    int vehicle = aProperty["vehicle"].toInt();
 
     QString time = aProperty["time"];
 
@@ -108,6 +110,8 @@ void CManager::addAgent(const QMap<QString, QString> aProperty)
 
     // insert agent object to manager
     mAgents.insert(id, agent);
+    mAgents_group.insert(id, group);
+    mAgents_vehicle.insert(id, vehicle);
     mAgents_time.insert(id, time);
 }
 
@@ -133,6 +137,28 @@ IVehicle *CManager::agent(int aID)
     }
 }
 
+int CManager::groupId(int aID)
+{
+    if ( mAgents_group.contains(aID)) {
+        return mAgents_group[aID];
+    }
+    else {
+        qDebug("ERROR : cannot find agent (ID:%d)", aID);
+        return NULL;
+    }
+}
+
+int CManager::vehicleId(int aID)
+{
+    if ( mAgents_vehicle.contains(aID)) {
+        return mAgents_vehicle[aID];
+    }
+    else {
+        qDebug("ERROR : cannot find agent (ID:%d)", aID);
+        return NULL;
+    }
+}
+
 QMap<int, IVehicle *> CManager::agents() const
 {
     return mAgents;
@@ -141,6 +167,16 @@ QMap<int, IVehicle *> CManager::agents() const
 QMap<int, QString> CManager::agentsTime() const
 {
     return mAgents_time;
+}
+
+QMap<int, int> CManager::agentsGroup() const
+{
+    return mAgents_group;
+}
+
+QMap<int, int> CManager::agentsVehicle() const
+{
+    return mAgents_vehicle;
 }
 
 

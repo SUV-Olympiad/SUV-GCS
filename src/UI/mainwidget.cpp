@@ -285,13 +285,18 @@ void MainWidget::loadConfigFile()
         // TODO: reduce sleep and check init Manager is finished.
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
         const QMap<int, QString> agentsTimeMap = mManager->agentsTime();
+        const QMap<int, int> agentsGroupMap = mManager->agentsGroup();
+        const QMap<int, int> agentsVehicleMap = mManager->agentsVehicle();
 
 
 
         QMap<int, IVehicle*>::const_iterator agentsIterator;
         QMap<int, QString>::const_iterator agentsTimeIterator;
+        QMap<int, int>::const_iterator agentsGroupIterator;
+        QMap<int, int>::const_iterator agentsVehicleIterator;
         bool isAllAgentsReady = true;
         
+
         do{
             CSleeper::msleep(500);
             isAllAgentsReady = true;

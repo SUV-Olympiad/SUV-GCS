@@ -24,7 +24,7 @@ public:
     void grouping(int depth, vector<QLineF> &mission_set, vector<int> &line_set,
                   vector<bool> &visited, vector<bool> &dp);
 
-    vector<int> SWAlgo::choice_best_group(vector <QLineF> &mission_set, vector<float> &EE_list);
+    vector<int> choice_best_group(vector <QLineF> &mission_set, vector<float> &EE_list);
 
 private:
 
@@ -35,17 +35,4 @@ private:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 #endif //SUV_GCS_SWALGO_H
-

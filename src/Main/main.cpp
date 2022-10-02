@@ -11,6 +11,7 @@
 
 
 #include "swalgo.h"
+#include "hungarian.h"
 #include <QLineF>
 #include <time.h>
 
@@ -33,6 +34,8 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
+
+
     QLineF l1 = QLineF(-26, 32, -82, -12);
     QLineF l2 = QLineF(-85, 96, 60, 59);
     QLineF l3 = QLineF(68, 23, 85, 90);
@@ -61,5 +64,22 @@ int main(int argc, char *argv[])
     for (int s: set) {
         cout << s << " ";
     }
+    cout << endl;
+    double INF = 987654321.0;
+    vector <vector<double>> test_dataset = {
+        {2.0, 3.0, 3.0},
+        {3.0, 2.0, 3.0},
+        {3.0, 3.0, 2.0}
+    };
+
+
+    vector<int> assign = vector<int>();
+    HungarianAlgorithm ha = HungarianAlgorithm();
+//    double cost = ha.Solve(test_dataset, assign);
+    vector<int> res = ha.SolveV2(test_dataset, assign);
+//    cout << "WTF : " << cost << endl;
+    for (int idx: res) {
+        cout << "FUCK : " << idx << endl;
+    }
     return a.exec();
-}
+};

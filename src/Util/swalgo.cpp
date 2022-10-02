@@ -34,10 +34,6 @@ void SWAlgo::grouping(int depth, vector<QLineF> &mission_set, vector<int> &line_
 
     dp[key] = true;
 
-    for (int l: line_set) {
-        cout << l;
-    }
-    cout << endl;
     if (line_set.size() >= this->max_cnt + 1) {
         this->groping_set.clear();
         this->max_cnt = line_set.size();
@@ -73,11 +69,9 @@ vector<int> SWAlgo::choice_best_group(vector<QLineF> &mission_set, vector<float>
     int max = -1;
     int group_idx = -1;
     for (int i = 0; i < this->groping_set.size(); i++) {
-        //TODO
         float val = 0.0;
         for (int idx: this->groping_set[i]) {
             int line_idx = this->groping_set[i][idx];
-//            qDebug() << mission_set[line_idx].length();
             val += (float)mission_set[line_idx].length() * EE_list[idx];
         }
         if (val > max) {

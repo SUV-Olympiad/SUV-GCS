@@ -21,7 +21,7 @@
 using std::placeholders::_1;
 
 MainWidget::MainWidget(QWidget *parent) :
-    QWidget(parent),
+    QMainWindow(parent),
     ui(new Ui::MainWidget)
 {
     ui->setupUi(this);
@@ -222,14 +222,14 @@ void MainWidget::updateStatusText()
 	QMap<int, IVehicle*> agentsMap = mManager->agents();
     QMap<int, IVehicle*>::iterator agentsIterator;
 
+    ui->statusListWidget->clear();
+
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         int id = agentsIterator.value()->id();
-		QString text = mManager->agent(id)->data("STATUSTEXT").toString();
+		bool isRoute = mManager->agent(id)->data("OFFLINE").toBool();
 
-		if ( !text.isEmpty() &&  text != mPrevStatusText[id] ) {
-			QString statusText = QString("[%1] %2")
-				.arg(id)
-				.arg(text);
+		if (isRoute) {
+			QString statusText = QString("[Group:%1\t ID:%2]\t Off path").arg(id).arg(id);
 
             ui->statusListWidget->addItem(statusText);
             ui->statusListWidget->scrollToBottom();
@@ -285,13 +285,18 @@ void MainWidget::loadConfigFile()
         // TODO: reduce sleep and check init Manager is finished.
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
         const QMap<int, QString> agentsTimeMap = mManager->agentsTime();
+        const QMap<int, int> agentsGroupMap = mManager->agentsGroup();
+        const QMap<int, int> agentsVehicleMap = mManager->agentsVehicle();
 
 
 
         QMap<int, IVehicle*>::const_iterator agentsIterator;
         QMap<int, QString>::const_iterator agentsTimeIterator;
+        QMap<int, int>::const_iterator agentsGroupIterator;
+        QMap<int, int>::const_iterator agentsVehicleIterator;
         bool isAllAgentsReady = true;
         
+
         do{
             CSleeper::msleep(500);
             isAllAgentsReady = true;

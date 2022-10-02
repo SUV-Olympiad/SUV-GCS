@@ -109,7 +109,6 @@ QT5_WRAP_CPP(QT_MOC_HPP ${QT_MOC})
 set(QT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Main/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/departurecontrol.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/mainwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/mainwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/sleeper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/logger.cpp
@@ -139,7 +138,6 @@ set(QT_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/logger.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/sleeper.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/departurecontrol.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/mainwindow.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/mainwidget.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/qcustomplot.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/mymath.h

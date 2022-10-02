@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1118</width>
-    <height>861</height>
+    <width>1092</width>
+    <height>915</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -53,12 +53,15 @@
      <height>16777215</height>
     </size>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
     <property name="sizeConstraint">
      <enum>QLayout::SetMinimumSize</enum>
     </property>
     <property name="topMargin">
      <number>100</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
     </property>
     <item>
      <widget class="QTabWidget" name="tabWidget">
@@ -90,7 +93,7 @@
           <x>0</x>
           <y>0</y>
           <width>1084</width>
-          <height>711</height>
+          <height>661</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -170,6 +173,9 @@
            </item>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout">
+             <property name="sizeConstraint">
+              <enum>QLayout::SetMinimumSize</enum>
+             </property>
              <item>
               <widget class="QRadioButton" name="camera_type">
                <property name="text">
@@ -194,7 +200,13 @@
              <property name="minimumSize">
               <size>
                <width>200</width>
-               <height>195</height>
+               <height>160</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
               </size>
              </property>
              <property name="styleSheet">
@@ -248,14 +260,6 @@
           </layout>
          </widget>
         </widget>
-        <widget class="QListWidget" name="statusListWidget">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>100</height>
-          </size>
-         </property>
-        </widget>
        </widget>
       </widget>
       <widget class="DepartureControl" name="departureControl">
@@ -263,6 +267,19 @@
         <string>Unmanned Traffic Management</string>
        </attribute>
       </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QListWidget" name="statusListWidget">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:red; font-size:16px; </string>
+      </property>
      </widget>
     </item>
    </layout>

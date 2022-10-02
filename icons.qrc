@@ -2,6 +2,8 @@
     <qresource prefix="/icon">
         <file>src/UI/icon/check.png</file>
         <file>src/UI/icon/configure.png</file>
+        <file>src/UI/icon/drone.png</file>
+        <file>src/UI/icon/flight.png</file>
         <file>src/UI/icon/play.png</file>
         <file>src/UI/icon/scenario.png</file>
         <file>src/UI/icon/setting_1.svg</file>

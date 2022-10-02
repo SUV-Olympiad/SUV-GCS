@@ -12,7 +12,8 @@
 #include "departurecontrol.h"
 
 
-#include <QWidget>
+#include <QMainWindow>
+
 #include <QGraphicsScene>
 #include <QTimer>
 #include <QThread>
@@ -43,7 +44,7 @@ class CController;
 
 static const QGeoCoordinate   refPos(REF_LAT, REF_LON, REF_ALT);
 
-class MainWidget : public QWidget
+class MainWidget : public QMainWindow
 {
     Q_OBJECT
 

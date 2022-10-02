@@ -797,31 +797,54 @@ void ObjectView::paintEvent(QPaintEvent *event)
         float heading = drone.heading();
         // qDebug("drone pos[%d] : %.9f %.9f (%.9f, %.9f)", drone.id(), pos.x(), pos.y(), drone.llh().x(), drone.llh().y());
 
-        QRectF rect = QRectF(pos.x(), pos.y(), 50, 50);
-        QPainterPath path;
+        
+        QPixmap pix(":/icon/src/UI/icon/drone.png");
+        QPixmap pix2(":/icon/src/UI/icon/flight.png");
 
-        QPointF p1 = QPointF(rect.left(), rect.top());
-        QPointF p2 = QPointF(rect.left() - (rect.width() / 2), rect.bottom());
-        QPointF p3 = QPointF(rect.right() - (rect.width() / 2), rect.bottom());
-        QPointF p4 = QPointF(rect.left(), rect.top());
-
-        path.moveTo(rotate(p1, pos, heading));
-        path.lineTo(rotate(p2, pos, heading));
-        path.lineTo(rotate(p3, pos, heading));
-        path.lineTo(rotate(p4, pos, heading));
-        paint.fillPath(path, QBrush(_colorList[drone.id()]));
-        // paint.setBrush(QBrush(Qt::red));
-        // paint.drawEllipse(pos, 5, 5);
+        paint.save();
+        paint.translate(pos.x(),pos.y());
+        paint.rotate(qRadiansToDegrees(heading) + 90);
+        if(_manager->vehicleId(drone.id()) == 1){
+            paint.drawPixmap(-25, -25, 50, 50, pix);
+        }else{
+            paint.drawPixmap(-25, -25, 50, 50, pix2);
+        }
+        paint.restore();
 
         QFont font = paint.font();
-        font.setPixelSize(20);
+        font.setPixelSize(15);
         font.bold();
         paint.setFont(font);
-        paint.setPen(Qt::yellow);
+
+        int color = _colorList[drone.id()].red() + _colorList[drone.id()].green() + _colorList[drone.id()].blue() / 3;
         
-        QPointF text_pos = p4 - QPointF(-6, -40);   // to locate at center
-        text_pos = rotate(text_pos, pos, heading);
-        paint.drawText(text_pos, QString("%1").arg(drone.id()));
+        if(color >= 128){
+            paint.setPen(Qt::black);
+        }else{
+            paint.setPen(Qt::white);
+        }
+
+        paint.fillRect(QRect(pos.x() - 5, pos.y() + 25, 45, 30),QBrush(_colorList[drone.id()]));
+
+        QPointF text_pos = QPointF(pos.x(), pos.y() + 45);
+        paint.drawText(text_pos, QString("[%1] %2").arg(_manager->groupId(drone.id())).arg(drone.id()));
+
+
+        // QRectF rect = QRectF(pos.x(), pos.y(), 50, 50);
+        // QPainterPath path;
+
+        // QPointF p1 = QPointF(rect.left(), rect.top());
+        // QPointF p2 = QPointF(rect.left() - (rect.width() / 2), rect.bottom());
+        // QPointF p3 = QPointF(rect.right() - (rect.width() / 2), rect.bottom());
+
+        // path.moveTo(rotate(p1, pos, heading));
+        // path.lineTo(rotate(p2, pos, heading));
+        // path.lineTo(rotate(p3, pos, heading));
+        // path.lineTo(rotate(p4, pos, heading));
+        
+        // paint.fillPath(path, QBrush(_colorList[drone.id()]));
+        // paint.setBrush(QBrush(Qt::red));
+        // paint.drawEllipse(pos, 5, 5);
     }
 
 

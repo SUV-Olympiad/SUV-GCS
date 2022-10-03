@@ -115,7 +115,7 @@ set(QT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/qcustomplot.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/mymath.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/hungarian.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/swalgo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/suvalgo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Manager/manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Vehicle/vehicle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Vehicle/rosdata.cpp
@@ -142,7 +142,7 @@ set(QT_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/UI/qcustomplot.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/mymath.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/hungarian.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/swalgo.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/suvalgo.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Manager/manager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Vehicle/vehicle.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Vehicle/rosdata.h

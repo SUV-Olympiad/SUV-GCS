@@ -73,7 +73,6 @@ vector<int> HungarianAlgorithm::SolveV2(vector <vector<double> >& DistMatrix, ve
     Assignment.clear();
     for (unsigned int r = 0; r < nRows; r++) {
         Assignment.push_back(assignment[r]);
-        cout << "FUCK  " << Assignment[r] << endl;
     }
 
     delete[] distMatrixIn;

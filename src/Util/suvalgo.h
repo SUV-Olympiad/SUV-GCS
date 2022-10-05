@@ -61,7 +61,7 @@ public:
 
     vector<int> choice_best_group();
 
-    vector<vector<int>> solution();
+    vector <vector<int>> solution(vector<int> &line_set);
 
     vector<vector<SUVAlgo::Wrapper>> make_matrix(vector<int> &group);
 private:

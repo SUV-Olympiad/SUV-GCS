@@ -16,39 +16,33 @@ vector<vector<SUVAlgo::Wrapper>> SUVAlgo::make_matrix(vector<int> &group){
 
     vector<int> start;
     vector<int> end;
-
     for (int idx: group) {
-        float sx = this->mission_sets[idx].x1();
-        float ex = this->mission_sets[idx].x2();
+        float sx = (this->mission_sets[idx].x1() * 100000);
+        float ex = (this->mission_sets[idx].x2() * 100000);
 
-
-        float test = 23.1234;
-        if (test )
-
-
-        if (-165.0 < sx && sx < -155.0) {
+        if (3676815.0 < sx && sx < 3676835.0) {
             start.push_back(VertiPort::POINT_A);
-        } else if (-45.0 < sx && sx < -35.0) {
+        } else if (3676340.0 < sx && sx < 3676350.0) {
             start.push_back(VertiPort::POINT_B);
-        } else if (1000.0 < sx && sx < 1100.0) {
+        } else if (3676835.0 < sx && sx < 3676860.0) {
             start.push_back(VertiPort::POINT_C);
-        } else if (800.0 < sx && sx < 850.0) {
+        } else if (3676395.0 < sx && sx < 3676420.0) {
             start.push_back(VertiPort::POINT_D);
-        } else if (-380.0 < sx && sx < -360.0) {
+        } else if (3676460.0 < sx && sx < 3676480.0) {
             start.push_back(VertiPort::POINT_E);
         } else {
             end.push_back(-1);
         }
 
-        if (-165.0 < ex && ex < -155.0) {
+        if (3676815.0 < ex && ex < 3676835.0) {
             end.push_back(VertiPort::POINT_A);
-        } else if (-45.0 < ex && ex < -35.0) {
+        } else if (3676340.0 < ex && ex < 3676350.0) {
             end.push_back(VertiPort::POINT_B);
-        } else if (1000.0 < ex && ex < 1100.0) {
+        } else if (3676835.0 < ex && ex < 3676860.0) {
             end.push_back(VertiPort::POINT_C);
-        } else if (800.0 < ex && ex < 850.0) {
+        } else if (3676395.0 < ex && ex < 3676420.0) {
             end.push_back(VertiPort::POINT_D);
-        } else if (-380.0 < ex && ex < -360.0) {
+        } else if (3676460.0 < ex && ex < 3676480.0) {
             end.push_back(VertiPort::POINT_E);
         } else {
             end.push_back(-1);
@@ -82,19 +76,22 @@ vector<vector<SUVAlgo::Wrapper>> SUVAlgo::make_matrix(vector<int> &group){
     return Matrix;
 }
 
-vector<vector<int>> SUVAlgo::solution(){
+vector<vector<int>> SUVAlgo::solution(vector<int> &line_set){
+    qDebug() << "[ UTM Solution Start ]";
     int n = this->mission_sets.size();
     vector<bool> visited(n, false);
     vector<bool> dp(pow(2, n), false);
-    vector<int> lineset;
     vector <vector<int>> res;
 
-    this->grouping(0, lineset, visited, dp);
-    this->print_grouping();
+    this->grouping(0, line_set, visited, dp);
+//    this->print_grouping();
     vector<int> group = this->choice_best_group();
+
+//    qDebug() << group;
 
     while (!group.empty()) {
         vector<int> tmp;
+
         vector<vector<SUVAlgo::Wrapper>> wrapper_matrix = this->make_matrix(group);
         vector <vector<double>> matrix = vector<vector<double>>(wrapper_matrix.size(), vector<double>(wrapper_matrix[0].size(), 0));
         for (int i = 0; i < wrapper_matrix.size(); ++i) {
@@ -117,7 +114,7 @@ vector<vector<int>> SUVAlgo::solution(){
         }
         res.push_back(tmp);
     }
-    qDebug() << res;
+
 
     return res;
 }
@@ -163,7 +160,7 @@ void SUVAlgo::print_grouping(){
     for (vector<int> set: this->groping_sets) {
         cout << "group " << i << " : ";
         for (int idx: set) {
-            cout  << "/ line : " << idx << "]";
+            cout  << "/ line_idx : " << idx << "]";
         }
         cout << endl;
         i++;
@@ -172,18 +169,18 @@ void SUVAlgo::print_grouping(){
 
 vector<int> SUVAlgo::choice_best_group() {
     int max = -1;
-    int group_idx = -1;
+    int group_idx = 0;
     for (int i = 0; i < this->groping_sets.size(); i++) {
         float val = 0.0;
         for (int idx: this->groping_sets[i]) {
-            int line_idx = this->groping_sets[i][idx];
-            val += this->mission_sets[line_idx].length() * this->EE_list[idx];
+            val += this->mission_sets[idx].length() * this->EE_list[idx];
         }
         if (val > max) {
             max = val;
             group_idx = i;
         }
     }
+
     return this->groping_sets[group_idx];
 }
 

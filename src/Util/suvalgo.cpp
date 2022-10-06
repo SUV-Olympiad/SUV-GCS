@@ -20,31 +20,63 @@ vector<vector<SUVAlgo::Wrapper>> SUVAlgo::make_matrix(vector<int> &group){
         float sx = (this->mission_sets[idx].x1() * 100000);
         float ex = (this->mission_sets[idx].x2() * 100000);
 
-        if (3676815.0 < sx && sx < 3676835.0) {
+//        if (3676815.0 < sx && sx < 3676835.0) {
+//            start.push_back(VertiPort::POINT_A);
+//        } else if (3676340.0 < sx && sx < 3676350.0) {
+//            start.push_back(VertiPort::POINT_B);
+//        } else if (3676835.0 < sx && sx < 3676860.0) {
+//            start.push_back(VertiPort::POINT_C);
+//        } else if (3676395.0 < sx && sx < 3676420.0) {
+//            start.push_back(VertiPort::POINT_D);
+//        } else if (3676460.0 < sx && sx < 3676480.0) {
+//            start.push_back(VertiPort::POINT_E);
+//        } else {
+//            qDebug() << "out of VertiPoint";
+//            end.push_back(-1);
+//        }
+//
+//        if (3676815.0 < ex && ex < 3676835.0) {
+//            end.push_back(VertiPort::POINT_A);
+//        } else if (3676340.0 < ex && ex < 3676350.0) {
+//            end.push_back(VertiPort::POINT_B);
+//        } else if (3676835.0 < ex && ex < 3676860.0) {
+//            end.push_back(VertiPort::POINT_C);
+//        } else if (3676395.0 < ex && ex < 3676420.0) {
+//            end.push_back(VertiPort::POINT_D);
+//        } else if (3676460.0 < ex && ex < 3676480.0) {
+//            end.push_back(VertiPort::POINT_E);
+//        } else {
+//            qDebug() << "out of VertiPoint";
+//            end.push_back(-1);
+//        }
+            /* suv09 */
+        if (3676780.0 < sx && sx < 3676799.0) {
             start.push_back(VertiPort::POINT_A);
-        } else if (3676340.0 < sx && sx < 3676350.0) {
+        } else if (3676230.0 < sx && sx < 3676260.0) {
             start.push_back(VertiPort::POINT_B);
         } else if (3676835.0 < sx && sx < 3676860.0) {
             start.push_back(VertiPort::POINT_C);
-        } else if (3676395.0 < sx && sx < 3676420.0) {
+        } else if (3676380.0 < sx && sx < 3676410.0) {
             start.push_back(VertiPort::POINT_D);
-        } else if (3676460.0 < sx && sx < 3676480.0) {
+        } else if (3676580.0 < sx && sx < 3676610.0) {
             start.push_back(VertiPort::POINT_E);
         } else {
+            qDebug() << "out of VertiPoint";
             end.push_back(-1);
         }
 
-        if (3676815.0 < ex && ex < 3676835.0) {
+        if (3676780.0 < ex && ex < 3676799.0) {
             end.push_back(VertiPort::POINT_A);
-        } else if (3676340.0 < ex && ex < 3676350.0) {
+        } else if (3676230.0 < ex && ex < 3676260.0) {
             end.push_back(VertiPort::POINT_B);
         } else if (3676835.0 < ex && ex < 3676860.0) {
             end.push_back(VertiPort::POINT_C);
-        } else if (3676395.0 < ex && ex < 3676420.0) {
+        } else if (3676380.0 < ex && ex < 3676410.0) {
             end.push_back(VertiPort::POINT_D);
-        } else if (3676460.0 < ex && ex < 3676480.0) {
+        } else if (3676580.0 < ex && ex < 3676610.0) {
             end.push_back(VertiPort::POINT_E);
         } else {
+            qDebug() << "out of VertiPoint";
             end.push_back(-1);
         }
     }

@@ -224,3 +224,53 @@ int SUVAlgo::make_key_set(vector<int> &line_set) {
     return key;
 }
 
+void SUVAlgo::test() {
+    vector <vector<int>> res = this->solution();
+    for (vector<int> set: res) {
+        for (int idx: set) {
+            printf("0.9f , ", this->mission_sets[idx]);
+        }
+        printf(" / ");
+    }
+    cout << endl;
+
+}
+
+vector<vector<SUVAlgo::Wrapper>> SUVAlgo::make_test_matrix(vector<int> &group){
+
+    vector<int> start;
+    vector<int> end;
+
+    for (int idx: group) {
+        float sx = (this->mission_sets[idx].x1());
+        float ex = (this->mission_sets[idx].x2());
+
+
+
+
+    vector <vector<SUVAlgo::Wrapper>> Matrix(this->verti_port_cnt,
+                                             vector<SUVAlgo::Wrapper>(this->verti_port_cnt, SUVAlgo::Wrapper()));
+
+    for (int i = 0; i < group.size(); ++i) {
+
+//        qDebug() << this->mission_sets[group[i]];
+        float weight = this->mission_sets[group[i]].length() * this->EE_list[group[i]];
+
+        if (Matrix[start[i]][end[i]].gradient == INF) {
+
+            Matrix[start[i]][end[i]].id = group[i];
+            Matrix[start[i]][end[i]].gradient = weight;
+        } else {
+            if (weight < Matrix[start[i]][end[i]].gradient) {
+                Matrix[start[i]][end[i]].gradient = weight;
+            }
+        }
+    }
+//    for (int i = 0; i < this->verti_port_cnt; i++) {
+//        for (int j = 0; j < this->verti_port_cnt; j++) {
+//            cout << "id : " << Matrix[i][j].id << " / gradient : " << Matrix[i][j].gradient << endl;
+//        }
+//        cout << endl;
+//    }
+    return Matrix;
+}

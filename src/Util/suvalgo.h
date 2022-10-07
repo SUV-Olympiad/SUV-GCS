@@ -57,18 +57,18 @@ public:
 
 
     void print_grouping();
-    void grouping(int depth, vector<int> &line_set, vector<bool> &visited, vector<bool> &dp);
-
-    vector<int> choice_best_group();
-
     vector <vector<int>> solution(vector<int> &line_set);
+    void test();
 
-    vector<vector<SUVAlgo::Wrapper>> make_matrix(vector<int> &group);
 private:
 
     int make_key_set(vector<int> &line_set);
 
+    vector<int> choice_best_group();
     bool none_cross_check(vector<int> &line_set, QLineF cur_line);
+    vector<vector<SUVAlgo::Wrapper>> make_matrix(vector<int> &group);
+    vector<vector<SUVAlgo::Wrapper>> make_test_matrix(vector<int> &group);
+    void grouping(int depth, vector<int> &line_set, vector<bool> &visited, vector<bool> &dp);
 
 };
 

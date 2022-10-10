@@ -44,14 +44,13 @@ void DepartureControl::showWarning(const QMap<int, QString> warning)
     warningsec++;
     int rowCount = ui->tableWidget->rowCount();
     for(int i=0; i<rowCount; i++){
-        qDebug() << warningsec;
         int id = ui->tableWidget->item(i,0)->text().toInt();
         if(warning.contains(id)){
             ui->tableWidget->setItem(i,6,new QTableWidgetItem(warning[id]));
             if(warningsec >= 15){
-                ui->tableWidget->item(i,0)->setBackground(Qt::red);
+                ui->tableWidget->item(i,0)->setBackground(QColor(255,79,40,100));
             }else{
-                ui->tableWidget->item(i,0)->setBackground(Qt::white);
+                ui->tableWidget->item(i,0)->setBackground(Qt::transparent);
             }
         }
     }

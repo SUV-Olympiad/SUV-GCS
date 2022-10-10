@@ -242,7 +242,7 @@ void MainWidget::updateStatusText()
         int id = agentsIterator.value()->id();
 		bool isRoute = mManager->agent(id)->data("OFFLINE").toBool();
 
-		if (!isRoute) {
+		if (isRoute) {
 			QString statusText = QString("[Group:%1\t ID:%2]\t Off path").arg(id).arg(id);
 
             ui->statusListWidget->addItem(statusText);

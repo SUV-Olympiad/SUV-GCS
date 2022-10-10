@@ -29,6 +29,10 @@
    <iconset>
     <normaloff>:/icon/Src/UI/icon/title.png</normaloff>:/icon/Src/UI/icon/title.png</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background:#333;
+color:#fff;</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <property name="enabled">
     <bool>true</bool>
@@ -79,6 +83,9 @@
       </property>
       <property name="toolTip">
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Traffic Control&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
       <property name="currentIndex">
        <number>0</number>
@@ -253,7 +260,7 @@
               </font>
              </property>
              <property name="styleSheet">
-              <string notr="true"/>
+              <string notr="true">background:transparent</string>
              </property>
             </widget>
            </item>
@@ -278,7 +285,7 @@
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">color:red; font-size:16px; </string>
+       <string notr="true">color:#FF4F28; font-size:16px; </string>
       </property>
      </widget>
     </item>
@@ -289,8 +296,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1026</width>
-     <height>20</height>
+     <width>1092</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOption">

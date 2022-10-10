@@ -18,6 +18,10 @@
 #include <opencv2/opencv.hpp>
 #include <cv_bridge/cv_bridge.h>
 
+
+#include <QSqlDatabase>
+#include <QSqlQuery>
+
 using std::placeholders::_1;
 
 MainWidget::MainWidget(QWidget *parent) :
@@ -77,6 +81,15 @@ MainWidget::MainWidget(QWidget *parent) :
     selectVehicleId = -1;
     ui->flightInfo->horizontalHeader()->setStretchLastSection(true);
     connect(ui->flightList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(on_sysList_itemClicked(QListWidgetItem*)));
+
+
+    connect(&mTimer, SIGNAL(timeout()), this, SLOT(updateUI()));
+    mTimer.setInterval(33);
+    mTimer.start();
+
+    connect(&mRoadTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
+    mRoadTimer.setInterval(200);
+    mRoadTimer.start();
 }
 
 MainWidget::~MainWidget()
@@ -266,63 +279,94 @@ void MainWidget::stopScenario()
     // mScenario->stop();
 }
 
+void MainWidget::loadDatabase()
+{
+    mManager->getAgent();
+
+    initManager();
+    if(mManager->numOfAgent() != 0){
+        procInitTreeWidget();
+    }else{
+        QMessageBox msgBox;
+        msgBox.setText("Database is empty.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.exec();
+    }
+}
+
+void MainWidget::ResetDatabase()
+{
+    dbManager* mdbManger = new dbManager();
+    QSqlDatabase db = mdbManger->db;
+
+    QSqlQuery query(db);
+    QString sql = QString("TRUNCATE drone");
+    query.exec(sql);
+
+    QMessageBox msgBox;
+    msgBox.setText("Success! Please turn the program off and on.");
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.exec();
+}
+
+
 void MainWidget::loadConfigFile()
 {
-    // QString fileName = "/home/suv/Project/qhac4/docs/CMODEL_2EA.conf";
-   QString fileName = QFileDialog::getOpenFileName(
-               this,
-               tr("Open Agent Configuration File"),
-               QString(CONFIG_FILE_PATH),
-               tr("Conf Files (*.conf)"));
+    if(mManager->numOfAgent() != 0){
+        QMessageBox msgBox;
+        msgBox.setText("There is already an imported UAV.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.exec();
+    }else{
+        // QString fileName = "/home/suv/Project/qhac4/docs/CMODEL_2EA.conf";
+        QString fileName = QFileDialog::getOpenFileName(
+                this,
+                tr("Open Agent Configuration File"),
+                QString(CONFIG_FILE_PATH),
+                tr("Conf Files (*.conf)"));
 
-    if ( !fileName.isEmpty() ) {
-        mManager->loadAgentFile(fileName);
+        if ( !fileName.isEmpty() ) {
+            qDebug() << mManager->numOfAgent();
+            initManager();
 
-		// init manager
-        initManager();
+            mManager->loadAgentFile(fileName);
 
-        // wait for initializing manager thread
-        // TODO: reduce sleep and check init Manager is finished.
-        const QMap<int, IVehicle*> agentsMap = mManager->agents();
-        const QMap<int, QString> agentsTimeMap = mManager->agentsTime();
-        const QMap<int, int> agentsGroupMap = mManager->agentsGroup();
-        const QMap<int, int> agentsVehicleMap = mManager->agentsVehicle();
-
+            // wait for initializing manager thread
+            // TODO: reduce sleep and check init Manager is finished.
+            QMap<int, IVehicle*> agentsMap = mManager->agents();
+            QMap<int, QString> agentsTimeMap = mManager->agentsTime();
+            QMap<int, int> agentsGroupMap = mManager->agentsGroup();
+            QMap<int, int> agentsVehicleMap = mManager->agentsVehicle();
 
 
-        QMap<int, IVehicle*>::const_iterator agentsIterator;
-        QMap<int, QString>::const_iterator agentsTimeIterator;
-        QMap<int, int>::const_iterator agentsGroupIterator;
-        QMap<int, int>::const_iterator agentsVehicleIterator;
-        bool isAllAgentsReady = true;
-        
 
-        do{
-            CSleeper::msleep(500);
-            isAllAgentsReady = true;
-            for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
-                if(agentsIterator.value()->isInitialized == false) {
-                    isAllAgentsReady = false;
-                    break;
+            QMap<int, IVehicle*>::const_iterator agentsIterator;
+            QMap<int, QString>::const_iterator agentsTimeIterator;
+            QMap<int, int>::const_iterator agentsGroupIterator;
+            QMap<int, int>::const_iterator agentsVehicleIterator;
+            bool isAllAgentsReady = true;
+            
+
+            do{
+                CSleeper::msleep(500);
+                isAllAgentsReady = true;
+                for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+                    if(agentsIterator.value()->isInitialized == false) {
+                        isAllAgentsReady = false;
+                        break;
+                    }
                 }
-            }
-            qDebug() << "isAllAgentsReadey : " << isAllAgentsReady;
-        } while(!isAllAgentsReady);
+                qDebug() << "isAllAgentsReadey : " << isAllAgentsReady;
+            } while(!isAllAgentsReady);
 
-        procInitTreeWidget();        
-        connect(&mTimer, SIGNAL(timeout()), this, SLOT(updateUI()));
-        mTimer.setInterval(33);
-        mTimer.start();
+            procInitTreeWidget();
+        }
 
-        connect(&mRoadTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
-        mRoadTimer.setInterval(200);
-        mRoadTimer.start();
+        _base_latlng.setLatitude(mManager->property("base", "latitude").toDouble());
+        _base_latlng.setLongitude(mManager->property("base", "longitude").toDouble());
+        _base_latlng.setAltitude(mManager->property("base", "altitude").toDouble());
+        qDebug() << "set base! for SITL. " << _base_latlng;
     }
-
-    _base_latlng.setLatitude(mManager->property("base", "latitude").toDouble());
-    _base_latlng.setLongitude(mManager->property("base", "longitude").toDouble());
-    _base_latlng.setAltitude(mManager->property("base", "altitude").toDouble());
-    qDebug() << "set base! for SITL. " << _base_latlng;
 }
 
 void MainWidget::checkFlight()

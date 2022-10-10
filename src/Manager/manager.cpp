@@ -5,9 +5,15 @@
 #include <QFile>
 #include <QDateTime>
 
+#include "dbmanager.h"
+#include <QSqlDatabase>
+#include <QSqlQuery>
+
 CManager::CManager(QObject *parent) :
     QObject(parent)
 {
+    mdbManger = new dbManager();
+    db = mdbManger->db;
 }
 
 CManager::~CManager()
@@ -52,6 +58,7 @@ int CManager::loadAgentFile(const QString &aFilePath)
             continue;
         }
 
+
         // If token is StartElement, we'll see if we can read it
         if(token == QXmlStreamReader::StartElement) {
             if(xml.name() == "agents") {
@@ -88,31 +95,63 @@ int CManager::loadAgentFile(const QString &aFilePath)
     return 0;
 }
 
+void CManager::getAgent(){
+    QSqlQuery query(db);
+    QString sql = QString("select * from drone");
+    query.exec(sql);
+    while(query.next()){
+        QMap<QString, QString> data;
+        data["id"] = query.value(1).toString();
+        data["sysid"] = query.value(2).toString();
+        data["type"] = query.value(3).toString();
+        data["group"] = query.value(4).toString();
+        data["vehicle"] = query.value(5).toString();
+        this->addAgent(data);
+    }
+}
+
 void CManager::addAgent(const QMap<QString, QString> aProperty)
 {
     IVehicle* agent = nullptr;
 
     QString type = aProperty["type"];
     int id = aProperty["id"].toInt();
+    int sysid = aProperty["sysid"].toInt();
     int group = aProperty["group"].toInt();
     int vehicle = aProperty["vehicle"].toInt();
-
     QString time = aProperty["time"];
 
-    // create agent object
-    if ( type == "CMODEL" ) {
-        agent = new CUAV(aProperty, this);
-    }
-    else {
-        qDebug("ERROR : Cannot support the %s", type.toLatin1().data());
-        return;
-    }
+    if(!this->hasAgent(id)){
+        // create agent object
+        if ( type == "CMODEL" ) {
+            agent = new CUAV(aProperty, this);
+            agent->init();
+        }
+        else {
+            qDebug("ERROR : Cannot support the %s", type.toLatin1().data());
+            return;
+        }
 
-    // insert agent object to manager
-    mAgents.insert(id, agent);
-    mAgents_group.insert(id, group);
-    mAgents_vehicle.insert(id, vehicle);
-    mAgents_time.insert(id, time);
+        //DB 추가
+        QSqlQuery query(db);
+
+        QString sql = QString("select * from drone where id='%1'").arg(id);
+        query.exec(sql);
+        query.first();
+        int count = query.value(0).toInt();
+        if(count == 0){
+            sql = QString("INSERT INTO drone (id,sysid,type,groupId,vehicle)VALUES('%1','%2','%3','%4','%5')").arg(id).arg(sysid).arg(type).arg(group).arg(vehicle);
+        }else{
+            sql = QString("UPDATE drone SET type='%1', sysid='%2', groupId='%3',vehicle='%4' WHERE id='%5'").arg(type).arg(sysid).arg(group).arg(vehicle).arg(id);
+        }
+        query.exec(sql);
+
+        // insert agent object to manager
+        mAgents.insert(id, agent);
+        mAgents_group.insert(id, group);
+        mAgents_vehicle.insert(id, vehicle);
+        mAgents_time.insert(id, time);
+    }
 }
 
 

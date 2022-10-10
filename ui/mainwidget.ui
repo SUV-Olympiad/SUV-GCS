@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1092</width>
-    <height>915</height>
+    <height>845</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -38,7 +38,7 @@
      <x>0</x>
      <y>0</y>
      <width>1086</width>
-     <height>901</height>
+     <height>811</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -58,7 +58,7 @@
      <enum>QLayout::SetMinimumSize</enum>
     </property>
     <property name="topMargin">
-     <number>100</number>
+     <number>25</number>
     </property>
     <property name="bottomMargin">
      <number>0</number>
@@ -74,7 +74,7 @@
       <property name="maximumSize">
        <size>
         <width>1084</width>
-        <height>800</height>
+        <height>700</height>
        </size>
       </property>
       <property name="toolTip">
@@ -295,42 +295,13 @@
    </property>
    <widget class="QMenu" name="menuOption">
     <property name="title">
-     <string>Option</string>
+     <string>UAV</string>
     </property>
-    <addaction name="actionParameter"/>
-    <addaction name="actionCalibration"/>
+    <addaction name="actionLoad_ConfigFile"/>
+    <addaction name="actionImport_from_Databse"/>
+    <addaction name="actionReset_Database"/>
    </widget>
    <addaction name="menuOption"/>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>20</y>
-     <width>787</width>
-     <height>75</height>
-    </rect>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>60</width>
-     <height>60</height>
-    </size>
-   </property>
-   <addaction name="actionLoadConf"/>
-   <addaction name="actionCheckFlight"/>
-   <addaction name="actionRunScenario"/>
-   <addaction name="actionStopScenario"/>
-   <addaction name="separator"/>
-   <addaction name="separator"/>
-   <addaction name="actionParameter"/>
-   <addaction name="actionCalibration"/>
-   <addaction name="actionAlarm"/>
-   <addaction name="actionGraph"/>
-   <addaction name="actionControl"/>
-   <addaction name="actionMode"/>
-   <addaction name="actionsendSC"/>
-   <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="geometry">
@@ -380,6 +351,14 @@
     <iconset resource="../icons.qrc">
      <normaloff>:/icon/src/UI/icon/parameters.png</normaloff>:/icon/src/UI/icon/parameters.png</iconset>
    </property>
+   <property name="text">
+    <string>Parameter</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionAddDrone">
    <property name="text">
     <string>Parameter</string>
    </property>
@@ -470,6 +449,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionLoad_ConfigFile">
+   <property name="text">
+    <string>Import from Configfile</string>
+   </property>
+  </action>
+  <action name="actionImport_from_Databse">
+   <property name="text">
+    <string>Import from Database</string>
+   </property>
+  </action>
+  <action name="actionReset_Database">
+   <property name="text">
+    <string>Reset Database</string>
    </property>
   </action>
  </widget>
@@ -680,6 +674,54 @@
     <hint type="destinationlabel">
      <x>277</x>
      <y>499</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLoad_ConfigFile</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>loadConfigFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>545</x>
+     <y>422</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionImport_from_Databse</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>loadDatabase()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>545</x>
+     <y>422</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionReset_Database</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>ResetDatabase()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>545</x>
+     <y>422</y>
     </hint>
    </hints>
   </connection>

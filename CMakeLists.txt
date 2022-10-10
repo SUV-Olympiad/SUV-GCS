@@ -81,7 +81,7 @@ include_directories(
 # Use this to define what the package will export (e.g. libs, headers).
 # Since the default here is to produce only a binary, we don't worry about
 # exporting anything. 
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets Network PrintSupport WebKit WebKitWidgets Positioning) 
+find_package(Qt5 REQUIRED COMPONENTS Core Sql Gui Widgets Network PrintSupport WebKit WebKitWidgets Positioning) 
 find_package(OpenGL)
 find_package(GLUT)
 find_package(OpenCV REQUIRED COMPONENTS core imgproc highgui imgcodecs)
@@ -116,6 +116,7 @@ set(QT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/mymath.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/hungarian.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Manager/manager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Manager/dbmanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Vehicle/vehicle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Vehicle/rosdata.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Vehicle/paramcheckworker.cpp
@@ -142,6 +143,7 @@ set(QT_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/mymath.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util/hungarian.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Manager/manager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Manager/dbmanager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Vehicle/vehicle.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Vehicle/rosdata.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Vehicle/paramcheckworker.h
@@ -163,7 +165,7 @@ QT5_WRAP_CPP(QT_MOC_HPP ${QT_HEADERS})
 ##############################################################################
 
 add_executable(suvgcs ${QT_SOURCES} ${QT_RESOURCES_CPP} ${QT_FORMS_HPP} ${QT_HEADERS} ${QT_MOC_HPP} ${QT_OTHERS})
-qt5_use_modules(suvgcs Core Gui Widgets Network PrintSupport WebKit WebKitWidgets Positioning )
+qt5_use_modules(suvgcs Core Gui Widgets Network PrintSupport WebKit WebKitWidgets Sql Positioning )
 target_link_libraries(suvgcs ${QT_LIBRARIES} ${OPENGL_gl_LIBRARY} ${GLUT_LIBRARIES} ${OpenCV_LIBS})
 install(TARGETS suvgcs 
         RUNTIME DESTINATION bin )

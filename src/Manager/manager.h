@@ -13,6 +13,8 @@
 #include <QtMath>
 #include <Eigen/Dense>
 
+#include "dbmanager.h"
+
 class IVehicle;
 
 class CManager : public QObject
@@ -25,6 +27,7 @@ public:
 
 public:
 	int  loadAgentFile(const QString& aFilePath);
+    void getAgent();
     void addAgent(const QMap<QString, QString> aAgent);
 
     int  numOfAgent();
@@ -62,6 +65,9 @@ private:
     QMap<int, int>                  mAgents_group;
     QMap<int, int>                  mAgents_vehicle;
     QList<Eigen::Vector3f>          mUnknownMark;
+
+    dbManager*                      mdbManger;
+    QSqlDatabase                    db;
 };
 
 #endif // DATAMANAGER_H

@@ -84,6 +84,8 @@ private Q_SLOTS:
     void updateUI();
     void runScenario();
     void stopScenario();
+    void loadDatabase();
+    void ResetDatabase();
     void loadConfigFile();
     void checkFlight();
     void runParamDialog();

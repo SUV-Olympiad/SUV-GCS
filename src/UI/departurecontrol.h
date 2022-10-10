@@ -20,10 +20,11 @@ public:
 
     void initData(QString data);
     void updateData(QString data);
-
+    void showWarning(const QMap<int, QString> warning);
 
 private:
     Ui::DepartureControl *ui;
+    int warningsec = 0;
 };
 
 #endif // DEPARTURECONTROL_H

@@ -39,6 +39,27 @@ void DepartureControl::updateData(QString data)
     }
 }
 
+void DepartureControl::showWarning(const QMap<int, QString> warning)
+{
+    warningsec++;
+    int rowCount = ui->tableWidget->rowCount();
+    for(int i=0; i<rowCount; i++){
+        qDebug() << warningsec;
+        int id = ui->tableWidget->item(i,0)->text().toInt();
+        if(warning.contains(id)){
+            ui->tableWidget->setItem(i,6,new QTableWidgetItem(warning[id]));
+            if(warningsec >= 15){
+                ui->tableWidget->item(i,0)->setBackground(Qt::red);
+            }else{
+                ui->tableWidget->item(i,0)->setBackground(Qt::white);
+            }
+        }
+    }
+    if(warningsec == 30){
+        warningsec = 0;
+    }
+}
+
 DepartureControl::~DepartureControl()
 {
     delete ui;

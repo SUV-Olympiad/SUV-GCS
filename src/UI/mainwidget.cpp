@@ -234,6 +234,7 @@ void MainWidget::updateStatusText()
 {
 	QMap<int, IVehicle*> agentsMap = mManager->agents();
     QMap<int, IVehicle*>::iterator agentsIterator;
+    QMap<int, QString> warningData;
 
     ui->statusListWidget->clear();
 
@@ -241,14 +242,16 @@ void MainWidget::updateStatusText()
         int id = agentsIterator.value()->id();
 		bool isRoute = mManager->agent(id)->data("OFFLINE").toBool();
 
-		if (isRoute) {
+		if (!isRoute) {
 			QString statusText = QString("[Group:%1\t ID:%2]\t Off path").arg(id).arg(id);
 
             ui->statusListWidget->addItem(statusText);
             ui->statusListWidget->scrollToBottom();
 			mPrevStatusText[id] = mManager->agent(id)->data("STATUSTEXT").toString();
+            warningData[id] = "Off path";
 		}
     }
+    ui->departureControl->showWarning(warningData);
 }
 
 void MainWidget::updateNotifier()

@@ -34,6 +34,7 @@ public:
     void disarm();
     void lock();
     void unlock();
+    int procReboot();
     void takeoff(double yaw, double altitude);
     void landing();
     void reposition(double lat, double lng, double yaw, double altitude);
@@ -57,7 +58,6 @@ private:
     int procCalibAccel();
     int procArm();
     int procDisarm();
-	int procReboot();
     int automode();
 
 public Q_SLOTS:

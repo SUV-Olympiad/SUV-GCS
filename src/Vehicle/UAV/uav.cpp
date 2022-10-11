@@ -137,7 +137,7 @@ int CUAV::cmd(const char *aCmd, QVariant aArg1, QVariant aArg2, QVariant aArg3, 
 		mSender->setParam(aArg1.toString(), aArg2);
 	}
 	else if ( item == "REBOOT") {
-		mSender->reboot();
+		mSender->procReboot();
 	}
     else if ( item == "MISSION_PLAN") {
 		mSender->planMission();

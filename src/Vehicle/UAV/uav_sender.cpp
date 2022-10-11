@@ -193,6 +193,8 @@ int CCModelCmdSender::procReboot()
     reboot_cmd.command = MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN;
     reboot_cmd.param1 = 1.0;
 
+    reboot_cmd.confirmation = true;
+    
     mAgent->dataROS()->publishCommand(reboot_cmd);
 
     return true;

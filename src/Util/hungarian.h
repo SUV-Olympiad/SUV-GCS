@@ -24,6 +24,7 @@ public:
 	HungarianAlgorithm();
 	~HungarianAlgorithm();
 	double Solve(vector <vector<double> >& DistMatrix, vector<int>& Assignment);
+	vector<int> SolveV2(vector <vector<double> >& DistMatrix, vector<int>& Assignment);
 
 private:
 	void assignmentoptimal(int *assignment, double *cost, double *distMatrix, int nOfRows, int nOfColumns);

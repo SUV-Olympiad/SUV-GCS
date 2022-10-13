@@ -9,6 +9,14 @@
 
 #include <rclcpp/rclcpp.hpp> //임시
 
+
+#include "suvalgo.h"
+#include "hungarian.h"
+#include <time.h>
+#include <QLineF>
+#include <time.h>
+
+using namespace std;
 // #include "ros/ros.h"
 //#include <std_msgs/String.h>
 //#include <geometry_msgs/PoseStamped.h>
@@ -29,4 +37,4 @@ int main(int argc, char *argv[])
     w.show();
 
     return a.exec();
-}
+};

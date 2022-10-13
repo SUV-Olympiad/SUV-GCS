@@ -295,3 +295,30 @@ bool sementIntersects(QVector2D a, QVector2D b, QVector2D c, QVector2D d)
     return ab <= 0 && cd <=0;
 }
 
+bool sementIntersects(QLineF line1, QLineF line2){
+    QVector2D a = QVector2D(line1.p1());
+    QVector2D b = QVector2D(line1.p2());
+    QVector2D c = QVector2D(line2.p1());
+    QVector2D d = QVector2D(line2.p2());
+
+    double ab = ccw(a, b, c)*ccw(a, b, d);
+    double cd = ccw(c, d ,a)*ccw(c, d, b);
+
+    if(ab ==0 && cd == 0){
+        QVector2D temp;
+
+        if( b.x() < a.x() && b.y() < a.y() ) {
+            temp = a;
+            a = b;
+            b = temp;
+        }
+        if( d.x() < c.x() && d.y() < c.y() ) {
+            temp = c;
+            c = d;
+            d = temp;
+        }
+        return !( (b.x() < c.x() && b.y() < c.y()) || (d.x() < a.x() && d.y() < a.y()));
+//        return !( b< c || d < a);
+    }
+    return ab <= 0 && cd <=0;
+}

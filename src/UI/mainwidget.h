@@ -10,7 +10,7 @@
 #include "controldialog.h"
 #include "qhac_mapview.h"
 #include "departurecontrol.h"
-
+#include "suvalgo.h"
 
 #include <QMainWindow>
 
@@ -31,6 +31,7 @@
 #include <QGeoCoordinate>
 #include <QMutex>
 #include <QListWidgetItem>
+#include <QLineF>
 
 #include <rclcpp/rclcpp.hpp>
 
@@ -60,6 +61,7 @@ public:
     static QVector3D LLH2NED(QGeoCoordinate pos);
     static QGeoCoordinate NED2LLH(QVector3D pos);
     static QGeoCoordinate ENU2LLH(QVector3D pos);
+    static QVector3D LLH2ENU(QGeoCoordinate pos);
     
 protected:
     bool event(QEvent * event);
@@ -95,6 +97,7 @@ private Q_SLOTS:
     void onControl();
     void onScenarioMode(bool aMode);
     void on_actionsendSC_triggered();
+    void unmannedTrafficManagement();
 
 private slots:
 
@@ -117,6 +120,7 @@ private:
     QGraphicsScene*         mMainPanelScene;
     QTimer                  mTimer;
     QTimer                  mRoadTimer;
+    QTimer                  mUtmTimer;
     CManager*               mManager;
     QThread                 mManagerThread;
     QMap<int, QString>      mPrevStatusText;

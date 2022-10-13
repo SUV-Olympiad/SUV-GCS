@@ -29,6 +29,7 @@
 
 #include <px4_msgs/msg/log_message.hpp>
 #include <sensor_msgs/msg/image.hpp>
+#include <suv_msgs/msg/leap.hpp>
 
 #include <spinworker.h>
 
@@ -165,6 +166,7 @@ public:
     void updateBatteryStatus(const px4_msgs::msg::BatteryStatus::SharedPtr msg);
     void updateFpvCamera(const sensor_msgs::msg::Image::SharedPtr msg);
     void updateFollowCamera(const sensor_msgs::msg::Image::SharedPtr msg);
+    void updateLeapMotion(const suv_msgs::msg::Leap::SharedPtr msg);
 
     // void parameterValueCallback(const px4_msgs::msg::UavcanParameterValue::SharedPtr msg);
     QList<QString> getParamRequested();
@@ -219,6 +221,7 @@ private:
     px4_msgs::msg::VehicleCommandAck            mVehicleCommandAck;
     px4_msgs::msg::BatteryStatus                mBatteryStatus;
     sensor_msgs::msg::Image                     mCameraImage;
+    suv_msgs::msg::Leap                         mLeapMotion;
     bool                                        mGstRunning;
 
     cv_bridge::CvImagePtr                       mFpv_Cv_ptr;
@@ -238,6 +241,8 @@ private:
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mFollowCameraImageSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleCommandAck>::SharedPtr mVehicleCommandAckSub_;
     rclcpp::Subscription<px4_msgs::msg::LogMessage>::SharedPtr mLogMessageSub_;
+
+    rclcpp::Subscription<suv_msgs::msg::Leap>::SharedPtr mLeapMotionSub_;
     // rclcpp::Subscription<px4_msgs::msg::UavcanParameterValue>::SharedPtr mUavcanParameterValueSub_;
 
     rclcpp::Publisher<px4_msgs::msg::VehicleCommand>::SharedPtr mCommandQHACPub_;

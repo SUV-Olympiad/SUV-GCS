@@ -34,6 +34,7 @@ get_default_rmw_implementation(rmw_implementation)
 find_package("${rmw_implementation}" REQUIRED)
 
 find_package(px4_msgs REQUIRED)
+find_package(suv_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 
@@ -178,11 +179,14 @@ ament_target_dependencies(suvgcs
     "std_msgs"
     "sensor_msgs"
     "cv_bridge"
-    "OpenCV")
+    "OpenCV"
+    "suv_msgs"
+)
 target_link_libraries(suvgcs)
 
 ament_export_dependencies(rclcpp rosidl_default_runtime)
 ament_export_include_directories(include ${px4_msgs_INCLUDE_DIRS})
+ament_export_include_directories(include ${suv_msgs_INCLUDE_DIRS})
 ament_export_libraries()
 
 

@@ -75,10 +75,12 @@ void CROSData::initSubscription()
     mMissionItemSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::NavigatorMissionItem>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionItem, this, _1));
     topic = QString("/vehicle%1/out/BatteryStatus").arg(sysid); 
     mBatteryStatusSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::BatteryStatus>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateBatteryStatus, this, _1));
-    topic = QString("/vehicle%1/fpv_camera/image_raw").arg(sysid - 1);
+    topic = QString("/vehicle%1/fpv_camera/image_raw").arg(sysid);
     mFpvCameraImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updateFpvCamera, this, _1));
-    topic = QString("/vehicle%1/follow_camera/image_raw").arg(sysid - 1);
+    topic = QString("/vehicle%1/follow_camera/image_raw").arg(sysid);
     mFollowCameraImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updateFollowCamera, this, _1));
+    topic = QString("/leapmotion");
+    mLeapMotionSub_ = mQHAC3Node->create_subscription<suv_msgs::msg::Leap>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateLeapMotion, this, _1));
 
     mVehicleCommandAckSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleCommandAck>(topic_prefix + "/vehicle_command_ack", qos, std::bind(&CROSData::updateVehicleCommandAck, this, _1));
     mLogMessageSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::LogMessage>(topic_prefix + "/log_message", qos, std::bind(&CROSData::updateLogMessage, this, _1));
@@ -294,6 +296,21 @@ QVariant CROSData::data(const QString &aItem)
 				.arg(mVehicleGlobalPosition.lat,6,'f',6)
 				.arg(mVehicleGlobalPosition.lon,6,'f',6)
 				.arg(mVehicleGlobalPosition.alt,6,'f',6);        
+    }
+    else if (item == "LEAP_ROLL" ) {
+        return mLeapMotion.roll;
+    }
+    else if (item == "LEAP_PITCH" ) {
+        return mLeapMotion.pitch;
+    }
+    else if (item == "LEAP_YAW" ) {
+        return mLeapMotion.yaw;
+    }
+    else if (item == "LEAP_HEIGHT" ) {
+        return mLeapMotion.height;
+    }
+    else if (item == "LEAP_GRIP" ) {
+        return mLeapMotion.grip;
     }
     else if (item == "MISSION" ) {
     
@@ -543,6 +560,11 @@ void CROSData::updateLogMessage(const px4_msgs::msg::LogMessage::SharedPtr msg)
     // mLogMessageQueue.enqueue(newLogMessage);
 }
 
+void CROSData::updateLeapMotion(const suv_msgs::msg::Leap::SharedPtr msg)
+{
+    mLeapMotion = *msg;
+
+}
 
 QList<QString> CROSData::getParamRequested() {
     return param_requested;

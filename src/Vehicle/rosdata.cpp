@@ -34,7 +34,7 @@ CROSData::CROSData(IVehicle* agent, QObject* parent)
                      << "ACRO(10)" << "UNUSED" << "DESCEND" << "TERMINATION" << "OFFBOARD(14)" << "STAB(15)" << "RATTITUDE" << "AUTO_TAKEOFF(17)" << "AUTO_LAND" << "AUTO_FOLLOW_TARGET" << "AUTO_PRECLAND"
                      << "ORBIT" << "MAX";
     mStrArmingStateList << "" << "INIT" << "STANDBY" << "ARMED" << "STANDBY_ERROR" << "SHUTDOWN" << "IN_AIR_RESTORE" << "MAX";
-    
+
     mTargetX = 0;
     mTargetY = 0;
     mTargetZ = 0;
@@ -61,19 +61,19 @@ void CROSData::initSubscription()
     // Subscribers
     QString topic = nullptr;
     int sysid = mAgent->data("SYSID").toInt();
-    topic = QString("/vehicle%1/out/VehicleStatus").arg(sysid); 
+    topic = QString("/vehicle%1/out/VehicleStatus").arg(sysid);
     mVehicleStatusSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleStatus>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateVehicleStatus, this, _1));
-    topic = QString("/vehicle%1/out/VehicleLocalPosition").arg(sysid); 
+    topic = QString("/vehicle%1/out/VehicleLocalPosition").arg(sysid);
     mVehicleLocalPositionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleLocalPosition>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateVehicleLocalPosition, this, _1));
-    topic = QString("/vehicle%1/out/VehicleGlobalPosition").arg(sysid); 
+    topic = QString("/vehicle%1/out/VehicleGlobalPosition").arg(sysid);
     mVehicleGlobalPositionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::VehicleGlobalPosition>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateVehicleGlobalPosition, this, _1));
-    topic = QString("/vehicle%1/out/Mission").arg(sysid); 
+    topic = QString("/vehicle%1/out/Mission").arg(sysid);
     mMissionSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::Mission>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMission, this, _1));
     topic = QString("/vehicle%1/out/MissionResult").arg(sysid);
     mMissionResultSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::MissionResult>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updateMissionResult, this, _1));
-    topic = QString("/vehicle%1/out/NavigatorMissionItem").arg(sysid); 
+    topic = QString("/vehicle%1/out/NavigatorMissionItem").arg(sysid);
     mMissionItemSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::NavigatorMissionItem>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateMissionItem, this, _1));
-    topic = QString("/vehicle%1/out/BatteryStatus").arg(sysid); 
+    topic = QString("/vehicle%1/out/BatteryStatus").arg(sysid);
     mBatteryStatusSub_ = mQHAC3Node->create_subscription<px4_msgs::msg::BatteryStatus>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateBatteryStatus, this, _1));
     topic = QString("/vehicle%1/fpv_camera/image_raw").arg(sysid);
     mFpvCameraImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updateFpvCamera, this, _1));
@@ -89,7 +89,7 @@ void CROSData::initSubscription()
     // Publishers
     rclcpp::QoS qos_cmd = rclcpp::SystemDefaultsQoS();
     qos_cmd.reliable();
-    topic = QString("/vehicle%1/in/VehicleCommand").arg(sysid); 
+    topic = QString("/vehicle%1/in/VehicleCommand").arg(sysid);
     mCommandQHACPub_ = mQHAC3Node->create_publisher<px4_msgs::msg::VehicleCommand>(topic.toStdString().c_str(), qos_cmd);
     // mUavcanParameterRequestQHACPub_ = mQHAC3Node->create_publisher<px4_msgs::msg::UavcanParameterRequest>(topic_prefix + "/uavcan_parameter_request", rclcpp::SystemDefaultsQoS());
 
@@ -131,9 +131,9 @@ QPixmap CROSData::getCamera()
 
     return QPixmap::fromImage(
         QImage(
-            (unsigned char*) image_mat.data, 
-            image_mat.cols, 
-            image_mat.rows, 
+            (unsigned char*) image_mat.data,
+            image_mat.cols,
+            image_mat.rows,
             QImage::Format_RGB888
         )
     );
@@ -222,7 +222,7 @@ QVariant CROSData::data(const QString &aItem)
 		return QString("(%1, %2, %3)")
 				.arg(mVehicleLocalPosition.x,6,'f',6)
 				.arg(mVehicleLocalPosition.y,6,'f',6)
-				.arg(mVehicleLocalPosition.z,6,'f',6);        
+				.arg(mVehicleLocalPosition.z,6,'f',6);
     }
     else if ( item == "POSVX" ) {
         return mVehicleLocalPosition.vx;
@@ -295,7 +295,7 @@ QVariant CROSData::data(const QString &aItem)
 		return QString("(%1, %2, %3)")
 				.arg(mVehicleGlobalPosition.lat,6,'f',6)
 				.arg(mVehicleGlobalPosition.lon,6,'f',6)
-				.arg(mVehicleGlobalPosition.alt,6,'f',6);        
+				.arg(mVehicleGlobalPosition.alt,6,'f',6);
     }
     else if (item == "LEAP_ROLL" ) {
         return mLeapMotion.roll;
@@ -313,7 +313,7 @@ QVariant CROSData::data(const QString &aItem)
         return mLeapMotion.grip;
     }
     else if (item == "MISSION" ) {
-    
+
         QVariantList varLst;
 
         for (auto v: mMissions){
@@ -345,7 +345,7 @@ QVariant CROSData::data(const QString &aItem)
     }
     else if (item == "FOLLOW_CAMERA") {
         cv::Mat image_mat = mFollow_Cv_ptr->image;
-    
+
         QPixmap camera = QPixmap::fromImage(
                 QImage(
                         (unsigned char*) image_mat.data,
@@ -492,7 +492,7 @@ void CROSData::updateMission(const px4_msgs::msg::Mission::SharedPtr msg)
 void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::SharedPtr msg)
 {
     mMissionItem = *msg;
-    
+
     CROSData::MissionItem *item = new CROSData::MissionItem(
         mMissionItem.instance_count,
         mMissionItem.sequence_total,
@@ -502,7 +502,7 @@ void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::Shar
         mMissionItem.altitude,
         mMissionItem.yaw
     );
-    
+
     if (mMissionSize < item->seq_total && !std::isnan(mMissionItem.altitude)){
         mMissions.append(item);
     } else {
@@ -592,18 +592,41 @@ bool CROSData::calculatedist(){
             start_x = mVehicleLocalPosition.ref_lat;
             start_y = mVehicleLocalPosition.ref_lon;
         } else {
-            start_x = mMissions[currentMissionindex-1]->lat;
-            start_y = mMissions[currentMissionindex-1]->lon;
+            start_x = mMissions[currentMissionindex - 1]->lat;
+            start_y = mMissions[currentMissionindex - 1]->lon;
         }
         end_x = mMissions[currentMissionindex]->lat;
         end_y = mMissions[currentMissionindex]->lon;
         current_x = mVehicleGlobalPosition.lat;
         current_y = mVehicleGlobalPosition.lon;
-        qreal slope = (end_y - start_y) / (end_x - start_x);
-        qreal intercept = start_y - (slope * start_x);
-        result = abs(slope * current_x - current_y + intercept) / sqrt(pow(slope, 2) + 1);
-        if (0.000005 < result)
+        qreal A = current_x - start_x;
+        qreal B = current_y - start_y;
+        qreal C = end_x - start_x;
+        qreal D = end_y - start_y;
+
+        qreal dot = A * C + B * D;
+        qreal len_sq = C * C + D * D;
+        qreal param = -1;
+        if (len_sq != 0)
+            param = dot / len_sq;
+        qreal xx, yy;
+        if (param < 0) {
+            xx = start_x;
+            yy = start_y;
+        } else if (param > 1) {
+            xx = end_x;
+            yy = end_y;
+        } else {
+            xx = start_x + param * C;
+            yy = start_y + param * D;
+        }
+
+        qreal dx = current_x - xx;
+        qreal dy = current_y - yy;
+        result = sqrt(dx * dx + dy * dy);
+        if (0.0001< result) {
             offline = true;
+        }
     }
     return offline;
 }

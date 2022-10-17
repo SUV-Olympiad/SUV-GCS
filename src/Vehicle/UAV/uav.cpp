@@ -94,12 +94,20 @@ int CUAV::cmd(const char *aCmd, QVariant aArg1, QVariant aArg2, QVariant aArg3, 
 
         QGeoCoordinate pos = NED2LLH(aArg1.value<QVector3D>(), mData->data("REF_LLH").value<QVector3D>());
         mSender->reposition(pos.latitude(), pos.longitude(), pos.altitude(), aArg2.toDouble());
+
         qDebug() << "NED : " << pos;
+
+
     }
     else if (item == "TAKEOFF" ) {
         // arg1 : height
         // arg2 : yaw
-        mSender->takeoff(aArg1.toDouble(), aArg2.toDouble());
+        // mSender->takeoff(aArg1.toDouble(), aArg2.toDouble());
+
+        QVector3D target = QVector3D(0,0,-aArg1.toDouble());
+        QGeoCoordinate pos = NED2LLH(target, mData->data("LLH").value<QVector3D>());
+        mSender->reposition(pos.latitude(), pos.longitude(), pos.altitude(), aArg2.toDouble());
+
 
         // double lat = data("GLOBAL_LAT").toDouble();
         // double lon = data("GLOBAL_LON").toDouble();

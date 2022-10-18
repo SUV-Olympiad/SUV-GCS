@@ -51,11 +51,14 @@ MainWidget::MainWidget(QWidget *parent) :
     mControlDialog = new CControlDialog(mManager, this);
 
     ui->mapView->init(mManager, 6, 6);
+    ui->mapView_2->init(mManager, 6, 6);
 
     // FIXME: dynamic change according to the drone position
     ui->mapView->moveByGPS(36.7721938,127.2696386, 15);
+    ui->mapView_2->moveByGPS(36.7721938,127.2696386, 15);
 
     mMapView = ui->mapView;
+    mMapView2 = ui->mapView_2;
     mRubberBand = NULL;
     mRubberBandDrawing = false;
     mPolygonDrawing = false;
@@ -90,6 +93,9 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(&mRoadTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
     mRoadTimer.setInterval(200);
     mRoadTimer.start();
+
+    ui->mapView_2->setVisible(false);
+    ui->cameraData->setVisible(false);
 }
 
 MainWidget::~MainWidget()
@@ -151,6 +157,7 @@ void MainWidget::procInitTreeWidget()
         colorList[agentsIterator.value()->id()] = color;
         roadList[agentsIterator.value()->id()] = roadData;
         mMapView->updateColor(colorList);
+        mMapView2->updateColor(colorList);
 
 
         QString str2 = QString("%1\t%2").arg(agentsIterator.value()->id()).arg(sysid);
@@ -194,10 +201,19 @@ void MainWidget::updateVehicleData(){
 
                 if(agentsIterator.value()->data(is_camtype).toBool()){
                     img = agentsIterator.value()->data(type).value<QPixmap>();
-                    img = img.scaled(ui->label->width(),ui->label->height(),Qt::KeepAspectRatio);
-                    ui->label->setPixmap(img);
+                    if(leapState == 0){
+                        img = img.scaled(ui->label->width(),ui->label->height(),Qt::KeepAspectRatio);
+                        ui->label->setPixmap(img);
+                    }else{
+                        img = img.scaled(ui->cameraData->width(),ui->cameraData->height(),Qt::KeepAspectRatio);
+                        ui->cameraData->setPixmap(img);
+                    }
                 }else{
-                    ui->label->setText("<html><head/><body><p align='center'>No camera</p></body></html>");
+                    if(leapState == 0){
+                        ui->label->setText("<html><head/><body><p align='center'>No camera</p></body></html>");
+                    }else{
+                        ui->cameraData->setText("<html><head/><body><p align='center'>No camera</p></body></html>");
+                    }
                 }
 
                 for (int i = 0; i < ui->flightInfo->rowCount() ; i++ ) {
@@ -227,6 +243,7 @@ void MainWidget::updateDronesInMap()
         QVector3D llh = agent->data("LLH").value<QVector3D>();
         float heading = agent->data("HEADING").value<qreal>();
         mMapView->updateDrone(agent->id(), llh.x(), llh.y(), heading);
+        mMapView2->updateDrone(agent->id(), llh.x(), llh.y(), heading);
     }
 }
 
@@ -861,6 +878,48 @@ void MainWidget::on_camera_type2_toggled(bool checked)
 {
     if(checked){
         camera_type = 1;
+    }
+}
+
+
+void MainWidget::LeapMotion(bool checked)
+{
+    qDebug() << "test";
+    if(checked){
+        ui->mapView_2->setVisible(true);
+        ui->label->setVisible(false);
+    }else{
+        ui->mapView_2->setVisible(false);
+        ui->label->setVisible(true);
+    }
+}
+void MainWidget::on_leapMotionChk_toggled(bool checked)
+{
+    const QMap<int, IVehicle*> agentsMap = mManager->agents();
+    QMap<int, IVehicle*>::const_iterator agentsIterator;
+    for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+        int agentId = agentsIterator.value()->id();
+        QPixmap img;
+        if(agentId == selectVehicleId){
+            double lat = agentsIterator.value()->data("GLOBAL_LAT").toDouble();
+            double lon = agentsIterator.value()->data("GLOBAL_LON").toDouble();
+            double alt = agentsIterator.value()->data("GLOBAL_ALT").toDouble();
+
+            const QMap<int, IVehicle*> agentsMap = mManager->agents();
+            if(checked){
+                leapState = 1;
+                ui->mapView_2->setVisible(true);
+                ui->label->setVisible(false);
+                ui->cameraData->setVisible(true);
+                ui->mapView->setVisible(false);
+            }else{
+                leapState = 0;
+                ui->mapView_2->setVisible(false);
+                ui->label->setVisible(true);
+                ui->cameraData->setVisible(false);
+                ui->mapView->setVisible(true);
+            }
+        }
     }
 }
 

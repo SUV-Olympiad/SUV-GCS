@@ -55,6 +55,7 @@ public:
 
 public:
     int                     selectVehicleId;
+    int                     leapState = 0;
     bool                    processImage;
     QLabel                  *mImageLabel, *mInformationLabel, *mMapSelectionLabel;
     QGeoCoordinate getNewPositionDiff(QGeoCoordinate oldPosition, double x, double y, double z);
@@ -108,6 +109,10 @@ private slots:
 
     void on_camera_type2_toggled(bool checked);
 
+    void LeapMotion(bool checked);
+
+    void on_leapMotionChk_toggled(bool checked);
+
 private:
     Ui::MainWidget*         ui;
     QLabel*                 mRemaingTimeLabel;
@@ -127,6 +132,7 @@ private:
     bool                    mReadyAlarm;
 
     qhac_mapview            *mMapView;
+    qhac_mapview            *mMapView2;
     DepartureControl        *mDepartureControl;
     QRubberBand             *mRubberBand;
     bool                    mRubberBandDrawing, mPolygonDrawing;

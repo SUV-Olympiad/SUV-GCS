@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1092</width>
-    <height>845</height>
+    <width>1212</width>
+    <height>974</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -41,8 +41,8 @@ color:#fff;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1086</width>
-     <height>811</height>
+     <width>1211</width>
+     <height>941</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -59,7 +59,7 @@ color:#fff;</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
     <property name="sizeConstraint">
-     <enum>QLayout::SetMinimumSize</enum>
+     <enum>QLayout::SetMaximumSize</enum>
     </property>
     <property name="topMargin">
      <number>25</number>
@@ -69,6 +69,9 @@ color:#fff;</string>
     </property>
     <item>
      <widget class="QTabWidget" name="tabWidget">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -77,8 +80,8 @@ color:#fff;</string>
       </property>
       <property name="maximumSize">
        <size>
-        <width>1084</width>
-        <height>700</height>
+        <width>1200</width>
+        <height>800</height>
        </size>
       </property>
       <property name="toolTip">
@@ -99,8 +102,8 @@ color:#fff;</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>1084</width>
-          <height>661</height>
+          <width>1200</width>
+          <height>781</height>
          </rect>
         </property>
         <property name="sizePolicy">
@@ -179,6 +182,13 @@ color:#fff;</string>
             </widget>
            </item>
            <item>
+            <widget class="QCheckBox" name="leapMotionChk">
+             <property name="text">
+              <string>Leap Motion</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <property name="sizeConstraint">
               <enum>QLayout::SetMinimumSize</enum>
@@ -201,6 +211,30 @@ color:#fff;</string>
               </widget>
              </item>
             </layout>
+           </item>
+           <item>
+            <widget class="qhac_mapview" name="mapView_2" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>200</width>
+               <height>200</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <kerning>true</kerning>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background:transparent</string>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QLabel" name="label">
@@ -241,28 +275,60 @@ color:#fff;</string>
             <number>6</number>
            </property>
            <item row="0" column="0">
-            <widget class="qhac_mapview" name="mapView" native="true">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="topMargin">
+              <number>0</number>
              </property>
-             <property name="minimumSize">
-              <size>
-               <width>500</width>
-               <height>500</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <kerning>true</kerning>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background:transparent</string>
-             </property>
-            </widget>
+             <item>
+              <widget class="QLabel" name="cameraData">
+               <property name="minimumSize">
+                <size>
+                 <width>600</width>
+                 <height>600</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">border-width: 1px; border-style: outset; background:#000; color:#fff</string>
+               </property>
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Camera&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="qhac_mapview" name="mapView" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>600</width>
+                 <height>600</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <kerning>true</kerning>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background:transparent</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>
@@ -296,7 +362,7 @@ color:#fff;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1092</width>
+     <width>1212</width>
      <height>22</height>
     </rect>
    </property>
@@ -653,38 +719,6 @@ color:#fff;</string>
    </hints>
   </connection>
   <connection>
-   <sender>camera_type</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWidget</receiver>
-   <slot>on_camera_type_toggled()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>93</x>
-     <y>499</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>558</x>
-     <y>430</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>camera_type2</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWidget</receiver>
-   <slot>on_camera_type2_toggled()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>277</x>
-     <y>499</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>277</x>
-     <y>499</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionLoad_ConfigFile</sender>
    <signal>triggered()</signal>
    <receiver>MainWidget</receiver>
@@ -729,6 +763,54 @@ color:#fff;</string>
     <hint type="destinationlabel">
      <x>545</x>
      <y>422</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>camera_type2</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWidget</receiver>
+   <slot>on_camera_type2_toggled()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>277</x>
+     <y>499</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>277</x>
+     <y>499</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>leapMotionChk</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWidget</receiver>
+   <slot>on_leapMotionChk_toggled()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>185</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>545</x>
+     <y>422</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>camera_type</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWidget</receiver>
+   <slot>on_camera_type_toggled()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>93</x>
+     <y>499</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>558</x>
+     <y>430</y>
     </hint>
    </hints>
   </connection>

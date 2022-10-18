@@ -22,6 +22,9 @@
      <property name="verticalScrollMode">
       <enum>QAbstractItemView::ScrollPerItem</enum>
      </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
      <column>
       <property name="text">
        <string>SYSID</string>
@@ -39,7 +42,7 @@
      </column>
      <column>
       <property name="text">
-       <string>NED</string>
+       <string>LLH</string>
       </property>
      </column>
      <column>

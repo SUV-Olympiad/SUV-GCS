@@ -13,6 +13,7 @@
 #include <QImage>
 #include <QtMath>
 #include <QList>
+#include <QFile>
 
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/opencv.hpp>
@@ -346,11 +347,9 @@ void MainWidget::loadConfigFile()
                 tr("Conf Files (*.conf)"));
 
         if ( !fileName.isEmpty() ) {
-            qDebug() << mManager->numOfAgent();
             initManager();
 
             mManager->loadAgentFile(fileName);
-
             // wait for initializing manager thread
             // TODO: reduce sleep and check init Manager is finished.
             QMap<int, IVehicle*> agentsMap = mManager->agents();
@@ -881,18 +880,6 @@ void MainWidget::on_camera_type2_toggled(bool checked)
     }
 }
 
-
-void MainWidget::LeapMotion(bool checked)
-{
-    qDebug() << "test";
-    if(checked){
-        ui->mapView_2->setVisible(true);
-        ui->label->setVisible(false);
-    }else{
-        ui->mapView_2->setVisible(false);
-        ui->label->setVisible(true);
-    }
-}
 void MainWidget::on_leapMotionChk_toggled(bool checked)
 {
     const QMap<int, IVehicle*> agentsMap = mManager->agents();
@@ -923,3 +910,17 @@ void MainWidget::on_leapMotionChk_toggled(bool checked)
     }
 }
 
+void MainWidget::typeUpload()
+{
+    QMap< QString, QString >  properties;
+    QString fileName = QFileDialog::getOpenFileName(
+        this,
+        tr("Open Agent Configuration File"),
+        QString(CONFIG_FILE_PATH),
+        tr("Conf Files (*.conf)")
+    );
+
+    if ( !fileName.isEmpty() ) {
+        mManager->loadVehicleFile(fileName);
+    }
+}

@@ -374,7 +374,14 @@ color:#fff;</string>
     <addaction name="actionImport_from_Databse"/>
     <addaction name="actionReset_Database"/>
    </widget>
+   <widget class="QMenu" name="menuVehicle">
+    <property name="title">
+     <string>Vehicle</string>
+    </property>
+    <addaction name="actionType_Upload"/>
+   </widget>
    <addaction name="menuOption"/>
+   <addaction name="menuVehicle"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="geometry">
@@ -537,6 +544,11 @@ color:#fff;</string>
   <action name="actionReset_Database">
    <property name="text">
     <string>Reset Database</string>
+   </property>
+  </action>
+  <action name="actionType_Upload">
+   <property name="text">
+    <string>Type Upload</string>
    </property>
   </action>
  </widget>
@@ -814,11 +826,28 @@ color:#fff;</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionType_Upload</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>typeUpload()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>605</x>
+     <y>486</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>loadConfigFile()</slot>
   <slot>runScenario()</slot>
   <slot>checkFlight()</slot>
+  <slot>ResetDatabase()</slot>
   <slot>takeoff()</slot>
   <slot>land()</slot>
   <slot>runParamDialog()</slot>
@@ -828,5 +857,6 @@ color:#fff;</string>
   <slot>runMonitoringDialog()</slot>
   <slot>onControl()</slot>
   <slot>onScenarioMode(bool)</slot>
+  <slot>typeUpload()</slot>
  </slots>
 </ui>

@@ -798,17 +798,12 @@ void ObjectView::paintEvent(QPaintEvent *event)
         // qDebug("drone pos[%d] : %.9f %.9f (%.9f, %.9f)", drone.id(), pos.x(), pos.y(), drone.llh().x(), drone.llh().y());
 
         
-        QPixmap pix(":/icon/src/UI/icon/drone.png");
-        QPixmap pix2(":/icon/src/UI/icon/flight.png");
 
         paint.save();
         paint.translate(pos.x(),pos.y());
         paint.rotate(qRadiansToDegrees(heading) + 90);
-        if(_manager->vehicleId(drone.id()) == 1){
-            paint.drawPixmap(-25, -25, 50, 50, pix);
-        }else{
-            paint.drawPixmap(-25, -25, 50, 50, pix2);
-        }
+        QPixmap pix(_manager->vehicleImage(_manager->vehicleId(drone.id())));
+        paint.drawPixmap(-25, -25, 50, 50, pix);
         paint.restore();
 
         QFont font = paint.font();

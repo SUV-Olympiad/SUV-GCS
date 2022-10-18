@@ -99,6 +99,7 @@ private Q_SLOTS:
     void onScenarioMode(bool aMode);
     void on_actionsendSC_triggered();
     void unmannedTrafficManagement();
+    void typeUpload();
 
 private slots:
 
@@ -108,8 +109,6 @@ private slots:
     void on_camera_type_toggled(bool checked);
 
     void on_camera_type2_toggled(bool checked);
-
-    void LeapMotion(bool checked);
 
     void on_leapMotionChk_toggled(bool checked);
 

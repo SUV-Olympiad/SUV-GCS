@@ -26,17 +26,21 @@ public:
     virtual ~CManager();
 
 public:
+	int  loadVehicleFile(const QString& aFilePath);
 	int  loadAgentFile(const QString& aFilePath);
     void getAgent();
     void addAgent(const QMap<QString, QString> aAgent);
+    void addVehicle(const QMap<QString, QString> aVehicle);
 
     int  numOfAgent();
     bool hasAgent(const int aID);
 
 
     IVehicle* agent(int aID);
-    int groupId(int aID);
     int vehicleId(int aID);
+    int groupId(int aID);
+    QString vehicleImage(int aID);
+    QString vehicleName(int aID);
     QMap<int, IVehicle*> agents() const;
     QMap<int, QString> agentsTime() const;
     QMap<int, int> agentsGroup() const;
@@ -62,8 +66,10 @@ private:
 
     QMap<int, IVehicle*>            mAgents;
     QMap<int, QString>              mAgents_time;
+    QMap<int, QString>              mAgents_vehicle_type_name;
+    QMap<int, QString>              mAgents_vehicle_type_image;
     QMap<int, int>                  mAgents_group;
-    QMap<int, int>                  mAgents_vehicle;
+    QMap<int, int>              mAgents_vehicle;
     QList<Eigen::Vector3f>          mUnknownMark;
 
     dbManager*                      mdbManger;

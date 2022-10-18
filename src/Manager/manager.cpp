@@ -39,6 +39,60 @@ void CManager::onTerminated()
     }
 }
 
+int CManager::loadVehicleFile(const QString &aFilePath)
+{    
+    QFile* file = new QFile(aFilePath);
+
+    if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return -1;
+    }
+
+    QXmlStreamReader xml(file);
+    QMap< QString, QString >  properties;
+    QMap< QString, QString >  mc;    
+    while(!xml.atEnd() && !xml.hasError()) {        
+        QXmlStreamReader::TokenType token = xml.readNext();
+
+        // If token is just StartDocument, we'll go to next
+        if(token == QXmlStreamReader::StartDocument) {
+            continue;
+        }
+
+
+        // If token is StartElement, we'll see if we can read it
+        if(token == QXmlStreamReader::StartElement) {
+            if(xml.name() == "types") {
+                continue;
+            }
+            else if(xml.name() == "type") {                
+                properties = this->parseAgentProperties(xml);
+                // check necessary elements
+				if ( ! properties.contains("id") || !properties.contains("image") || !properties.contains("name") ) {
+					qDebug("ERROR :  require necessary elements (id and image) ");
+                    continue;
+                }
+                this->addVehicle(properties);
+            }
+            else if ( xml.name() == "emdscen") {
+                mEmdscen = this->parseEmdScenProperties(xml);
+            }
+            else if ( xml.name() == "base") {
+                mBase = this->parseBaseProperties(xml);
+            }
+        }
+    }
+
+    if(xml.hasError()) {
+		qDebug("ERROR : There are errors in conf file %s", xml.errorString().toLatin1().data());
+        return -1;
+    }
+
+    xml.clear();
+    delete file;
+
+    return 0;
+}
+
 int CManager::loadAgentFile(const QString &aFilePath)
 {    
     QFile* file = new QFile(aFilePath);
@@ -110,6 +164,16 @@ void CManager::getAgent(){
     }
 }
 
+void CManager::addVehicle(const QMap<QString, QString> aProperty)
+{
+    int id = aProperty["id"].toInt();
+    QString image = aProperty["image"];
+    QString name = aProperty["name"];
+    mAgents_vehicle_type_name.insert(id, name);
+    mAgents_vehicle_type_image.insert(id, image);
+
+}
+
 void CManager::addAgent(const QMap<QString, QString> aProperty)
 {
     IVehicle* agent = nullptr;
@@ -172,6 +236,28 @@ IVehicle *CManager::agent(int aID)
     }
     else {
         qDebug("ERROR : cannot find agent (ID:%d)", aID);
+        return NULL;
+    }
+}
+
+QString CManager::vehicleImage(int aID)
+{
+    if ( mAgents_vehicle_type_image.contains(aID)) {
+        return mAgents_vehicle_type_image[aID];
+    }
+    else {
+        qDebug("ERROR : cannot find vehicleImage (ID:%d)", aID);
+        return NULL;
+    }
+}
+
+QString CManager::vehicleName(int aID)
+{
+    if ( mAgents_vehicle_type_name.contains(aID)) {
+        return mAgents_vehicle_type_name[aID];
+    }
+    else {
+        qDebug("ERROR : cannot find vehicleName (ID:%d)", aID);
         return NULL;
     }
 }

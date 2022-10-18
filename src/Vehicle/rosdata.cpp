@@ -353,6 +353,10 @@ QVariant CROSData::data(const QString &aItem)
     else if (item == "OFFLINE"){
         return calculatedist();
     }
+    else if (item == "PREFLIGHT_CHECK"){
+        bool valid_position = mVehicleLocalPosition.xy_valid&mVehicleLocalPosition.z_valid&mVehicleLocalPosition.v_xy_valid&mVehicleLocalPosition.v_z_valid;
+        return (valid_position ? "READY":"NOT READY");
+    }
     else {
         return QString("--");
     }

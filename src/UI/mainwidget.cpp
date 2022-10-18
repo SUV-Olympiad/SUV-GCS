@@ -167,7 +167,8 @@ void MainWidget::procInitTreeWidget()
                 << "ISARMED"
                 << "Battery"
                 << "LLH_STR"
-                << "LPOS_STR";
+                << "LPOS_STR"
+                << "PREFLIGHT_CHECK";
     int numItem = strItemList.size();
 
     for (int i = 0; i < numItem ; i++ ) {
@@ -565,7 +566,7 @@ void MainWidget::keyEvent(QKeyEvent *event)
         for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
             IVehicle* agent = agentsIterator.value();
             qDebug() << "TAKEOFF......";
-            agent->cmd("TAKEOFF", 10, HEADING);
+            agent->cmd("TAKEOFF", 3, HEADING);
         }
     }
         break;
@@ -592,7 +593,7 @@ void MainWidget::keyEvent(QKeyEvent *event)
         break;
     case Qt::Key_1:
 	{
-        QVector3D target_pos = QVector3D(0, 10, -10);
+        QVector3D target_pos = QVector3D(0, 0, 0);
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
         QMap<int, IVehicle*>::const_iterator agentsIterator;
         for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
@@ -603,7 +604,8 @@ void MainWidget::keyEvent(QKeyEvent *event)
         break;
     case Qt::Key_0:
 	{
-        QVector3D target_pos = QVector3D(0, 0, -10);
+        
+        QVector3D target_pos = QVector3D(20, 0, 0);
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
         QMap<int, IVehicle*>::const_iterator agentsIterator;
         for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
@@ -612,7 +614,61 @@ void MainWidget::keyEvent(QKeyEvent *event)
         }
 	}
         break;
-
+    case Qt::Key_2:
+	{
+        QVector3D target_pos = QVector3D(20, 20, 0);
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            IVehicle* agent = agentsIterator.value();
+            agent->cmd("MOVE_NED", target_pos, HEADING);
+        }
+	}
+        break;
+    case Qt::Key_3:
+	{
+        QVector3D target_pos = QVector3D(-20, 20, 0);
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            IVehicle* agent = agentsIterator.value();
+            agent->cmd("MOVE_NED", target_pos, HEADING);
+        }
+	}
+        break;
+    case Qt::Key_4:
+	{
+        QVector3D target_pos = QVector3D(-20, -20, 0);
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            IVehicle* agent = agentsIterator.value();
+            agent->cmd("MOVE_NED", target_pos, HEADING);
+        }
+	}
+        break;
+    case Qt::Key_5:
+	{
+        QVector3D target_pos = QVector3D(0, -20, 0);
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            IVehicle* agent = agentsIterator.value();
+            agent->cmd("MOVE_NED", target_pos, HEADING);
+        }
+	}
+        break;
+    case Qt::Key_6:
+	{
+        QVector3D target_pos = QVector3D(0, 0, 0);
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            IVehicle* agent = agentsIterator.value();
+            agent->cmd("MOVE_NED", target_pos, HEADING);
+        }
+	}
+        break;
     case Qt::Key_N:
 	{
         const QMap<int, IVehicle*> agentsMap = mManager->agents();

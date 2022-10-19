@@ -357,6 +357,11 @@ QVariant CROSData::data(const QString &aItem)
         bool valid_position = mVehicleLocalPosition.xy_valid&mVehicleLocalPosition.z_valid&mVehicleLocalPosition.v_xy_valid&mVehicleLocalPosition.v_z_valid;
         return (valid_position ? "READY":"NOT READY");
     }
+    else if (item == "TIMESTAMP"){
+
+        qulonglong timestamp = mVehicleStatus.timestamp;
+        return timestamp;
+    }
     else {
         return QString("--");
     }

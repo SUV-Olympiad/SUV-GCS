@@ -166,6 +166,11 @@ public:
     void updateBatteryStatus(const px4_msgs::msg::BatteryStatus::SharedPtr msg);
     void updateFpvCamera(const sensor_msgs::msg::Image::SharedPtr msg);
     void updateFollowCamera(const sensor_msgs::msg::Image::SharedPtr msg);
+    void updatePointACamera(const sensor_msgs::msg::Image::SharedPtr msg);
+    void updatePointBCamera(const sensor_msgs::msg::Image::SharedPtr msg);
+    void updatePointCCamera(const sensor_msgs::msg::Image::SharedPtr msg);
+    void updatePointDCamera(const sensor_msgs::msg::Image::SharedPtr msg);
+    void updatePointECamera(const sensor_msgs::msg::Image::SharedPtr msg);
     void updateLeapMotion(const suv_msgs::msg::Leap::SharedPtr msg);
 
     // void parameterValueCallback(const px4_msgs::msg::UavcanParameterValue::SharedPtr msg);
@@ -226,6 +231,11 @@ private:
 
     cv_bridge::CvImagePtr                       mFpv_Cv_ptr;
     cv_bridge::CvImagePtr                       mFollow_Cv_ptr;
+    cv_bridge::CvImagePtr                       mPointA_Cv_ptr;
+    cv_bridge::CvImagePtr                       mPointB_Cv_ptr;
+    cv_bridge::CvImagePtr                       mPointC_Cv_ptr;
+    cv_bridge::CvImagePtr                       mPointD_Cv_ptr;
+    cv_bridge::CvImagePtr                       mPointE_Cv_ptr;
 
     QList<QString>                      param_requested;
 
@@ -239,6 +249,11 @@ private:
     rclcpp::Subscription<px4_msgs::msg::BatteryStatus>::SharedPtr mBatteryStatusSub_;
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mFpvCameraImageSub_;
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mFollowCameraImageSub_;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mPointAImageSub_;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mPointBImageSub_;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mPointCImageSub_;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mPointDImageSub_;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr mPointEImageSub_;
     rclcpp::Subscription<px4_msgs::msg::VehicleCommandAck>::SharedPtr mVehicleCommandAckSub_;
     rclcpp::Subscription<px4_msgs::msg::LogMessage>::SharedPtr mLogMessageSub_;
 

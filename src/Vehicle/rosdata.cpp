@@ -79,6 +79,17 @@ void CROSData::initSubscription()
     mFpvCameraImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updateFpvCamera, this, _1));
     topic = QString("/vehicle%1/follow_camera/image_raw").arg(sysid);
     mFollowCameraImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updateFollowCamera, this, _1));
+    topic = QString("/camera_point_a/image_raw").arg(sysid);
+    mPointAImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updatePointACamera, this, _1));
+    topic = QString("/camera_point_b/image_raw").arg(sysid);
+    mPointBImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updatePointBCamera, this, _1));
+    topic = QString("/camera_point_c/image_raw").arg(sysid);
+    mPointCImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updatePointCCamera, this, _1));
+    topic = QString("/camera_point_d/image_raw").arg(sysid);
+    mPointDImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updatePointDCamera, this, _1));
+    topic = QString("/camera_point_e/image_raw").arg(sysid);
+    mPointEImageSub_ = mQHAC3Node->create_subscription<sensor_msgs::msg::Image>(topic.toStdString().c_str(), qos2, std::bind(&CROSData::updatePointECamera, this, _1));
+
     topic = QString("/leapmotion");
     mLeapMotionSub_ = mQHAC3Node->create_subscription<suv_msgs::msg::Leap>(topic.toStdString().c_str(), qos, std::bind(&CROSData::updateLeapMotion, this, _1));
 
@@ -356,6 +367,71 @@ QVariant CROSData::data(const QString &aItem)
         );
         return camera;
     }
+    else if (item == "POINT_A_CAMERA") {
+        cv::Mat image_mat = mPointA_Cv_ptr->image;
+
+        QPixmap camera = QPixmap::fromImage(
+                QImage(
+                        (unsigned char*) image_mat.data,
+                        image_mat.cols,
+                        image_mat.rows,
+                        QImage::Format_RGB888
+                )
+        );
+        return camera;
+    }
+    else if (item == "POINT_B_CAMERA") {
+        cv::Mat image_mat = mPointB_Cv_ptr->image;
+
+        QPixmap camera = QPixmap::fromImage(
+                QImage(
+                        (unsigned char*) image_mat.data,
+                        image_mat.cols,
+                        image_mat.rows,
+                        QImage::Format_RGB888
+                )
+        );
+        return camera;
+    }
+    else if (item == "POINT_C_CAMERA") {
+        cv::Mat image_mat = mPointC_Cv_ptr->image;
+
+        QPixmap camera = QPixmap::fromImage(
+                QImage(
+                        (unsigned char*) image_mat.data,
+                        image_mat.cols,
+                        image_mat.rows,
+                        QImage::Format_RGB888
+                )
+        );
+        return camera;
+    }
+    else if (item == "POINT_D_CAMERA") {
+        cv::Mat image_mat = mPointD_Cv_ptr->image;
+
+        QPixmap camera = QPixmap::fromImage(
+                QImage(
+                        (unsigned char*) image_mat.data,
+                        image_mat.cols,
+                        image_mat.rows,
+                        QImage::Format_RGB888
+                )
+        );
+        return camera;
+    }
+    else if (item == "POINT_E_CAMERA") {
+        cv::Mat image_mat = mPointE_Cv_ptr->image;
+
+        QPixmap camera = QPixmap::fromImage(
+                QImage(
+                        (unsigned char*) image_mat.data,
+                        image_mat.cols,
+                        image_mat.rows,
+                        QImage::Format_RGB888
+                )
+        );
+        return camera;
+    }
     else if ( item == "MSG_INTERVAL_TIME") {
         qint64 t = QDateTime::currentMSecsSinceEpoch();
         if ((t - mRecvTime_Monitoring) > 10000 ) {
@@ -526,7 +602,6 @@ void CROSData::updateFpvCamera(const sensor_msgs::msg::Image::SharedPtr msg)
     catch (cv_bridge::Exception& e) {
         qDebug() << "cv_bridge exception: " << e.what();
     }
-
 }
 
 void CROSData::updateFollowCamera(const sensor_msgs::msg::Image::SharedPtr msg)
@@ -539,7 +614,66 @@ void CROSData::updateFollowCamera(const sensor_msgs::msg::Image::SharedPtr msg)
     catch (cv_bridge::Exception& e) {
         qDebug() << "cv_bridge exception: " << e.what();
     }
+}
 
+void CROSData::updatePointACamera(const sensor_msgs::msg::Image::SharedPtr msg)
+{
+    try
+    {
+        mPointA_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_follow_cam = true;
+    }
+    catch (cv_bridge::Exception& e) {
+        qDebug() << "cv_bridge exception: " << e.what();
+    }
+}
+
+void CROSData::updatePointBCamera(const sensor_msgs::msg::Image::SharedPtr msg)
+{
+    try
+    {
+        mPointB_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_follow_cam = true;
+    }
+    catch (cv_bridge::Exception& e) {
+        qDebug() << "cv_bridge exception: " << e.what();
+    }
+}
+
+void CROSData::updatePointCCamera(const sensor_msgs::msg::Image::SharedPtr msg)
+{
+    try
+    {
+        mPointC_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_follow_cam = true;
+    }
+    catch (cv_bridge::Exception& e) {
+        qDebug() << "cv_bridge exception: " << e.what();
+    }
+}
+
+void CROSData::updatePointDCamera(const sensor_msgs::msg::Image::SharedPtr msg)
+{
+    try
+    {
+        mPointD_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_follow_cam = true;
+    }
+    catch (cv_bridge::Exception& e) {
+        qDebug() << "cv_bridge exception: " << e.what();
+    }
+}
+
+void CROSData::updatePointECamera(const sensor_msgs::msg::Image::SharedPtr msg)
+{
+    try
+    {
+        mPointE_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_follow_cam = true;
+    }
+    catch (cv_bridge::Exception& e) {
+        qDebug() << "cv_bridge exception: " << e.what();
+    }
 }
 
 void CROSData::updateVehicleCommandAck(const px4_msgs::msg::VehicleCommandAck::SharedPtr msg)

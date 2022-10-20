@@ -14,6 +14,12 @@ CManager::CManager(QObject *parent) :
 {
     mdbManger = new dbManager();
     db = mdbManger->db;
+
+    mAgents_vehicle_type_name[0] = "iris";
+    mAgents_vehicle_type_image[0] = ":/icon/src/UI/icon/drone.png";
+
+    mAgents_vehicle_type_name[1] = "iris";
+    mAgents_vehicle_type_image[1] = ":/icon/src/UI/icon/flight.png";
 }
 
 CManager::~CManager()
@@ -173,7 +179,6 @@ void CManager::addVehicle(const QMap<QString, QString> aProperty)
     
     mAgents_vehicle_type_name.insert(id, name);
     mAgents_vehicle_type_image.insert(id, image);
-    qDebug() << "insert";
 
 }
 

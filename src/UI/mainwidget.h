@@ -57,6 +57,7 @@ public:
     QString                 point_camera = "";
     int                     selectVehicleId;
     int                     leapState = 0;
+    bool                    isUTM = true;
     bool                    processImage;
     QLabel                  *mImageLabel, *mInformationLabel, *mMapSelectionLabel;
     QGeoCoordinate getNewPositionDiff(QGeoCoordinate oldPosition, double x, double y, double z);
@@ -105,6 +106,7 @@ private Q_SLOTS:
 
 private slots:
 
+    void utmOnOff();
 
     void showMap();
     void showPointA();

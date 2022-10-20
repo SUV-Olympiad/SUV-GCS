@@ -15,11 +15,11 @@ CManager::CManager(QObject *parent) :
     mdbManger = new dbManager();
     db = mdbManger->db;
 
-    mAgents_vehicle_type_name[0] = "iris";
-    mAgents_vehicle_type_image[0] = ":/icon/src/UI/icon/drone.png";
-
     mAgents_vehicle_type_name[1] = "iris";
-    mAgents_vehicle_type_image[1] = ":/icon/src/UI/icon/flight.png";
+    mAgents_vehicle_type_image[1] = ":/icon/src/UI/icon/drone.png";
+
+    mAgents_vehicle_type_name[2] = "vtol";
+    mAgents_vehicle_type_image[2] = ":/icon/src/UI/icon/flight.png";
 }
 
 CManager::~CManager()

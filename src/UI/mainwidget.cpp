@@ -382,7 +382,6 @@ void MainWidget::loadConfigFile()
                 QMap<int, int>::const_iterator agentsVehicleIterator;
                 bool isAllAgentsReady = true;
                 
-
                 do{
                     CSleeper::msleep(500);
                     isAllAgentsReady = true;
@@ -407,6 +406,7 @@ void MainWidget::loadConfigFile()
             connect(&mRoadTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
             mRoadTimer.setInterval(200);
             mRoadTimer.start();
+
 
             connect(&mUtmTimer, SIGNAL(timeout()), this, SLOT(unmannedTrafficManagement()));
             mUtmTimer.setInterval(120000);
@@ -534,78 +534,81 @@ void MainWidget::on_actionsendSC_triggered()
 }
 
 void MainWidget::unmannedTrafficManagement(){
-    QTime t;
-    qDebug() << "[ UTM Start ]";
-    const QMap<int, IVehicle*> agentsMap = mManager->agents();
-    const QMap<int, int> agentsVehicleMap = mManager->agentsVehicle();
-
-    vector<int> vehicle_tye_sets;
-    vector<QLineF> mission_sets;
-    vector<IVehicle*> agent_sets;
-    vector<float> EE_list;
-    vector<int> line_set;
-
-    int index = 0;
-
-    QMap<int, IVehicle*>::const_iterator agentsIterator;
-    QMap<int, int>::const_iterator agentsTypeIterator;
-
-    for (agentsTypeIterator = agentsVehicleMap.begin(); agentsTypeIterator != agentsVehicleMap.end(); ++agentsTypeIterator){
-        int type = agentsTypeIterator.value();
-        vehicle_tye_sets.push_back(type);
-    }
-
-    for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
-        IVehicle* agent = agentsIterator.value();
-        QList<QVariant> agent_mission = agent->data("MISSION").toList();
-
-        if (agent_mission.isEmpty()) {
-            qDebug() << agent->data("SYSID") << " vehicle don't have mission";
-            return;
-        }
-//        QString("(lat : %1, lon : %2)").arg(start,6,'f',6).arg(end,6,'f',6)
-        QPointF start, end;
-        CROSData::MissionItem *fItem = agent_mission.first().value<CROSData::MissionItem*>();
-        CROSData::MissionItem *lItem = agent_mission.last().value<CROSData::MissionItem*>();
-        start = QPointF(fItem->lat, fItem->lon);
-        end = QPointF(lItem->lat, lItem->lon);
-//        qDebug() << "Start : " << QString("(lat : %1, lon : %2)").arg(fItem->lat,8,'f',8).arg(fItem->lon,8,'f',8)
-//        << "  end : " << QString("(lat : %1, lon : %2)").arg(lItem->lat,8,'f',8).arg(lItem->lon,8,'f',8);
-        agent_sets.push_back(agent);
-        mission_sets.push_back(QLineF(start, end));
-        //TODO 기체 타입별 에너지 효율 추가
-        EE_list.push_back(vehicle_tye_sets[index]);
-        if (agent->data("MODE") != "Auto loiter mode") {
-            line_set.push_back(index);
-        }
-
-        index++;
-    }
-
-    SUVAlgo utm = SUVAlgo(mission_sets, EE_list);
-    vector <vector<int>> ready_list = utm.solution(line_set);
-    for (vector<int> wait_set: ready_list) {
-        cout << "Ready ";
-        for (int idx: wait_set) {
-            cout <<agent_sets[idx]->data("SYSID").toInt() << " ";
-        }
-        cout << endl;
-    }
-    qDebug() << "Mission Start to utm";
-    for (vector<int> wait_set: ready_list) {
-        for (int idx: wait_set) {
-            if (agent_sets[idx]->data("MODE") == "Auto loiter mode") {
-                qDebug() << agent_sets[idx]->data("SYSID").toInt() << " start mission";
-                agent_sets[idx]->cmd("MISSION_START");
-            } else {
-                qDebug() << agent_sets[idx]->data("SYSID").toInt() << " is flying ";
-                continue;
-            }
-        }
+    qDebug() << "test";
+    if(isUTM){
         QTime t;
-        t.start();
-        while(t.elapsed()<15000)
-            QCoreApplication::processEvents();
+        qDebug() << "[ UTM Start ]";
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        const QMap<int, int> agentsVehicleMap = mManager->agentsVehicle();
+
+        vector<int> vehicle_tye_sets;
+        vector<QLineF> mission_sets;
+        vector<IVehicle*> agent_sets;
+        vector<float> EE_list;
+        vector<int> line_set;
+
+        int index = 0;
+
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        QMap<int, int>::const_iterator agentsTypeIterator;
+
+        for (agentsTypeIterator = agentsVehicleMap.begin(); agentsTypeIterator != agentsVehicleMap.end(); ++agentsTypeIterator){
+            int type = agentsTypeIterator.value();
+            vehicle_tye_sets.push_back(type);
+        }
+
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            IVehicle* agent = agentsIterator.value();
+            QList<QVariant> agent_mission = agent->data("MISSION").toList();
+
+            if (agent_mission.isEmpty()) {
+                qDebug() << agent->data("SYSID") << " vehicle don't have mission";
+                return;
+            }
+    //        QString("(lat : %1, lon : %2)").arg(start,6,'f',6).arg(end,6,'f',6)
+            QPointF start, end;
+            CROSData::MissionItem *fItem = agent_mission.first().value<CROSData::MissionItem*>();
+            CROSData::MissionItem *lItem = agent_mission.last().value<CROSData::MissionItem*>();
+            start = QPointF(fItem->lat, fItem->lon);
+            end = QPointF(lItem->lat, lItem->lon);
+    //        qDebug() << "Start : " << QString("(lat : %1, lon : %2)").arg(fItem->lat,8,'f',8).arg(fItem->lon,8,'f',8)
+    //        << "  end : " << QString("(lat : %1, lon : %2)").arg(lItem->lat,8,'f',8).arg(lItem->lon,8,'f',8);
+            agent_sets.push_back(agent);
+            mission_sets.push_back(QLineF(start, end));
+            //TODO 기체 타입별 에너지 효율 추가
+            EE_list.push_back(vehicle_tye_sets[index]);
+            if (agent->data("MODE") != "Auto loiter mode") {
+                line_set.push_back(index);
+            }
+
+            index++;
+        }
+
+        SUVAlgo utm = SUVAlgo(mission_sets, EE_list);
+        vector <vector<int>> ready_list = utm.solution(line_set);
+        for (vector<int> wait_set: ready_list) {
+            cout << "Ready ";
+            for (int idx: wait_set) {
+                cout <<agent_sets[idx]->data("SYSID").toInt() << " ";
+            }
+            cout << endl;
+        }
+        qDebug() << "Mission Start to utm";
+        for (vector<int> wait_set: ready_list) {
+            for (int idx: wait_set) {
+                if (agent_sets[idx]->data("MODE") == "Auto loiter mode") {
+                    qDebug() << agent_sets[idx]->data("SYSID").toInt() << " start mission";
+                    agent_sets[idx]->cmd("MISSION_START");
+                } else {
+                    qDebug() << agent_sets[idx]->data("SYSID").toInt() << " is flying ";
+                    continue;
+                }
+            }
+            QTime t;
+            t.start();
+            while(t.elapsed()<15000)
+                QCoreApplication::processEvents();
+        }
     }
 }
 
@@ -1015,5 +1018,21 @@ void MainWidget::updatePointCamera()
         img = agentsIterator.value()->data(point_camera).value<QPixmap>();
         img = img.scaled(ui->cameraData->width(),ui->cameraData->height(),Qt::KeepAspectRatio);
         ui->cameraData->setPixmap(img);
+    }
+}
+
+void MainWidget::utmOnOff()
+{
+    isUTM = !isUTM;
+    if(isUTM){
+        QMessageBox msgBox;
+        msgBox.setText("UTM on");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.exec();
+    }else{
+        QMessageBox msgBox;
+        msgBox.setText("UTM off");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.exec();
     }
 }

@@ -460,6 +460,8 @@ color:#fff;</string>
      <string>Vehicle</string>
     </property>
     <addaction name="actionType_Upload"/>
+    <addaction name="separator"/>
+    <addaction name="actionUTM_On_Off"/>
    </widget>
    <addaction name="menuOption"/>
    <addaction name="menuVehicle"/>
@@ -630,6 +632,11 @@ color:#fff;</string>
   <action name="actionType_Upload">
    <property name="text">
     <string>Type Upload</string>
+   </property>
+  </action>
+  <action name="actionUTM_On_Off">
+   <property name="text">
+    <string>UTM On/Off</string>
    </property>
   </action>
  </widget>
@@ -1003,8 +1010,25 @@ color:#fff;</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionUTM_On_Off</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWidget</receiver>
+   <slot>utmOnOff()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>605</x>
+     <y>486</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
+  <slot>utmOnOff()</slot>
   <slot>showMap()</slot>
   <slot>showPointA()</slot>
   <slot>showPointB()</slot>

@@ -34,6 +34,7 @@ void DepartureControl::updateData(QString data)
             ui->tableWidget->setItem(i,1,new QTableWidgetItem(list[1]));
             ui->tableWidget->setItem(i,2,new QTableWidgetItem(list[2]));
             ui->tableWidget->setItem(i,3,new QTableWidgetItem(list[3]));
+            ui->tableWidget->setItem(i,4,new QTableWidgetItem(list[4]));
         }
         
     }

@@ -37,6 +37,11 @@
      </column>
      <column>
       <property name="text">
+       <string>MODE</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
        <string>Battery</string>
       </property>
      </column>

@@ -33,6 +33,7 @@ public:
     void addVehicle(const QMap<QString, QString> aVehicle);
 
     int  numOfAgent();
+    int  numOfType();
     bool hasAgent(const int aID);
 
 
@@ -56,6 +57,7 @@ public Q_SLOTS:
 private:
     IVehicle* createAgent(const int aID, const char* aIP);
     QMap<QString, QString> parseAgentProperties(QXmlStreamReader& aXml, int* aStatus=NULL);
+    QMap<QString, QString> parseTypeProperties(QXmlStreamReader& aXml, int* aStatus=NULL);
     QMap<QString, QString> parseMotionCaptureProperties(QXmlStreamReader& aXml, int* aStatus=NULL);
     QMap<QString, QString> parseEmdScenProperties(QXmlStreamReader& aXml, int* aStatus=NULL);
     QMap<QString, QString> parseBaseProperties(QXmlStreamReader& aXml, int* aStatus=NULL);

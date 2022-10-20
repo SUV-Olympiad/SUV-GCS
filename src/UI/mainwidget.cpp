@@ -171,7 +171,8 @@ void MainWidget::procInitTreeWidget()
 
     //Show table
     QStringList strItemList;
-    strItemList << "MODE"
+    strItemList << "Vehicle Type"
+                << "MODE"
                 << "ISARMED"
                 << "Battery"
                 << "LLH_STR"
@@ -218,15 +219,18 @@ void MainWidget::updateVehicleData(){
                 }
 
                 for (int i = 0; i < ui->flightInfo->rowCount() ; i++ ) {
-                
                     QString type = ui->flightInfo->item(i, 0)->text();
                     QString value;
 
-                    if ( agentsIterator.value() == NULL )  {
-                        qDebug("Error: agent == NULL");
-                        continue;
+                    if(i == 0){
+                        value = mManager->vehicleName(mManager->vehicleId(agentId));
+                    }else{
+                        if ( agentsIterator.value() == NULL )  {
+                            qDebug("Error: agent == NULL");
+                            continue;
+                        }
+                        value = QString("%1").arg((agentsIterator.value()->data(type)).toString());
                     }
-                    value = QString("%1").arg((agentsIterator.value()->data(type)).toString());
                     
                     ui->flightInfo->setItem(i,1,new QTableWidgetItem(value));
                 }
@@ -302,16 +306,23 @@ void MainWidget::stopScenario()
 
 void MainWidget::loadDatabase()
 {
-    mManager->getAgent();
-
-    initManager();
-    if(mManager->numOfAgent() != 0){
-        procInitTreeWidget();
-    }else{
+    if(mManager->numOfType() == 0){
         QMessageBox msgBox;
-        msgBox.setText("Database is empty.");
+        msgBox.setText("Please insert vehicle type");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.exec();
+    }else{
+        mManager->getAgent();
+
+        initManager();
+        if(mManager->numOfAgent() != 0){
+            procInitTreeWidget();
+        }else{
+            QMessageBox msgBox;
+            msgBox.setText("Database is empty.");
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.exec();
+        }
     }
 }
 
@@ -333,69 +344,74 @@ void MainWidget::ResetDatabase()
 
 void MainWidget::loadConfigFile()
 {
-    if(mManager->numOfAgent() != 0){
+    if(mManager->numOfType() == 0){
         QMessageBox msgBox;
-        msgBox.setText("There is already an imported UAV.");
+        msgBox.setText("Please insert vehicle type");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.exec();
     }else{
-        // QString fileName = "/home/suv/Project/qhac4/docs/CMODEL_2EA.conf";
-        QString fileName = QFileDialog::getOpenFileName(
-                this,
-                tr("Open Agent Configuration File"),
-                QString(CONFIG_FILE_PATH),
-                tr("Conf Files (*.conf)"));
+        if(mManager->numOfAgent() != 0){
+            QMessageBox msgBox;
+            msgBox.setText("There is already an imported UAV.");
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.exec();
+        }else{
+            // QString fileName = "/home/suv/Project/qhac4/docs/CMODEL_2EA.conf";
+            QString fileName = QFileDialog::getOpenFileName(
+                    this,
+                    tr("Open Agent Configuration File"),
+                    QString(CONFIG_FILE_PATH),
+                    tr("Conf Files (*.conf)"));
 
-        if ( !fileName.isEmpty() ) {
-            initManager();
+            if ( !fileName.isEmpty() ) {
+                initManager();
 
-            mManager->loadAgentFile(fileName);
-            // wait for initializing manager thread
-            // TODO: reduce sleep and check init Manager is finished.
-            QMap<int, IVehicle*> agentsMap = mManager->agents();
-            QMap<int, QString> agentsTimeMap = mManager->agentsTime();
-            QMap<int, int> agentsGroupMap = mManager->agentsGroup();
-            QMap<int, int> agentsVehicleMap = mManager->agentsVehicle();
+                mManager->loadAgentFile(fileName);
+                // wait for initializing manager thread
+                // TODO: reduce sleep and check init Manager is finished.
+                QMap<int, IVehicle*> agentsMap = mManager->agents();
+                QMap<int, QString> agentsTimeMap = mManager->agentsTime();
+                QMap<int, int> agentsGroupMap = mManager->agentsGroup();
+                QMap<int, int> agentsVehicleMap = mManager->agentsVehicle();
 
 
 
-            QMap<int, IVehicle*>::const_iterator agentsIterator;
-            QMap<int, QString>::const_iterator agentsTimeIterator;
-            QMap<int, int>::const_iterator agentsGroupIterator;
-            QMap<int, int>::const_iterator agentsVehicleIterator;
-            bool isAllAgentsReady = true;
-            
+                QMap<int, IVehicle*>::const_iterator agentsIterator;
+                QMap<int, QString>::const_iterator agentsTimeIterator;
+                QMap<int, int>::const_iterator agentsGroupIterator;
+                QMap<int, int>::const_iterator agentsVehicleIterator;
+                bool isAllAgentsReady = true;
+                
 
-            do{
-                CSleeper::msleep(500);
-                isAllAgentsReady = true;
-                for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
-                    if(agentsIterator.value()->isInitialized == false) {
-                        isAllAgentsReady = false;
-                        break;
+                do{
+                    CSleeper::msleep(500);
+                    isAllAgentsReady = true;
+                    for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+                        if(agentsIterator.value()->isInitialized == false) {
+                            isAllAgentsReady = false;
+                            break;
+                        }
                     }
-                }
-                qDebug() << "isAllAgentsReadey : " << isAllAgentsReady;
-            } while(!isAllAgentsReady);
+                    qDebug() << "isAllAgentsReadey : " << isAllAgentsReady;
+                } while(!isAllAgentsReady);
 
-            procInitTreeWidget();
+                procInitTreeWidget();
+            }
+
+
+            _base_latlng.setLatitude(mManager->property("base", "latitude").toDouble());
+            _base_latlng.setLongitude(mManager->property("base", "longitude").toDouble());
+            _base_latlng.setAltitude(mManager->property("base", "altitude").toDouble());
+            qDebug() << "set base! for SITL. " << _base_latlng;
+
+            connect(&mRoadTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
+            mRoadTimer.setInterval(200);
+            mRoadTimer.start();
+
+            connect(&mUtmTimer, SIGNAL(timeout()), this, SLOT(unmannedTrafficManagement()));
+            mUtmTimer.setInterval(120000);
+            mUtmTimer.start();
         }
-
-
-        _base_latlng.setLatitude(mManager->property("base", "latitude").toDouble());
-        _base_latlng.setLongitude(mManager->property("base", "longitude").toDouble());
-        _base_latlng.setAltitude(mManager->property("base", "altitude").toDouble());
-        qDebug() << "set base! for SITL. " << _base_latlng;
-
-        connect(&mRoadTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
-        mRoadTimer.setInterval(200);
-        mRoadTimer.start();
-
-        connect(&mUtmTimer, SIGNAL(timeout()), this, SLOT(unmannedTrafficManagement()));
-        mUtmTimer.setInterval(120000);
-        mUtmTimer.start();
-
-
     }
 }
 
@@ -484,6 +500,7 @@ void MainWidget::updateUI()
     rclcpp::spin_some(_ros2node);
     updateDronesInMap();
     updateDeparture();
+    updatePointCamera();
 }
 
 bool MainWidget::event(QEvent *event)
@@ -834,7 +851,8 @@ void MainWidget::on_sysList_itemClicked(QListWidgetItem *item)
 void MainWidget::updateDeparture()
 {
     QStringList strItemList;
-    strItemList << "MODE"
+    strItemList << ""
+                << "MODE"
                 << "Battery"
                 << "LLH_STR";
     int numItem = strItemList.size();
@@ -851,17 +869,21 @@ void MainWidget::updateDeparture()
 
         for (int i = 0; i < numItem ; i++ ) {
             QString value;
+            if(i == 0){
+                value = mManager->vehicleName(mManager->vehicleId(sysid.toInt()));
+            }else{
+                if ( agentsIterator.value() == NULL )  {
+                    qDebug("Error: agent == NULL");
+                    continue;
+                }
 
-            if ( agentsIterator.value() == NULL )  {
-                qDebug("Error: agent == NULL");
-                continue;
+                value = QString("%1").arg((agentsIterator.value()->data(strItemList[i])).toString());
             }
-
-            value = QString("%1").arg((agentsIterator.value()->data(strItemList[i])).toString());
 
             departureData.append(value);
             departureData.append("\t");
         }
+
         ui->departureControl->updateData(departureData);
     }
 }
@@ -922,5 +944,76 @@ void MainWidget::typeUpload()
 
     if ( !fileName.isEmpty() ) {
         mManager->loadVehicleFile(fileName);
+        QMessageBox msgBox;
+        QString str = QString("Sucess total : %1").arg(mManager->numOfType());
+        msgBox.setText(str);
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.exec();
+    }
+}
+
+void MainWidget::showMap(){
+    point_camera = "";
+    ui->mapView_2->setVisible(false);
+    ui->label->setVisible(true);
+    ui->cameraData->setVisible(false);
+    ui->mapView->setVisible(true);
+}
+
+void MainWidget::showPointA()
+{
+    point_camera = "POINT_A_CAMERA";
+    ui->mapView_2->setVisible(true);
+    ui->label->setVisible(false);
+    ui->cameraData->setVisible(true);
+    ui->mapView->setVisible(false);
+}
+
+void MainWidget::showPointB()
+{
+    point_camera = "POINT_B_CAMERA";
+    ui->mapView_2->setVisible(true);
+    ui->label->setVisible(false);
+    ui->cameraData->setVisible(true);
+    ui->mapView->setVisible(false);
+}
+
+void MainWidget::showPointC()
+{
+    point_camera = "POINT_C_CAMERA";
+    ui->mapView_2->setVisible(true);
+    ui->label->setVisible(false);
+    ui->cameraData->setVisible(true);
+    ui->mapView->setVisible(false);
+}
+
+void MainWidget::showPointD()
+{
+    point_camera = "POINT_D_CAMERA";
+    ui->mapView_2->setVisible(true);
+    ui->label->setVisible(false);
+    ui->cameraData->setVisible(true);
+    ui->mapView->setVisible(false);
+}
+
+void MainWidget::showPointE()
+{
+    point_camera = "POINT_E_CAMERA";
+    ui->mapView_2->setVisible(true);
+    ui->label->setVisible(false);
+    ui->cameraData->setVisible(true);
+    ui->mapView->setVisible(false);
+}
+
+void MainWidget::updatePointCamera()
+{
+    if(mManager->numOfAgent() != 0 && point_camera != ""){
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        agentsIterator = agentsMap.begin();
+        QPixmap img;
+        img = agentsIterator.value()->data(point_camera).value<QPixmap>();
+        img = img.scaled(ui->cameraData->width(),ui->cameraData->height(),Qt::KeepAspectRatio);
+        ui->cameraData->setPixmap(img);
     }
 }

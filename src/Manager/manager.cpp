@@ -65,7 +65,7 @@ int CManager::loadVehicleFile(const QString &aFilePath)
                 continue;
             }
             else if(xml.name() == "type") {                
-                properties = this->parseAgentProperties(xml);
+                properties = this->parseTypeProperties(xml);
                 // check necessary elements
 				if ( ! properties.contains("id") || !properties.contains("image") || !properties.contains("name") ) {
 					qDebug("ERROR :  require necessary elements (id and image) ");
@@ -169,8 +169,11 @@ void CManager::addVehicle(const QMap<QString, QString> aProperty)
     int id = aProperty["id"].toInt();
     QString image = aProperty["image"];
     QString name = aProperty["name"];
+
+    
     mAgents_vehicle_type_name.insert(id, name);
     mAgents_vehicle_type_image.insert(id, image);
+    qDebug() << "insert";
 
 }
 
@@ -224,6 +227,11 @@ int CManager::numOfAgent()
     return mAgents.size();
 }
 
+int CManager::numOfType()
+{
+    return mAgents_vehicle_type_name.size();
+}
+
 bool CManager::hasAgent(const int aID)
 {
     return mAgents.contains(aID);
@@ -250,6 +258,7 @@ QString CManager::vehicleImage(int aID)
         return NULL;
     }
 }
+
 
 QString CManager::vehicleName(int aID)
 {
@@ -333,6 +342,36 @@ QMap<QString, QString> CManager::parseAgentProperties(QXmlStreamReader &aXml, in
     aXml.readNext();
 
     while(!(aXml.tokenType() == QXmlStreamReader::EndElement && aXml.name() == "agent")) {
+        if(aXml.tokenType() == QXmlStreamReader::StartElement) {
+            QStringRef name = aXml.name();
+            aXml.readNext();
+            property[name.toString().trimmed().toLower()] = aXml.text().toString().trimmed(); // Jang added 2016. 5. 9.
+        }
+        aXml.readNext();
+    }
+
+    return property;
+}
+
+QMap<QString, QString> CManager::parseTypeProperties(QXmlStreamReader &aXml, int* aStatus)
+{
+    QMap<QString, QString> property;
+
+    // Let's check that we're really getting a type
+    if(aXml.tokenType() != QXmlStreamReader::StartElement &&
+            aXml.name() == "type") {
+        if ( aStatus != NULL ) *aStatus = -1;
+        return property;
+    }
+
+    // Let's get the attributes for type
+    QXmlStreamAttributes attributes = aXml.attributes();
+    if(attributes.hasAttribute("id")) {
+        property["id"] = attributes.value("id").toString().trimmed();
+    }
+    aXml.readNext();
+
+    while(!(aXml.tokenType() == QXmlStreamReader::EndElement && aXml.name() == "type")) {
         if(aXml.tokenType() == QXmlStreamReader::StartElement) {
             QStringRef name = aXml.name();
             aXml.readNext();

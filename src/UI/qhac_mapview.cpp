@@ -819,7 +819,7 @@ void ObjectView::paintEvent(QPaintEvent *event)
             paint.setPen(Qt::white);
         }
 
-        paint.fillRect(QRect(pos.x() - 5, pos.y() + 25, 45, 30),QBrush(_colorList[drone.id()]));
+        paint.fillRect(QRect(pos.x() - 5, pos.y() + 25, 50, 30),QBrush(_colorList[drone.id()]));
 
         QPointF text_pos = QPointF(pos.x(), pos.y() + 45);
         paint.drawText(text_pos, QString("[%1] %2").arg(_manager->groupId(drone.id())).arg(drone.id()));

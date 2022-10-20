@@ -54,6 +54,7 @@ public:
     virtual ~MainWidget();
 
 public:
+    QString                 point_camera = "";
     int                     selectVehicleId;
     int                     leapState = 0;
     bool                    processImage;
@@ -78,6 +79,7 @@ private:
     void updateNotifier();
     void updateDeparture();
     void showCameraPopup();
+    void updatePointCamera();
 
 private:    // ROS2 Topic
     rclcpp::Node::SharedPtr _ros2node;
@@ -103,6 +105,13 @@ private Q_SLOTS:
 
 private slots:
 
+
+    void showMap();
+    void showPointA();
+    void showPointB();
+    void showPointC();
+    void showPointD();
+    void showPointE();
 
     void on_sysList_itemClicked(QListWidgetItem *item);
 

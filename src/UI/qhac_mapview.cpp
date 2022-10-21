@@ -802,7 +802,7 @@ void ObjectView::paintEvent(QPaintEvent *event)
         paint.save();
         paint.translate(pos.x(),pos.y());
         paint.rotate(qRadiansToDegrees(heading) + 90);
-        QPixmap pix(_manager->vehicleImage(_manager->vehicleId(drone.id())));
+        QPixmap pix(_manager->vehicleImage(_manager->vehicleType(drone.id())));
         paint.drawPixmap(-25, -25, 50, 50, pix);
         paint.restore();
 

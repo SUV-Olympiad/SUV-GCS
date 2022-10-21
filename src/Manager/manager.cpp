@@ -15,11 +15,11 @@ CManager::CManager(QObject *parent) :
     mdbManger = new dbManager();
     db = mdbManger->db;
 
-    mAgents_vehicle_type_name[1] = "iris";
-    mAgents_vehicle_type_image[1] = ":/icon/src/UI/icon/drone.png";
-
-    mAgents_vehicle_type_name[2] = "vtol";
-    mAgents_vehicle_type_image[2] = ":/icon/src/UI/icon/flight.png";
+    mAgents_vehicle_type_image["iris"] = ":/icon/src/UI/icon/drone.png";
+    mAgents_vehicle_type_image["vtol"] = ":/icon/src/UI/icon/flight.png";
+    mAgents_vehicle_type_image["typhoon"] = ":/icon/src/UI/icon/flight.png";
+    mAgents_vehicle_type_image["rover"] = ":/icon/src/UI/icon/car.png";
+    mAgents_vehicle_type_image["boat"] = ":/icon/src/UI/icon/ship.png";
 }
 
 CManager::~CManager()
@@ -177,8 +177,7 @@ void CManager::addVehicle(const QMap<QString, QString> aProperty)
     QString name = aProperty["name"];
 
     
-    mAgents_vehicle_type_name.insert(id, name);
-    mAgents_vehicle_type_image.insert(id, image);
+    mAgents_vehicle_type_image.insert(name, image);
 
 }
 
@@ -190,7 +189,7 @@ void CManager::addAgent(const QMap<QString, QString> aProperty)
     int id = aProperty["id"].toInt();
     int sysid = aProperty["sysid"].toInt();
     int group = aProperty["group"].toInt();
-    int vehicle = aProperty["vehicle"].toInt();
+    QString vehicle = aProperty["vehicle"];
     QString time = aProperty["time"];
 
     if(!this->hasAgent(id)){
@@ -212,9 +211,9 @@ void CManager::addAgent(const QMap<QString, QString> aProperty)
         query.first();
         int count = query.value(0).toInt();
         if(count == 0){
-            sql = QString("INSERT INTO drone (id,sysid,type,groupId,vehicle)VALUES('%1','%2','%3','%4','%5')").arg(id).arg(sysid).arg(type).arg(group).arg(vehicle);
+            // sql = QString("INSERT INTO drone (id,sysid,type,groupId,vehicle)VALUES('%1','%2','%3','%4','%5')").arg(id).arg(sysid).arg(type).arg(group).arg(vehicle);
         }else{
-            sql = QString("UPDATE drone SET type='%1', sysid='%2', groupId='%3',vehicle='%4' WHERE id='%5'").arg(type).arg(sysid).arg(group).arg(vehicle).arg(id);
+            // sql = QString("UPDATE drone SET type='%1', sysid='%2', groupId='%3',vehicle='%4' WHERE id='%5'").arg(type).arg(sysid).arg(group).arg(vehicle).arg(id);
         }
         query.exec(sql);
 
@@ -234,7 +233,7 @@ int CManager::numOfAgent()
 
 int CManager::numOfType()
 {
-    return mAgents_vehicle_type_name.size();
+    return mAgents_vehicle_type_image.size();
 }
 
 bool CManager::hasAgent(const int aID)
@@ -253,25 +252,13 @@ IVehicle *CManager::agent(int aID)
     }
 }
 
-QString CManager::vehicleImage(int aID)
+QString CManager::vehicleImage(QString type)
 {
-    if ( mAgents_vehicle_type_image.contains(aID)) {
-        return mAgents_vehicle_type_image[aID];
+    if ( mAgents_vehicle_type_image.contains(type)) {
+        return mAgents_vehicle_type_image[type];
     }
     else {
-        qDebug("ERROR : cannot find vehicleImage (ID:%d)", aID);
-        return NULL;
-    }
-}
-
-
-QString CManager::vehicleName(int aID)
-{
-    if ( mAgents_vehicle_type_name.contains(aID)) {
-        return mAgents_vehicle_type_name[aID];
-    }
-    else {
-        qDebug("ERROR : cannot find vehicleName (ID:%d)", aID);
+        qDebug("ERROR : cannot find vehicleImage (ID:%s)", type);
         return NULL;
     }
 }
@@ -287,7 +274,7 @@ int CManager::groupId(int aID)
     }
 }
 
-int CManager::vehicleId(int aID)
+QString CManager::vehicleType(int aID)
 {
     if ( mAgents_vehicle.contains(aID)) {
         return mAgents_vehicle[aID];
@@ -313,7 +300,7 @@ QMap<int, int> CManager::agentsGroup() const
     return mAgents_group;
 }
 
-QMap<int, int> CManager::agentsVehicle() const
+QMap<int, QString> CManager::agentsVehicle() const
 {
     return mAgents_vehicle;
 }

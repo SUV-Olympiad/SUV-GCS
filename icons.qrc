@@ -1,14 +1,15 @@
 <RCC>
     <qresource prefix="/icon">
         <file>src/UI/icon/check.png</file>
+        <file>src/UI/icon/car.png</file>
         <file>src/UI/icon/configure.png</file>
         <file>src/UI/icon/drone.png</file>
-        <file>src/UI/icon/flight.png</file>
         <file>src/UI/icon/play.png</file>
         <file>src/UI/icon/scenario.png</file>
         <file>src/UI/icon/setting_1.svg</file>
         <file>src/UI/icon/setting_2.png</file>
         <file>src/UI/icon/stop.png</file>
+        <file>src/UI/icon/ship.png</file>
         <file>src/UI/icon/calibration.png</file>
         <file>src/UI/icon/parameters.png</file>
         <file>src/UI/icon/alarm.png</file>

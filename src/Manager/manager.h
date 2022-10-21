@@ -38,14 +38,13 @@ public:
 
 
     IVehicle* agent(int aID);
-    int vehicleId(int aID);
     int groupId(int aID);
-    QString vehicleImage(int aID);
-    QString vehicleName(int aID);
+    QString vehicleType(int aID);
+    QString vehicleImage(QString type);
     QMap<int, IVehicle*> agents() const;
     QMap<int, QString> agentsTime() const;
     QMap<int, int> agentsGroup() const;
-    QMap<int, int> agentsVehicle() const;
+    QMap<int, QString> agentsVehicle() const;
 
     QString property(const QString& aGroup, const QString& aKey);
 
@@ -68,10 +67,9 @@ private:
 
     QMap<int, IVehicle*>            mAgents;
     QMap<int, QString>              mAgents_time;
-    QMap<int, QString>              mAgents_vehicle_type_name;
-    QMap<int, QString>              mAgents_vehicle_type_image;
+    QMap<QString, QString>          mAgents_vehicle_type_image;
     QMap<int, int>                  mAgents_group;
-    QMap<int, int>              mAgents_vehicle;
+    QMap<int, QString>              mAgents_vehicle;
     QList<Eigen::Vector3f>          mUnknownMark;
 
     dbManager*                      mdbManger;

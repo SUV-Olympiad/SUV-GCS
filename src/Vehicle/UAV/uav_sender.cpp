@@ -77,7 +77,7 @@ void CCModelCmdSender::takeoff(double height, double yaw)
     takeoff_cmd.param1 = -1.0;
     takeoff_cmd.param2 = 0.0;
     takeoff_cmd.param3 = 0.0;
-    takeoff_cmd.param4 = yaw * DEG2RAD;
+    takeoff_cmd.param4 = yaw;
     takeoff_cmd.param5 = qInf();
     takeoff_cmd.param6 = qInf();
     takeoff_cmd.param7 = mAgent->data("REF_ALT").toDouble() + height;
@@ -103,7 +103,7 @@ void CCModelCmdSender::reposition(double lat, double lng, double altitude, doubl
     reposition_cmd.param1 = -1.0;
     reposition_cmd.param2 = 1.0;
     reposition_cmd.param3 = 0.0;
-    reposition_cmd.param4 = yaw * DEG2RAD;
+    reposition_cmd.param4 = yaw ;
     reposition_cmd.param5 = lat;
     reposition_cmd.param6 = lng;
     reposition_cmd.param7 = altitude;

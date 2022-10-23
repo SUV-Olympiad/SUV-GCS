@@ -130,7 +130,7 @@ private:
     QGeoCoordinate          _base_latlng = QGeoCoordinate(36.766559, 127.281290, 82);
     QMap<int, QString>      roadList;
 
-    float                   HEADING = 270;
+    float                   HEADING = 0;
     float                   TARGET_Z = 10;
     float                   DEPLOY_MINIMUM_DIST = 5.0;      // in meter
 

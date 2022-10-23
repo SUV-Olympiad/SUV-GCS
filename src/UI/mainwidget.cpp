@@ -563,8 +563,8 @@ void MainWidget::keyEvent(QKeyEvent *event)
     case Qt::Key_A:
     {
         qDebug() << "TAKEOFF......";
-        mManager->agent(3)->cmd("TAKEOFF", 3 , HEADING);
-        mManager->agent(4)->cmd("TAKEOFF", 3 , HEADING);
+        mManager->agent(1)->cmd("TAKEOFF", 3 , HEADING);
+        //mManager->agent(4)->cmd("TAKEOFF", 3 , HEADING);
         /*
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
         QMap<int, IVehicle*>::const_iterator agentsIterator;
@@ -694,6 +694,13 @@ void MainWidget::keyEvent(QKeyEvent *event)
             qDebug() << "REBOOT";
             agent->cmd("REBOOT");
         }
+	}
+        break;
+    case Qt::Key_F:
+	{
+       HEADING = mManager->agent(1)->data("HEADING").value<qreal>();
+       qDebug() << "HAEDING FIX...";
+       qDebug() << HEADING;
 	}
         break;
     default:

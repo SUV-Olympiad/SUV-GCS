@@ -78,9 +78,11 @@ private:
     void updateDronesInMap();
     void updateStatusText();
     void updateNotifier();
+    void updateWindowSize();
     void updateDeparture();
     void showCameraPopup();
     void updatePointCamera();
+    void cameraBtnReset();
 
 private:    // ROS2 Topic
     rclcpp::Node::SharedPtr _ros2node;

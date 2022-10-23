@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1212</width>
-    <height>974</height>
+    <width>1496</width>
+    <height>1091</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -33,118 +33,116 @@
    <string notr="true">background:#333;
 color:#fff;</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
+  <widget class="QWidget" name="centralWidget" native="true">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1211</width>
-     <height>941</height>
+     <width>1461</width>
+     <height>1021</height>
     </rect>
    </property>
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+    <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <property name="maximumSize">
+   <property name="minimumSize">
     <size>
-     <width>16777215</width>
-     <height>16777215</height>
+     <width>0</width>
+     <height>50</height>
     </size>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
     <property name="sizeConstraint">
      <enum>QLayout::SetMaximumSize</enum>
     </property>
     <property name="topMargin">
-     <number>25</number>
+     <number>50</number>
     </property>
     <property name="bottomMargin">
-     <number>0</number>
+     <number>1</number>
     </property>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QHBoxLayout" name="DroneBtn">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMaximumSize</enum>
+      </property>
       <property name="topMargin">
-       <number>50</number>
+       <number>0</number>
+      </property>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="PointBtn" stretch="1,9">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMaximumSize</enum>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
       </property>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <widget class="QPushButton" name="UtmOnOff">
+        <property name="text">
+         <string>UTM Status : OFF</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <property name="leftMargin">
+         <number>40</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
         <item>
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="QPushButton" name="showMapBtn">
+          <property name="styleSheet">
+           <string notr="true">color:#333; background:#fff</string>
+          </property>
           <property name="text">
-           <string>PushButton</string>
+           <string>Show Map</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_5">
+         <widget class="QPushButton" name="showPointABtn">
           <property name="text">
-           <string>PushButton</string>
+           <string>Point A</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="showPointBBtn">
           <property name="text">
-           <string>PushButton</string>
+           <string>Point B</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_4">
+         <widget class="QPushButton" name="showPointCBtn">
           <property name="text">
-           <string>PushButton</string>
+           <string>Point C</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="showPointDBtn">
+          <property name="text">
+           <string>Point D</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="showPointEBtn">
+          <property name="text">
+           <string>Point E</string>
           </property>
          </widget>
         </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QPushButton" name="showMapBtn">
-        <property name="text">
-         <string>Show Map</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="showPointABtn">
-        <property name="text">
-         <string>Point A</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="showPointBBtn">
-        <property name="text">
-         <string>Point B</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="showPointCBtn">
-        <property name="text">
-         <string>Point C</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="showPointDBtn">
-        <property name="text">
-         <string>Point D</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="showPointEBtn">
-        <property name="text">
-         <string>Point E</string>
-        </property>
-       </widget>
       </item>
      </layout>
     </item>
@@ -152,6 +150,12 @@ color:#fff;</string>
      <widget class="QTabWidget" name="tabWidget">
       <property name="enabled">
        <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+        <horstretch>1</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
       </property>
       <property name="minimumSize">
        <size>
@@ -162,7 +166,7 @@ color:#fff;</string>
       <property name="maximumSize">
        <size>
         <width>1200</width>
-        <height>800</height>
+        <height>900</height>
        </size>
       </property>
       <property name="toolTip">
@@ -188,7 +192,7 @@ color:#fff;</string>
          </rect>
         </property>
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -260,13 +264,6 @@ color:#fff;</string>
                <string>Data</string>
               </property>
              </column>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="leapMotionChk">
-             <property name="text">
-              <string>Leap Motion</string>
-             </property>
             </widget>
            </item>
            <item>
@@ -443,7 +440,7 @@ color:#fff;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1212</width>
+     <width>1496</width>
      <height>22</height>
     </rect>
    </property>
@@ -867,38 +864,6 @@ color:#fff;</string>
    </hints>
   </connection>
   <connection>
-   <sender>camera_type2</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWidget</receiver>
-   <slot>on_camera_type2_toggled()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>277</x>
-     <y>499</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>277</x>
-     <y>499</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>camera_type</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWidget</receiver>
-   <slot>on_camera_type_toggled()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>93</x>
-     <y>499</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>558</x>
-     <y>430</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionType_Upload</sender>
    <signal>triggered()</signal>
    <receiver>MainWidget</receiver>
@@ -921,12 +886,12 @@ color:#fff;</string>
    <slot>showMap()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>450</x>
-     <y>88</y>
+     <x>316</x>
+     <y>71</y>
     </hint>
     <hint type="destinationlabel">
-     <x>605</x>
-     <y>486</y>
+     <x>651</x>
+     <y>498</y>
     </hint>
    </hints>
   </connection>
@@ -937,12 +902,12 @@ color:#fff;</string>
    <slot>showPointA()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>588</x>
-     <y>88</y>
+     <x>523</x>
+     <y>71</y>
     </hint>
     <hint type="destinationlabel">
-     <x>605</x>
-     <y>486</y>
+     <x>651</x>
+     <y>498</y>
     </hint>
    </hints>
   </connection>
@@ -953,12 +918,12 @@ color:#fff;</string>
    <slot>showPointB()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>727</x>
-     <y>88</y>
+     <x>730</x>
+     <y>71</y>
     </hint>
     <hint type="destinationlabel">
-     <x>605</x>
-     <y>486</y>
+     <x>651</x>
+     <y>498</y>
     </hint>
    </hints>
   </connection>
@@ -969,12 +934,12 @@ color:#fff;</string>
    <slot>showPointC()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>865</x>
-     <y>88</y>
+     <x>937</x>
+     <y>71</y>
     </hint>
     <hint type="destinationlabel">
-     <x>605</x>
-     <y>486</y>
+     <x>651</x>
+     <y>498</y>
     </hint>
    </hints>
   </connection>
@@ -985,12 +950,12 @@ color:#fff;</string>
    <slot>showPointD()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1004</x>
-     <y>88</y>
+     <x>1143</x>
+     <y>71</y>
     </hint>
     <hint type="destinationlabel">
-     <x>605</x>
-     <y>486</y>
+     <x>651</x>
+     <y>498</y>
     </hint>
    </hints>
   </connection>
@@ -1001,28 +966,28 @@ color:#fff;</string>
    <slot>showPointE()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1142</x>
-     <y>88</y>
+     <x>1350</x>
+     <y>71</y>
     </hint>
     <hint type="destinationlabel">
-     <x>605</x>
-     <y>486</y>
+     <x>651</x>
+     <y>498</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>actionUTM_On_Off</sender>
-   <signal>triggered()</signal>
+   <sender>UtmOnOff</sender>
+   <signal>clicked()</signal>
    <receiver>MainWidget</receiver>
    <slot>utmOnOff()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
+     <x>110</x>
+     <y>71</y>
     </hint>
     <hint type="destinationlabel">
-     <x>605</x>
-     <y>486</y>
+     <x>651</x>
+     <y>498</y>
     </hint>
    </hints>
   </connection>

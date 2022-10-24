@@ -780,8 +780,44 @@ void MainWidget::keyEvent(QKeyEvent *event)
         }
 	}
         break;
-    // 
+    //
+    case Qt::Key_Z:
+    {
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            IVehicle* agent = agentsIterator.value();
+            qDebug() << "Change AUTOMISSION......";
+            agent->cmd("AUTOMISSION");
+        }
+    }
+            break;
+    case Qt::Key_X:
+    {
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            IVehicle* agent = agentsIterator.value();
+            qDebug() << "Change OFFBOARD......";
+            agent->cmd("OFFBOARD");
+            agent->cmd("OFFBOARD_ATT_MODE");
+        }
+    }
+            break;
     case Qt::Key_C:
+    {
+        const QMap<int, IVehicle*> agentsMap = mManager->agents();
+        QMap<int, IVehicle*>::const_iterator agentsIterator;
+        for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+            IVehicle* agent = agentsIterator.value();
+            qDebug() << "leap test......";
+            QVector3D rpy = agent->data("LEAP_RPY").value<QVector3D>();
+            qDebug() << rpy;
+            agent->cmd("ATTITUDE_CTL", rpy.x(), rpy.y(), rpy.z());
+        }
+    }
+        break;
+    case Qt::Key_V:
 	{
         QList<QVector3D> list0 = {QVector3D(-164.713669, 187.642624, 156.505997), QVector3D(-158.424179, 192.779358, 156.505692), 
                         QVector3D(-152.753922, 185.777817, 156.505997), QVector3D(-158.962479, 180.760254, 156.505997)};

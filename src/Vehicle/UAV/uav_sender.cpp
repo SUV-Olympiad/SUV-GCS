@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include <QMutexLocker>
 #include <QtMath>
+#include <tf2/LinearMath/Quaternion.h>
 
 #define RAD2DEG		(57.0)
 #define DEG2RAD     (0.0174533)
@@ -239,6 +240,36 @@ int CCModelCmdSender::automode()
 
  //    return len;
     return 0;
+}
+
+void CCModelCmdSender::attitude_control(float roll, float pitch, float yaw)
+{
+    auto cmd = px4_msgs::msg::VehicleAttitudeSetpoint();
+    tf2::Quaternion q;
+    q.setRPY(roll, pitch, yaw);
+    cmd.q_d[0] = q.x();
+    cmd.q_d[1] = q.y();
+    cmd.q_d[2] = q.z();
+    cmd.q_d[3] = q.w();
+    cmd.thrust_body[0] = 0.0;
+    cmd.thrust_body[1] = 0.0;
+    cmd.thrust_body[2] = -1;
+    cmd.yaw_sp_move_rate = 1;
+    qDebug() << q;
+//    cmd.timestamp = this->get_clock()->now().nanoseconds() / 1000;
+    mAgent->dataROS()->publishAttitudeSetpoint(cmd);
+}
+
+void CCModelCmdSender::offboard_att_mode()
+{
+    auto cmd = px4_msgs::msg::OffboardControlMode();
+    cmd.position = false;
+    cmd.velocity = false;
+    cmd.acceleration = false;
+    cmd.attitude = true;
+    cmd.body_rate = true;
+//    cmd.timestamp = this->get_clock()->now().nanoseconds() / 1000;
+    mAgent->dataROS()->publishOffboardControlMode(cmd);
 }
 
 int CCModelCmdSender::offboard()

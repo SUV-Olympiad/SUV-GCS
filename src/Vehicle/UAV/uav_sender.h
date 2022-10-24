@@ -12,6 +12,8 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/vehicle_command.hpp>
+#include <px4_msgs/msg/offboard_control_mode.hpp>
+#include <px4_msgs/msg/vehicle_attitude_setpoint.hpp>
 #include <px4_msgs/msg/uavcan_parameter_request.hpp>
 
 class CUAV;
@@ -30,6 +32,8 @@ public:
 public:
     void planMission();
     void startMission();
+    void offboard_att_mode();
+    void attitude_control(float roll, float pitch, float yaw);
     void arm();
     void disarm();
     void lock();

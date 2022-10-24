@@ -1,0 +1,10 @@
+/home/suv/olympiad/SUV-GCS/build/CMakeFiles/install/strip.dir
+/home/suv/olympiad/SUV-GCS/build/CMakeFiles/install/local.dir
+/home/suv/olympiad/SUV-GCS/build/CMakeFiles/install.dir
+/home/suv/olympiad/SUV-GCS/build/CMakeFiles/list_install_components.dir
+/home/suv/olympiad/SUV-GCS/build/CMakeFiles/rebuild_cache.dir
+/home/suv/olympiad/SUV-GCS/build/CMakeFiles/edit_cache.dir
+/home/suv/olympiad/SUV-GCS/build/CMakeFiles/test.dir
+/home/suv/olympiad/SUV-GCS/build/CMakeFiles/suvgcs.dir
+/home/suv/olympiad/SUV-GCS/build/CMakeFiles/suvgcs_uninstall.dir
+/home/suv/olympiad/SUV-GCS/build/CMakeFiles/uninstall.dir

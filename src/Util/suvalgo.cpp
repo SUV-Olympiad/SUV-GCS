@@ -17,63 +17,34 @@ vector<vector<SUVAlgo::Wrapper>> SUVAlgo::make_matrix(vector<int> &group){
     vector<int> start;
     vector<int> end;
     for (int idx: group) {
-        float sx = (this->mission_sets[idx].x1() * 100000);
-        float ex = (this->mission_sets[idx].x2() * 100000);
+        float sx = this->mission_sets[idx].x1();
+        float ex = this->mission_sets[idx].x2() ;
 
-//        if (3676815.0 < sx && sx < 3676835.0) {
-//            start.push_back(VertiPort::POINT_A);
-//        } else if (3676340.0 < sx && sx < 3676350.0) {
-//            start.push_back(VertiPort::POINT_B);
-//        } else if (3676835.0 < sx && sx < 3676860.0) {
-//            start.push_back(VertiPort::POINT_C);
-//        } else if (3676395.0 < sx && sx < 3676420.0) {
-//            start.push_back(VertiPort::POINT_D);
-//        } else if (3676460.0 < sx && sx < 3676480.0) {
-//            start.push_back(VertiPort::POINT_E);
-//        } else {
-//            qDebug() << "out of VertiPoint";
-//            end.push_back(-1);
-//        }
-//
-//        if (3676815.0 < ex && ex < 3676835.0) {
-//            end.push_back(VertiPort::POINT_A);
-//        } else if (3676340.0 < ex && ex < 3676350.0) {
-//            end.push_back(VertiPort::POINT_B);
-//        } else if (3676835.0 < ex && ex < 3676860.0) {
-//            end.push_back(VertiPort::POINT_C);
-//        } else if (3676395.0 < ex && ex < 3676420.0) {
-//            end.push_back(VertiPort::POINT_D);
-//        } else if (3676460.0 < ex && ex < 3676480.0) {
-//            end.push_back(VertiPort::POINT_E);
-//        } else {
-//            qDebug() << "out of VertiPoint";
-//            end.push_back(-1);
-//        }
-            /* suv09 */
-        if (3676780.0 < sx && sx < 3676799.0) {
+        /* suv12 */
+        if (36.767651 < sx && sx < 36.768056) {
             start.push_back(VertiPort::POINT_A);
-        } else if (3676230.0 < sx && sx < 3676260.0) {
+        } else if (36.762324 < sx && sx < 36.762562) {
             start.push_back(VertiPort::POINT_B);
-        } else if (3676835.0 < sx && sx < 3676860.0) {
+        } else if (36.768357 < sx && sx < 36.768621) {
             start.push_back(VertiPort::POINT_C);
-        } else if (3676380.0 < sx && sx < 3676410.0) {
+        } else if (36.763832 < sx && sx < 36.764041) {
             start.push_back(VertiPort::POINT_D);
-        } else if (3676580.0 < sx && sx < 3676610.0) {
+        } else if (36.765817 < sx && sx < 36.766071) {
             start.push_back(VertiPort::POINT_E);
         } else {
             qDebug() << "out of VertiPoint";
-            end.push_back(-1);
+            start.push_back(-1);
         }
 
-        if (3676780.0 < ex && ex < 3676799.0) {
+        if (36.767651 < ex && ex < 36.768056) {
             end.push_back(VertiPort::POINT_A);
-        } else if (3676230.0 < ex && ex < 3676260.0) {
+        } else if (36.762324 < ex && ex < 36.762562) {
             end.push_back(VertiPort::POINT_B);
-        } else if (3676835.0 < ex && ex < 3676860.0) {
+        } else if (36.768357 < ex && ex < 36.768621) {
             end.push_back(VertiPort::POINT_C);
-        } else if (3676380.0 < ex && ex < 3676410.0) {
+        } else if (36.763832 < ex && ex < 36.764041) {
             end.push_back(VertiPort::POINT_D);
-        } else if (3676580.0 < ex && ex < 3676610.0) {
+        } else if (36.765817 < ex && ex < 36.766071) {
             end.push_back(VertiPort::POINT_E);
         } else {
             qDebug() << "out of VertiPoint";
@@ -119,7 +90,7 @@ vector<vector<int>> SUVAlgo::solution(vector<int> &line_set){
 //    this->print_grouping();
     vector<int> group = this->choice_best_group();
 
-//    qDebug() << group;
+    qDebug() << group;
 
     while (!group.empty()) {
         vector<int> tmp;

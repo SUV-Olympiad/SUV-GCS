@@ -239,6 +239,28 @@ void MainWidget::updateVehicleData(){
     }
 }
 
+void MainWidget::updateWindowSize()
+{
+    QSize size = this->size();
+    int he = size.height() - 200;
+    ui->centralWidget->setMinimumSize(size);
+    ui->centralWidget->setMaximumSize(size);
+    ui->tabWidget->setMinimumHeight(he);
+    ui->tabWidget->setMaximumHeight(he);
+    ui->tabWidget->setMinimumWidth(size.width());
+    ui->tabWidget->setMaximumWidth(size.width());
+
+    ui->splitter_3->setMinimumHeight(he);
+    ui->splitter_3->setMaximumHeight(he);
+    ui->splitter_3->setMinimumWidth(size.width());
+    ui->splitter_3->setMaximumWidth(size.width());
+
+    ui->splitter2_3->setMinimumHeight(he);
+    ui->splitter2_3->setMaximumHeight(he);
+    ui->splitter2_3->setMinimumWidth(size.width());
+    ui->splitter2_3->setMaximumWidth(size.width());
+}
+
 void MainWidget::updateDronesInMap()
 {
     QMap<int, IVehicle*> agentsMap = mManager->agents();
@@ -500,6 +522,7 @@ void MainWidget::updateUI()
     rclcpp::spin_some(_ros2node);
     updateDronesInMap();
     updateDeparture();
+    updateWindowSize();
     updatePointCamera();
 }
 
@@ -958,12 +981,23 @@ void MainWidget::typeUpload()
     }
 }
 
+void MainWidget::cameraBtnReset(){
+    ui->showPointABtn->setStyleSheet("color:#fff; background:#333");
+    ui->showPointBBtn->setStyleSheet("color:#fff; background:#333");
+    ui->showPointCBtn->setStyleSheet("color:#fff; background:#333");
+    ui->showPointDBtn->setStyleSheet("color:#fff; background:#333");
+    ui->showPointEBtn->setStyleSheet("color:#fff; background:#333");
+    ui->showMapBtn->setStyleSheet("color:#fff; background:#333");
+}
+
 void MainWidget::showMap(){
     point_camera = "";
     ui->mapView_2->setVisible(false);
     ui->label->setVisible(true);
     ui->cameraData->setVisible(false);
     ui->mapView->setVisible(true);
+    this->cameraBtnReset();
+    ui->showMapBtn->setStyleSheet("color:#333; background:#fff");
 }
 
 void MainWidget::showPointA()
@@ -973,6 +1007,8 @@ void MainWidget::showPointA()
     ui->label->setVisible(false);
     ui->cameraData->setVisible(true);
     ui->mapView->setVisible(false);
+    this->cameraBtnReset();
+    ui->showPointABtn->setStyleSheet("color:#333; background:#fff");
 }
 
 void MainWidget::showPointB()
@@ -982,6 +1018,8 @@ void MainWidget::showPointB()
     ui->label->setVisible(false);
     ui->cameraData->setVisible(true);
     ui->mapView->setVisible(false);
+    this->cameraBtnReset();
+    ui->showPointBBtn->setStyleSheet("color:#333; background:#fff");
 }
 
 void MainWidget::showPointC()
@@ -991,6 +1029,8 @@ void MainWidget::showPointC()
     ui->label->setVisible(false);
     ui->cameraData->setVisible(true);
     ui->mapView->setVisible(false);
+    this->cameraBtnReset();
+    ui->showPointCBtn->setStyleSheet("color:#333; background:#fff");
 }
 
 void MainWidget::showPointD()
@@ -1000,6 +1040,8 @@ void MainWidget::showPointD()
     ui->label->setVisible(false);
     ui->cameraData->setVisible(true);
     ui->mapView->setVisible(false);
+    this->cameraBtnReset();
+    ui->showPointDBtn->setStyleSheet("color:#333; background:#fff");
 }
 
 void MainWidget::showPointE()
@@ -1009,6 +1051,8 @@ void MainWidget::showPointE()
     ui->label->setVisible(false);
     ui->cameraData->setVisible(true);
     ui->mapView->setVisible(false);
+    this->cameraBtnReset();
+    ui->showPointEBtn->setStyleSheet("color:#333; background:#fff");
 }
 
 void MainWidget::updatePointCamera()
@@ -1028,14 +1072,8 @@ void MainWidget::utmOnOff()
 {
     isUTM = !isUTM;
     if(isUTM){
-        QMessageBox msgBox;
-        msgBox.setText("UTM on");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
+        ui->UtmOnOff->setText(QString("UTM Status : ON"));
     }else{
-        QMessageBox msgBox;
-        msgBox.setText("UTM off");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
+        ui->UtmOnOff->setText(QString("UTM Status : OFF"));
     }
 }

@@ -242,11 +242,14 @@ void MainWidget::updateVehicleData(){
 void MainWidget::updateWindowSize()
 {
     QSize size = this->size();
-    int he = size.height() - 200;
+    int he = size.height() - 95;
     ui->centralWidget->setMinimumSize(size);
     ui->centralWidget->setMaximumSize(size);
-    ui->tabWidget->setMinimumHeight(he);
-    ui->tabWidget->setMaximumHeight(he);
+    ui->centralWidget->setMinimumHeight(he);
+    ui->centralWidget->setMaximumHeight(he);
+
+    ui->tabWidget->setMinimumHeight(he - 100);
+    ui->tabWidget->setMaximumHeight(he - 100);
     ui->tabWidget->setMinimumWidth(size.width());
     ui->tabWidget->setMaximumWidth(size.width());
 
@@ -261,6 +264,9 @@ void MainWidget::updateWindowSize()
     ui->splitter2_3->setMaximumWidth(size.width());
 
     ui->mainToolBar->setGeometry(size.width() - 500,20,500,75);
+
+    ui->statusListWidget->setMinimumWidth(size.width());
+    ui->statusListWidget->setMaximumWidth(size.width());
 }
 
 void MainWidget::updateDronesInMap()

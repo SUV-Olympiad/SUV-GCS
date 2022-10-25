@@ -38,7 +38,7 @@ color:#fff;</string>
     <rect>
      <x>0</x>
      <y>20</y>
-     <width>787</width>
+     <width>500</width>
      <height>75</height>
     </rect>
    </property>
@@ -65,7 +65,7 @@ color:#fff;</string>
      <x>0</x>
      <y>95</y>
      <width>1461</width>
-     <height>1021</height>
+     <height>900</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -91,7 +91,7 @@ color:#fff;</string>
      <number>0</number>
     </property>
     <property name="bottomMargin">
-     <number>1</number>
+     <number>0</number>
     </property>
     <item>
      <layout class="QHBoxLayout" name="DroneBtn">
@@ -589,7 +589,7 @@ color:#fff;</string>
     </hint>
    </hints>
   </connection>
-    <connection>
+  <connection>
    <sender>actionShowMap</sender>
    <signal>triggered()</signal>
    <receiver>MainWidget</receiver>

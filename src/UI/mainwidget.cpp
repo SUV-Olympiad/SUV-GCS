@@ -149,7 +149,7 @@ void MainWidget::procInitTreeWidget()
     QString departureData{""};
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         int sysid = agentsIterator.value()->data("SYSID").toInt();
-        QColor color = QColor(255, 255, 255);
+        QColor(255, 255, 255);
         QString roadData{""};
         QString str = QString("ID : %1\tSYSID : %2").arg(agentsIterator.value()->id()).arg(sysid);
         QListWidgetItem* pItem =new QListWidgetItem(str);

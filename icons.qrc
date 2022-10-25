@@ -4,6 +4,8 @@
         <file>src/UI/icon/car.png</file>
         <file>src/UI/icon/configure.png</file>
         <file>src/UI/icon/drone.png</file>
+        <file>src/UI/icon/earth.png</file>
+        <file>src/UI/icon/earth_off.png</file>
         <file>src/UI/icon/flight.png</file>
         <file>src/UI/icon/play.png</file>
         <file>src/UI/icon/scenario.png</file>
@@ -13,6 +15,16 @@
         <file>src/UI/icon/ship.png</file>
         <file>src/UI/icon/calibration.png</file>
         <file>src/UI/icon/parameters.png</file>
+        <file>src/UI/icon/pointa.png</file>
+        <file>src/UI/icon/pointa_off.png</file>
+        <file>src/UI/icon/pointb.png</file>
+        <file>src/UI/icon/pointb_off.png</file>
+        <file>src/UI/icon/pointc.png</file>
+        <file>src/UI/icon/pointc_off.png</file>
+        <file>src/UI/icon/pointd.png</file>
+        <file>src/UI/icon/pointd_off.png</file>
+        <file>src/UI/icon/pointe.png</file>
+        <file>src/UI/icon/pointe_off.png</file>
         <file>src/UI/icon/alarm.png</file>
         <file>src/UI/icon/analysis.png</file>
         <file>src/UI/icon/graph.png</file>
@@ -21,6 +33,8 @@
         <file>src/UI/icon/test.png</file>
         <file>src/UI/icon/scenario_mode.png</file>
         <file>src/UI/icon/ftp.png</file>
+        <file>src/UI/icon/utm.png</file>
+        <file>src/UI/icon/utm_off.png</file>
     </qresource>
     <qresource prefix="/html">
         <file>src/UI/google_maps.html</file>

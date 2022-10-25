@@ -149,7 +149,7 @@ void MainWidget::procInitTreeWidget()
     QString departureData{""};
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         int sysid = agentsIterator.value()->data("SYSID").toInt();
-        QColor(255, 255, 255);
+        QColor color = QColor(255, 255, 255);
         QString roadData{""};
         QString str = QString("ID : %1\tSYSID : %2").arg(agentsIterator.value()->id()).arg(sysid);
         QListWidgetItem* pItem =new QListWidgetItem(str);
@@ -259,6 +259,8 @@ void MainWidget::updateWindowSize()
     ui->splitter2_3->setMaximumHeight(he);
     ui->splitter2_3->setMinimumWidth(size.width());
     ui->splitter2_3->setMaximumWidth(size.width());
+
+    ui->mainToolBar->setGeometry(size.width() - 500,20,500,75);
 }
 
 void MainWidget::updateDronesInMap()
@@ -318,7 +320,7 @@ void MainWidget::updateNotifier()
 void MainWidget::runScenario()
 {
     QString scenario_name = mManager->property("emdscen", "name");
-    ui->actionMode->setChecked(false);
+    // ui->actionMode->setChecked(false);
 }
 
 void MainWidget::stopScenario()
@@ -982,12 +984,26 @@ void MainWidget::typeUpload()
 }
 
 void MainWidget::cameraBtnReset(){
-    ui->showPointABtn->setStyleSheet("color:#fff; background:#333");
-    ui->showPointBBtn->setStyleSheet("color:#fff; background:#333");
-    ui->showPointCBtn->setStyleSheet("color:#fff; background:#333");
-    ui->showPointDBtn->setStyleSheet("color:#fff; background:#333");
-    ui->showPointEBtn->setStyleSheet("color:#fff; background:#333");
-    ui->showMapBtn->setStyleSheet("color:#fff; background:#333");
+    QPixmap img[6];
+    QIcon icon[6];
+
+    img[0].load(":/icon/src/UI/icon/earth_off.png");
+    img[1].load(":/icon/src/UI/icon/pointa_off.png");
+    img[2].load(":/icon/src/UI/icon/pointb_off.png");
+    img[3].load(":/icon/src/UI/icon/pointc_off.png");
+    img[4].load(":/icon/src/UI/icon/pointd_off.png");
+    img[5].load(":/icon/src/UI/icon/pointe_off.png");
+
+    for(int i=0; i<6; i++){
+        icon[i] = QIcon(img[i]);
+    }
+    
+    ui->actionShowMap->setIcon(img[0]);
+    ui->actionPointA->setIcon(img[1]);
+    ui->actionPointB->setIcon(img[2]);
+    ui->actionPointC->setIcon(img[3]);
+    ui->actionPointD->setIcon(img[4]);
+    ui->actionPointE->setIcon(img[5]);
 }
 
 void MainWidget::showMap(){
@@ -997,7 +1013,12 @@ void MainWidget::showMap(){
     ui->cameraData->setVisible(false);
     ui->mapView->setVisible(true);
     this->cameraBtnReset();
-    ui->showMapBtn->setStyleSheet("color:#333; background:#fff");
+
+    qDebug() << "test";
+    QPixmap img;
+    img.load(":/icon/src/UI/icon/earth.png");
+    QIcon icon = QIcon(img);
+    ui->actionShowMap->setIcon(img);
 }
 
 void MainWidget::showPointA()
@@ -1008,7 +1029,11 @@ void MainWidget::showPointA()
     ui->cameraData->setVisible(true);
     ui->mapView->setVisible(false);
     this->cameraBtnReset();
-    ui->showPointABtn->setStyleSheet("color:#333; background:#fff");
+    
+    QPixmap img;
+    img.load(":/icon/src/UI/icon/pointa.png");
+    QIcon icon = QIcon(img);
+    ui->actionPointA->setIcon(img);
 }
 
 void MainWidget::showPointB()
@@ -1019,7 +1044,11 @@ void MainWidget::showPointB()
     ui->cameraData->setVisible(true);
     ui->mapView->setVisible(false);
     this->cameraBtnReset();
-    ui->showPointBBtn->setStyleSheet("color:#333; background:#fff");
+    
+    QPixmap img;
+    img.load(":/icon/src/UI/icon/pointb.png");
+    QIcon icon = QIcon(img);
+    ui->actionPointB->setIcon(img);
 }
 
 void MainWidget::showPointC()
@@ -1030,7 +1059,11 @@ void MainWidget::showPointC()
     ui->cameraData->setVisible(true);
     ui->mapView->setVisible(false);
     this->cameraBtnReset();
-    ui->showPointCBtn->setStyleSheet("color:#333; background:#fff");
+    
+    QPixmap img;
+    img.load(":/icon/src/UI/icon/pointc.png");
+    QIcon icon = QIcon(img);
+    ui->actionPointC->setIcon(img);
 }
 
 void MainWidget::showPointD()
@@ -1041,7 +1074,11 @@ void MainWidget::showPointD()
     ui->cameraData->setVisible(true);
     ui->mapView->setVisible(false);
     this->cameraBtnReset();
-    ui->showPointDBtn->setStyleSheet("color:#333; background:#fff");
+    
+    QPixmap img;
+    img.load(":/icon/src/UI/icon/pointd.png");
+    QIcon icon = QIcon(img);
+    ui->actionPointD->setIcon(img);
 }
 
 void MainWidget::showPointE()
@@ -1052,7 +1089,11 @@ void MainWidget::showPointE()
     ui->cameraData->setVisible(true);
     ui->mapView->setVisible(false);
     this->cameraBtnReset();
-    ui->showPointEBtn->setStyleSheet("color:#333; background:#fff");
+    
+    QPixmap img;
+    img.load(":/icon/src/UI/icon/pointe.png");
+    QIcon icon = QIcon(img);
+    ui->actionPointE->setIcon(img);
 }
 
 void MainWidget::updatePointCamera()
@@ -1072,8 +1113,14 @@ void MainWidget::utmOnOff()
 {
     isUTM = !isUTM;
     if(isUTM){
-        ui->UtmOnOff->setText(QString("UTM Status : ON"));
+        QPixmap img;
+        img.load(":/icon/src/UI/icon/utm.png");
+        QIcon icon = QIcon(img);
+        ui->actionUTM_On_Off_Btn->setIcon(img);
     }else{
-        ui->UtmOnOff->setText(QString("UTM Status : OFF"));
+        QPixmap img;
+        img.load(":/icon/src/UI/icon/utm_off.png");
+        QIcon icon = QIcon(img);
+        ui->actionUTM_On_Off_Btn->setIcon(img);
     }
 }

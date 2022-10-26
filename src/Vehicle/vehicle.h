@@ -68,7 +68,9 @@ public:
 public:
     void setScenarioStatus(const ScenarioStatus aStatus);
     ScenarioStatus scenarioStatus();
-
+    float                   mXvalue = 0.0;
+    float                   mYvalue = 0.0;
+    float                   mZvalue = 0.0;
 private:
     int                             mID;                    // Agent ID
     QMap< QString, QString >        mInfo;                  // Agent property

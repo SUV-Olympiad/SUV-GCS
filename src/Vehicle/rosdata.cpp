@@ -102,10 +102,8 @@ void CROSData::initSubscription()
     qos_cmd.reliable();
     topic = QString("/vehicle%1/in/VehicleCommand").arg(sysid);
     mCommandQHACPub_ = mQHAC3Node->create_publisher<px4_msgs::msg::VehicleCommand>(topic.toStdString().c_str(), qos_cmd);
-    topic = QString("/vehicle%1/in/OffboardControlMode").arg(sysid);
-    mOffboardModeQHACPub_ = mQHAC3Node->create_publisher<px4_msgs::msg::OffboardControlMode>(topic.toStdString().c_str(), qos_cmd);
-    topic = QString("/vehicle%1/in/VehicleAttitudeSetpoint").arg(sysid);
-    mAttitudeSetpointQHACPub_ = mQHAC3Node->create_publisher<px4_msgs::msg::VehicleAttitudeSetpoint>(topic.toStdString().c_str(), qos_cmd);
+    topic = QString("/vehicle%1/in/ManualControlSetpoint").arg(sysid);
+    mManualControlSetpointQHACPub_ = mQHAC3Node->create_publisher<px4_msgs::msg::ManualControlSetpoint>(topic.toStdString().c_str(), qos_cmd);
     // mUavcanParameterRequestQHACPub_ = mQHAC3Node->create_publisher<px4_msgs::msg::UavcanParameterRequest>(topic_prefix + "/uavcan_parameter_request", rclcpp::SystemDefaultsQoS());
 
     // Agent Manager
@@ -183,6 +181,12 @@ QVariant CROSData::data(const QString &aItem)
         {
         case 0:
             mode = "Manual mode";
+            break;
+        case 1:
+            mode = "Altitude mode";
+            break;
+        case 2:
+            mode = "Position mode";
             break;
         case 3:
             mode = "Auto mission mode";
@@ -711,12 +715,8 @@ void CROSData::publishCommand(px4_msgs::msg::VehicleCommand command) {
     mCommandQHACPub_->publish(command);
 }
 
-void CROSData::publishOffboardControlMode(px4_msgs::msg::OffboardControlMode command) {
-    mOffboardModeQHACPub_->publish(command);
-}
-
-void CROSData::publishAttitudeSetpoint(px4_msgs::msg::VehicleAttitudeSetpoint command) {
-    mAttitudeSetpointQHACPub_->publish(command);
+void CROSData::publishManualControlSetpoint(px4_msgs::msg::ManualControlSetpoint command) {
+    mManualControlSetpointQHACPub_->publish(command);
 }
 
 void CROSData::setAgentBaseDiffAlt(double alt) {

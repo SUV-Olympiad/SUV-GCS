@@ -533,6 +533,43 @@ void MainWidget::on_actionsendSC_triggered()
     }
 }
 
+void MainWidget::leapmotionControl(IVehicle* agent){
+    float manX = 0.0;
+    float manY = 0.0;
+    float manZ = 0.5;
+    float manR = 0.0;
+    float leap_roll = agent->data("LEAP_ROLL").value<qreal>();
+    float leap_pitch = agent->data("LEAP_PITCH").value<qreal>();
+    float leap_yaw = agent->data("LEAP_YAW").value<qreal>();
+    float leap_height = agent->data("LEAP_HEIGHT").value<qreal>();
+    float leap_grip = agent->data("LEAP_GRIP").value<qreal>();
+    qDebug() << "roll : " << leap_roll;
+    qDebug() << "pitch : " << leap_pitch;
+    qDebug() << "yaw : " << leap_yaw;
+    if (leap_roll > 20) {
+        manY = -0.6;
+    } else if (leap_roll < -20) {
+        manY = 0.6;
+    }
+
+    if (leap_pitch < -18) {
+        manX = 0.6;
+    } else if (leap_pitch > 20) {
+        manX = -0.6;
+    }
+
+    if (leap_yaw < -20) {
+        manR = -0.3;
+    } else if (leap_yaw > 15) {
+        manR = 0.3;
+    }
+
+    if (leap_height < 150 && leap_grip > 0.9 && agent->data("MODE") == "Position mode") {
+        agent->cmd("LANDING");
+    } else if (agent->data("MODE") == "Position mode"){
+        agent->cmd("MANUAL_CTL", manX, manY, manZ, manR);
+    }
+}
 void MainWidget::unmannedTrafficManagement(){
      if(isUTM){
          QTime t;
@@ -798,9 +835,8 @@ void MainWidget::keyEvent(QKeyEvent *event)
         QMap<int, IVehicle*>::const_iterator agentsIterator;
         for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
             IVehicle* agent = agentsIterator.value();
-            qDebug() << "Change OFFBOARD......";
-            agent->cmd("OFFBOARD");
-            agent->cmd("OFFBOARD_ATT_MODE");
+            qDebug() << "Change POSITION......";
+            agent->cmd("POSITION");
         }
     }
             break;
@@ -810,10 +846,26 @@ void MainWidget::keyEvent(QKeyEvent *event)
         QMap<int, IVehicle*>::const_iterator agentsIterator;
         for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
             IVehicle* agent = agentsIterator.value();
+            agent->cmd("OFFBOARD");
+            agent->cmd("OFFBOARD_VELOCITY_MODE");
+            agent->cmd("ARM");
             qDebug() << "leap test......";
-            QVector3D rpy = agent->data("LEAP_RPY").value<QVector3D>();
-            qDebug() << rpy;
-            agent->cmd("ATTITUDE_CTL", rpy.x(), rpy.y(), rpy.z());
+//            QVector3D rpy = agent->data("LEAP_RPY").value<QVector3D>();
+//            float height = agent->data("LEAP_HEIGHT").value<qreal>();
+//            qDebug() << rpy;
+//            qDebug() << "height : " << height;
+//            if (rpy.x() > 65) {
+//                agent->mYvalue += 0.3;
+//            } else if (rpy.x() < -65) {
+//                agent->mYvalue -= 0.3;
+//            }
+//            if (rpy.y() > 50) {
+//                agent->mXvalue += 0.3;
+//            } else if (rpy.y() < -45) {
+//                agent->mXvalue -= 0.3;
+//            }
+
+            agent->cmd("MOVE_BODY", 0.0, 0.0, -5.0, 0.0);
         }
     }
         break;

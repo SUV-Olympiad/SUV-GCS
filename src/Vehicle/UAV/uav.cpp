@@ -118,6 +118,9 @@ int CUAV::cmd(const char *aCmd, QVariant aArg1, QVariant aArg2, QVariant aArg3, 
     else if ( item == "MANUAL" ) {
         mSender->manual();
     }
+    else if ( item == "POSITION" ) {
+        mSender->position();
+    }
 	else if ( item == "CALIB_GYRO") {
 		mSender->calib_gyro();
 	}
@@ -145,11 +148,8 @@ int CUAV::cmd(const char *aCmd, QVariant aArg1, QVariant aArg2, QVariant aArg3, 
     else if ( item == "MISSION_START") {
 		mSender->startMission();
 	}
-    else if ( item == "OFFBOARD_ATT_MODE") {
-        mSender->offboard_att_mode();
-    }
-    else if ( item == "ATTITUDE_CTL") {
-        mSender->attitude_control(aArg1.toFloat(), aArg2.toFloat(), aArg3.toFloat());
+    else if ( item == "MANUAL_CTL") {
+        mSender->manual_control(aArg1.toFloat(), aArg2.toFloat(), aArg3.toFloat(), aArg4.toFloat());
     }
     else {
         qDebug("ERROR: Not determined command (%s)", aCmd);

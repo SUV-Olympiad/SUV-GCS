@@ -31,8 +31,7 @@
 #include <sensor_msgs/msg/image.hpp>
 
 #include <suv_msgs/msg/leap.hpp>
-#include <px4_msgs/msg/offboard_control_mode.hpp>
-#include <px4_msgs/msg/vehicle_attitude_setpoint.hpp>
+#include <px4_msgs/msg/manual_control_setpoint.hpp>
 
 
 #include <spinworker.h>
@@ -158,8 +157,7 @@ public:
     void updateTarget(float x, float y, float z, float H);
     void updateTargetGlobal(double lat, double lng, double altitude, double yaw);
     void publishCommand(px4_msgs::msg::VehicleCommand command);
-    void publishOffboardControlMode(px4_msgs::msg::OffboardControlMode command);
-    void publishAttitudeSetpoint(px4_msgs::msg::VehicleAttitudeSetpoint command);
+    void publishManualControlSetpoint(px4_msgs::msg::ManualControlSetpoint command);
     // void publishRequestParam(px4_msgs::msg::UavcanParameterRequest req);
     void updateLogMessage(const px4_msgs::msg::LogMessage::SharedPtr msg);
     void updateVehicleStatus(const px4_msgs::msg::VehicleStatus::SharedPtr msg);
@@ -267,8 +265,7 @@ private:
     // rclcpp::Subscription<px4_msgs::msg::UavcanParameterValue>::SharedPtr mUavcanParameterValueSub_;
 
     rclcpp::Publisher<px4_msgs::msg::VehicleCommand>::SharedPtr mCommandQHACPub_;
-    rclcpp::Publisher<px4_msgs::msg::OffboardControlMode>::SharedPtr mOffboardModeQHACPub_;
-    rclcpp::Publisher<px4_msgs::msg::VehicleAttitudeSetpoint>::SharedPtr mAttitudeSetpointQHACPub_;
+    rclcpp::Publisher<px4_msgs::msg::ManualControlSetpoint>::SharedPtr mManualControlSetpointQHACPub_;
     // rclcpp::Publisher<px4_msgs::msg::UavcanParameterRequest>::SharedPtr mUavcanParameterRequestQHACPub_;
 
     rclcpp::executors::SingleThreadedExecutor::SharedPtr mROS2Executor;

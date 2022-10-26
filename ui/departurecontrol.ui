@@ -57,11 +57,6 @@
      </column>
      <column>
       <property name="text">
-       <string>Arrival Time</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
        <string>Error</string>
       </property>
      </column>

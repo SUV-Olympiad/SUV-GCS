@@ -2,6 +2,8 @@
 #define DEPARTURECONTROL_H
 
 #include <QWidget>
+#include <QTableWidgetItem>
+
 
 #include "manager.h"
 
@@ -25,6 +27,8 @@ public:
 private:
     Ui::DepartureControl *ui;
     int warningsec = 0;
+
+    QTableWidgetItem *newItem;
 };
 
 #endif // DEPARTURECONTROL_H

@@ -275,6 +275,7 @@ void MainWidget::updateDronesInMap()
     QMap<int, IVehicle*>::iterator agentsIterator;
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         IVehicle* agent = agentsIterator.value();
+        leapmotionControl(agent);
         QVector3D llh = agent->data("LLH").value<QVector3D>();
         float heading = agent->data("HEADING").value<qreal>();
         mMapView->updateDrone(agent->id(), llh.x(), llh.y(), heading);
@@ -574,9 +575,9 @@ void MainWidget::leapmotionControl(IVehicle* agent){
     float leap_yaw = agent->data("LEAP_YAW").value<qreal>();
     float leap_height = agent->data("LEAP_HEIGHT").value<qreal>();
     float leap_grip = agent->data("LEAP_GRIP").value<qreal>();
-    qDebug() << "roll : " << leap_roll;
-    qDebug() << "pitch : " << leap_pitch;
-    qDebug() << "yaw : " << leap_yaw;
+//    qDebug() << "roll : " << leap_roll;
+//    qDebug() << "pitch : " << leap_pitch;
+//    qDebug() << "yaw : " << leap_yaw;
     if (leap_roll > 20) {
         manY = -0.6;
     } else if (leap_roll < -20) {
@@ -595,9 +596,9 @@ void MainWidget::leapmotionControl(IVehicle* agent){
         manR = 0.3;
     }
 
-    if (leap_height < 150 && leap_grip > 0.9 && agent->data("MODE") == "Position mode") {
+    if (leap_height < 150 && leap_grip > 0.9) {
         agent->cmd("LANDING");
-    } else if (agent->data("MODE") == "Position mode"){
+    } else{
         agent->cmd("MANUAL_CTL", manX, manY, manZ, manR);
     }
 }

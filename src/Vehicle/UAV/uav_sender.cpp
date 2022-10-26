@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include <QMutexLocker>
 #include <QtMath>
+#include <tf2/LinearMath/Quaternion.h>
 
 #define RAD2DEG		(57.0)
 #define DEG2RAD     (0.0174533)
@@ -241,6 +242,18 @@ int CCModelCmdSender::automode()
     return 0;
 }
 
+void CCModelCmdSender::manual_control(float x, float y, float z, float yaw)
+{
+    auto cmd = px4_msgs::msg::ManualControlSetpoint();
+    cmd.valid = true;
+    cmd.data_source = 2;
+    cmd.x = x;
+    cmd.y = y;
+    cmd.z = z;
+    cmd.r = yaw;
+    mAgent->dataROS()->publishManualControlSetpoint(cmd);
+}
+
 int CCModelCmdSender::offboard()
 {
      const int PX4_CUSTOM_MAIN_MODE_OFFBOARD = 6;
@@ -275,6 +288,27 @@ int CCModelCmdSender::automission()
      posctl_cmd.param2 = 3;
 
      mAgent->dataROS()->publishCommand(posctl_cmd);
+    return 0;
+}
+
+int CCModelCmdSender::position()
+{
+    const int PX4_CUSTOM_MAIN_MODE_POSCTL = 3;
+
+    int mode             = MAV_MODE_FLAG_SAFETY_ARMED |
+                           MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
+    if ( mAgent->info("mode") == QString("hils") ) {
+        mode            |= MAV_MODE_FLAG_HIL_ENABLED;
+    }
+
+    auto offboard_cmd = px4_msgs::msg::VehicleCommand();
+    offboard_cmd.target_system = mAgent->sysID();
+    offboard_cmd.command = px4_msgs::msg::VehicleCommand::VEHICLE_CMD_DO_SET_MODE;
+    offboard_cmd.confirmation = true;
+    offboard_cmd.param1 = mode;
+    offboard_cmd.param2 = PX4_CUSTOM_MAIN_MODE_POSCTL;
+
+    mAgent->dataROS()->publishCommand(offboard_cmd);
     return 0;
 }
 

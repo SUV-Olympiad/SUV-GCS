@@ -1,0 +1,4 @@
+source;share/suvgcs/local_setup.bash
+source;share/suvgcs/local_setup.dsv
+source;share/suvgcs/local_setup.sh
+source;share/suvgcs/local_setup.zsh

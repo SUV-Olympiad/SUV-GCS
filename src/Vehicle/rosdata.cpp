@@ -102,6 +102,8 @@ void CROSData::initSubscription()
     qos_cmd.reliable();
     topic = QString("/vehicle%1/in/VehicleCommand").arg(sysid);
     mCommandQHACPub_ = mQHAC3Node->create_publisher<px4_msgs::msg::VehicleCommand>(topic.toStdString().c_str(), qos_cmd);
+    topic = QString("/vehicle%1/in/ManualControlSetpoint").arg(sysid);
+    mManualControlSetpointQHACPub_ = mQHAC3Node->create_publisher<px4_msgs::msg::ManualControlSetpoint>(topic.toStdString().c_str(), qos_cmd);
     // mUavcanParameterRequestQHACPub_ = mQHAC3Node->create_publisher<px4_msgs::msg::UavcanParameterRequest>(topic_prefix + "/uavcan_parameter_request", rclcpp::SystemDefaultsQoS());
 
     // Agent Manager
@@ -179,6 +181,12 @@ QVariant CROSData::data(const QString &aItem)
         {
         case 0:
             mode = "Manual mode";
+            break;
+        case 1:
+            mode = "Altitude mode";
+            break;
+        case 2:
+            mode = "Position mode";
             break;
         case 3:
             mode = "Auto mission mode";
@@ -307,6 +315,9 @@ QVariant CROSData::data(const QString &aItem)
 				.arg(mVehicleGlobalPosition.lat,6,'f',6)
 				.arg(mVehicleGlobalPosition.lon,6,'f',6)
 				.arg(mVehicleGlobalPosition.alt,6,'f',6);
+    }
+    else if (item == "LEAP_RPY" ) {
+        return QVector3D(mLeapMotion.roll, mLeapMotion.pitch, mLeapMotion.yaw);
     }
     else if (item == "LEAP_ROLL" ) {
         return mLeapMotion.roll;
@@ -702,6 +713,10 @@ QList<QString> CROSData::getParamRequested() {
 
 void CROSData::publishCommand(px4_msgs::msg::VehicleCommand command) {
     mCommandQHACPub_->publish(command);
+}
+
+void CROSData::publishManualControlSetpoint(px4_msgs::msg::ManualControlSetpoint command) {
+    mManualControlSetpointQHACPub_->publish(command);
 }
 
 void CROSData::setAgentBaseDiffAlt(double alt) {

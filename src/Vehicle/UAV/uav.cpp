@@ -14,7 +14,7 @@ CUAV::CUAV(QMap<QString, QString> aProperty, QObject *parent)
 	mSysID = 0;
 	mIPAddr = QString("");
 	mLedColor = QColor(255,255,255);
-    mData = nullptr;    
+    mData = nullptr;
     mSender = nullptr;
 
     mTimer = new QTimer(this);
@@ -26,7 +26,7 @@ CUAV::~CUAV()
     mTimer->stop();
     mRosTimer->stop();
 
-    if ( mData != nullptr ) delete mData;    
+    if ( mData != nullptr ) delete mData;
     if ( mSender != nullptr ) delete mSender;
     if ( mTimer != nullptr) delete mTimer;
     if ( mRosTimer != nullptr) delete mRosTimer;
@@ -88,7 +88,7 @@ int CUAV::cmd(const char *aCmd, QVariant aArg1, QVariant aArg2, QVariant aArg3, 
         // Lat, Lon, Alt, Yaw
         mSender->reposition(aArg1.toFloat(), aArg2.toFloat(), aArg3.toFloat(), aArg4.toDouble());
     }
-    else if (item == "MOVE_NED" ) {        
+    else if (item == "MOVE_NED" ) {
         // arg1 : NED position <QVector3D >
         // arg2 : heading <double>
 
@@ -118,6 +118,9 @@ int CUAV::cmd(const char *aCmd, QVariant aArg1, QVariant aArg2, QVariant aArg3, 
     else if ( item == "MANUAL" ) {
         mSender->manual();
     }
+    else if ( item == "POSITION" ) {
+        mSender->position();
+    }
 	else if ( item == "CALIB_GYRO") {
 		mSender->calib_gyro();
 	}
@@ -145,6 +148,9 @@ int CUAV::cmd(const char *aCmd, QVariant aArg1, QVariant aArg2, QVariant aArg3, 
     else if ( item == "MISSION_START") {
 		mSender->startMission();
 	}
+    else if ( item == "MANUAL_CTL") {
+        mSender->manual_control(aArg1.toFloat(), aArg2.toFloat(), aArg3.toFloat(), aArg4.toFloat());
+    }
     else {
         qDebug("ERROR: Not determined command (%s)", aCmd);
         return -1;
@@ -204,7 +210,7 @@ QVariant CUAV::data(const char *aName)
 		return mData->checkAck(MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN);
 	}
     else if ( item == "DIR_FILES") {
-        return mDirFiles;    
+        return mDirFiles;
     }
     else if ( item == "ARMPOS_NED") {
         return LLH2NED(mArmPos);

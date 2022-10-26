@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>src/UI/icon/check.png</file>
+        <file>src/UI/icon/car.png</file>
+        <file>src/UI/icon/configure.png</file>
+        <file>src/UI/icon/drone.png</file>
+        <file>src/UI/icon/play.png</file>
+        <file>src/UI/icon/scenario.png</file>
+        <file>src/UI/icon/setting_1.svg</file>
+        <file>src/UI/icon/setting_2.png</file>
+        <file>src/UI/icon/stop.png</file>
+        <file>src/UI/icon/ship.png</file>
+        <file>src/UI/icon/calibration.png</file>
+        <file>src/UI/icon/parameters.png</file>
+        <file>src/UI/icon/alarm.png</file>
+        <file>src/UI/icon/analysis.png</file>
+        <file>src/UI/icon/graph.png</file>
+        <file>src/UI/icon/controller.png</file>
+        <file>src/UI/icon/title.png</file>
+        <file>src/UI/icon/test.png</file>
+        <file>src/UI/icon/scenario_mode.png</file>
+        <file>src/UI/icon/ftp.png</file>
+    </qresource>
+    <qresource prefix="/html">
+        <file>src/UI/google_maps.html</file>
+    </qresource>
+</RCC>

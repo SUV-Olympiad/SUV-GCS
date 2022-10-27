@@ -48,7 +48,7 @@
 #### 4. 경로 표시
 #### 5. <img src="./src/UI/icon/pointa_off.png" width="30" height="30"> : A, B, C, D, E 각 VeriPort 화면
 #### 6. <img src="./src/UI/icon/earth.png" width="30" height="30"> : 지도화면으로 전환
-#### 7. <img src="./src/UI/icon/utm_off.png" 력width="30" height="30"> : UTM Algorithm 버튼
+#### 7. <img src="./src/UI/icon/utm_off.png" width="30" height="30"> : UTM Algorithm 버튼
 
 
 ## Unmanned Traffic management

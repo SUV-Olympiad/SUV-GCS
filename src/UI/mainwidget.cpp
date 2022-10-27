@@ -275,7 +275,6 @@ void MainWidget::updateDronesInMap()
     QMap<int, IVehicle*>::iterator agentsIterator;
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         IVehicle* agent = agentsIterator.value();
-        leapmotionControl(agent);
         QVector3D llh = agent->data("LLH").value<QVector3D>();
         float heading = agent->data("HEADING").value<qreal>();
         mMapView->updateDrone(agent->id(), llh.x(), llh.y(), heading);

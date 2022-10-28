@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 {
     glutInit(&argc, argv);
     QApplication a(argc, argv);
-    a.setApplicationName("QHAC3");
+    a.setApplicationName("SUV GCS");
     a.setQuitOnLastWindowClosed(true);
 
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);

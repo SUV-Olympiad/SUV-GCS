@@ -277,11 +277,13 @@ void MainWidget::updateWindowSize()
     ui->centralWidget->setMinimumHeight(he);
     ui->centralWidget->setMaximumHeight(he);
 
-    ui->tabWidget->setMinimumHeight(he - 100);
-    ui->tabWidget->setMaximumHeight(he - 100);
+    he = he - 122;
+    ui->tabWidget->setMinimumHeight(he);
+    ui->tabWidget->setMaximumHeight(he);
     ui->tabWidget->setMinimumWidth(size.width());
     ui->tabWidget->setMaximumWidth(size.width());
 
+    he = he - 28;
     ui->splitter_3->setMinimumHeight(he);
     ui->splitter_3->setMaximumHeight(he);
     ui->splitter_3->setMinimumWidth(size.width());
@@ -291,6 +293,14 @@ void MainWidget::updateWindowSize()
     ui->splitter2_3->setMaximumHeight(he);
     ui->splitter2_3->setMinimumWidth(size.width());
     ui->splitter2_3->setMaximumWidth(size.width());
+    
+
+    ui->verticalGroupBox_3->setMinimumHeight(he);
+    ui->verticalGroupBox_3->setMaximumHeight(he);
+
+    he = he - ui->camera_type_widget->height() - ui->flightList->height() - ui->flightInfo->height();
+    ui->label->setMinimumHeight(he);
+    ui->label->setMaximumHeight(he);
 
     ui->mainToolBar->setGeometry(size.width() - 500,20,500,75);
 

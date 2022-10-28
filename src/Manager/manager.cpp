@@ -8,6 +8,7 @@
 #include "dbmanager.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QSqlError>
 
 CManager::CManager(QObject *parent) :
     QObject(parent)
@@ -15,11 +16,13 @@ CManager::CManager(QObject *parent) :
     mdbManger = new dbManager();
     db = mdbManger->db;
 
-    mAgents_vehicle_type_image["iris"] = ":/icon/src/UI/icon/drone.png";
-    mAgents_vehicle_type_image["vtol"] = ":/icon/src/UI/icon/flight.png";
-    mAgents_vehicle_type_image["typhoon"] = ":/icon/src/UI/icon/flight.png";
-    mAgents_vehicle_type_image["rover"] = ":/icon/src/UI/icon/car.png";
-    mAgents_vehicle_type_image["boat"] = ":/icon/src/UI/icon/ship.png";
+    qDebug() << db.lastError().text();
+
+    mAgents_vehicle_type_image["IRIS"] = ":/icon/src/UI/icon/drone.png";
+    mAgents_vehicle_type_image["VTOL"] = ":/icon/src/UI/icon/flight.png";
+    mAgents_vehicle_type_image["TYPHOON"] = ":/icon/src/UI/icon/flight.png";
+    mAgents_vehicle_type_image["ROVER"] = ":/icon/src/UI/icon/car.png";
+    mAgents_vehicle_type_image["BOAT"] = ":/icon/src/UI/icon/ship.png";
 }
 
 CManager::~CManager()
@@ -211,9 +214,9 @@ void CManager::addAgent(const QMap<QString, QString> aProperty)
         query.first();
         int count = query.value(0).toInt();
         if(count == 0){
-            // sql = QString("INSERT INTO drone (id,sysid,type,groupId,vehicle)VALUES('%1','%2','%3','%4','%5')").arg(id).arg(sysid).arg(type).arg(group).arg(vehicle);
+            sql = QString("INSERT INTO drone (id,sysid,type,groupId,vehicle)VALUES('%1','%2','%3','%4','%5')").arg(id).arg(sysid).arg(type).arg(group).arg(vehicle);
         }else{
-            // sql = QString("UPDATE drone SET type='%1', sysid='%2', groupId='%3',vehicle='%4' WHERE id='%5'").arg(type).arg(sysid).arg(group).arg(vehicle).arg(id);
+            sql = QString("UPDATE drone SET type='%1', sysid='%2', groupId='%3',vehicle='%4' WHERE id='%5'").arg(type).arg(sysid).arg(group).arg(vehicle).arg(id);
         }
         query.exec(sql);
 

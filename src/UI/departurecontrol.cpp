@@ -25,8 +25,8 @@ void DepartureControl::initData(QString data)
         
         ui->tableWidget->insertRow(ui->tableWidget->rowCount() );
         
-        ui->tableWidget->setItem(i,0,new QTableWidgetItem(itemList[1]));
-
+        newItem[i*7+0].setText(itemList[1]);
+        ui->tableWidget->setItem(i,0,&newItem[i*7+0]);
         ui->tableWidget->setItem(i,1,&newItem[i*7+1]);
         ui->tableWidget->setItem(i,2,&newItem[i*7+2]);
         ui->tableWidget->setItem(i,3,&newItem[i*7+3]);
@@ -46,6 +46,7 @@ void DepartureControl::updateData(QString data)
             newItem[i*7+2].setText(list[2]);
             newItem[i*7+3].setText(list[3]);
             newItem[i*7+4].setText(list[4]);
+            newItem[i*7+5].setText(list[5]);
         }
         
     }
@@ -64,7 +65,7 @@ void DepartureControl::showWarning(const QMap<int, QString> warning)
         if(warning.contains(id)){
             newItem[i*7+6].setText(warning[id]);
             if(warningsec >= 15){
-                ui->tableWidget->item(i,0)->setBackground(QColor(255,79,40,100));
+                newItem[i*7+0].setBackground(QColor(255,79,40,100));
                 newItem[i*7+1].setBackground(QColor(255,79,40,100));
                 newItem[i*7+2].setBackground(QColor(255,79,40,100));
                 newItem[i*7+3].setBackground(QColor(255,79,40,100));
@@ -72,7 +73,7 @@ void DepartureControl::showWarning(const QMap<int, QString> warning)
                 newItem[i*7+5].setBackground(QColor(255,79,40,100));
                 newItem[i*7+6].setBackground(QColor(255,79,40,100));
             }else{
-                ui->tableWidget->item(i,0)->setBackground(Qt::transparent);
+                newItem[i*7+0].setBackground(Qt::transparent);
                 newItem[i*7+1].setBackground(Qt::transparent);
                 newItem[i*7+2].setBackground(Qt::transparent);
                 newItem[i*7+3].setBackground(Qt::transparent);
@@ -80,6 +81,14 @@ void DepartureControl::showWarning(const QMap<int, QString> warning)
                 newItem[i*7+5].setBackground(Qt::transparent);
                 newItem[i*7+6].setBackground(Qt::transparent);
             }
+        }else{
+            newItem[i*7+0].setBackground(Qt::transparent);
+            newItem[i*7+1].setBackground(Qt::transparent);
+            newItem[i*7+2].setBackground(Qt::transparent);
+            newItem[i*7+3].setBackground(Qt::transparent);
+            newItem[i*7+4].setBackground(Qt::transparent);
+            newItem[i*7+5].setBackground(Qt::transparent);
+            newItem[i*7+6].setBackground(Qt::transparent);
         }
     }
     if(warningsec == 30){

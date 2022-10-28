@@ -30,6 +30,11 @@
        <string>SYSID</string>
       </property>
      </column>
+    <column>
+      <property name="text">
+       <string>Group ID</string>
+      </property>
+     </column>
      <column>
       <property name="text">
        <string>Vehicles Type</string>
@@ -48,11 +53,6 @@
      <column>
       <property name="text">
        <string>LLH</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Deaprture Time</string>
       </property>
      </column>
      <column>

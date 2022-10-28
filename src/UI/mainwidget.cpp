@@ -313,11 +313,7 @@ void MainWidget::updateStatusText()
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         int id = agentsIterator.value()->id();
 		bool isRoute = mManager->agent(id)->data("OFFLINE").toBool();
-
-        if(id == 1 || id == 4 || id == 7){
-            isRoute = true;
-        }
-
+        
         QPixmap pix, pix2;
         QImage img;
         if(warningAction.contains(id)){
@@ -398,11 +394,21 @@ void MainWidget::leapMotionStart(int idx){
         IVehicle* agent = mManager->agent(leapMotionState);
         agent->cmd("POSITION");
 
+        ui->mapView_2->setVisible(true);
+        ui->label->setVisible(false);
+        ui->cameraData->setVisible(true);
+        ui->mapView->setVisible(false);
+
     }else if(leapMotionState == leapIdx){
         // Leap end
         IVehicle* agent = mManager->agent(leapIdx);
         agent->cmd("AUTOMISSION");
         leapMotionState = -1;
+
+        ui->mapView_2->setVisible(false);
+        ui->label->setVisible(true);
+        ui->cameraData->setVisible(false);
+        ui->mapView->setVisible(true);
     }else{
         QMessageBox msgBox;
         msgBox.setText("Already!");
@@ -1106,6 +1112,7 @@ void MainWidget::updateDeparture()
 {
     QStringList strItemList;
     strItemList << ""
+                << ""
                 << "MODE"
                 << "Battery"
                 << "LLH_STR";
@@ -1124,6 +1131,8 @@ void MainWidget::updateDeparture()
         for (int i = 0; i < numItem ; i++ ) {
             QString value;
             if(i == 0){
+                value = QString("%1").arg(mManager->groupId(sysid.toInt()));
+            }else if(i == 1){
                 value = mManager->vehicleType(sysid.toInt());
             }else{
                 if ( agentsIterator.value() == NULL )  {
@@ -1237,7 +1246,6 @@ void MainWidget::showMap(){
     ui->mapView->setVisible(true);
     this->cameraBtnReset();
 
-    qDebug() << "test";
     QPixmap img;
     img.load(":/icon/src/UI/icon/earth.png");
     QIcon icon = QIcon(img);

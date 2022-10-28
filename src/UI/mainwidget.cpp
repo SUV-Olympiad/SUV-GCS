@@ -298,7 +298,7 @@ void MainWidget::updateWindowSize()
     ui->verticalGroupBox_3->setMinimumHeight(he);
     ui->verticalGroupBox_3->setMaximumHeight(he);
 
-    he = he - ui->camera_type_widget->height() - ui->flightList->height() - ui->flightInfo->height();
+    he = he - ui->camera_type_widget->height() - ui->flightList->height() - ui->flightInfo->height() - 40;
     ui->label->setMinimumHeight(he);
     ui->label->setMaximumHeight(he);
 

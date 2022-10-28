@@ -30,7 +30,7 @@
        <string>SYSID</string>
       </property>
      </column>
-    <column>
+     <column>
       <property name="text">
        <string>Group ID</string>
       </property>
@@ -57,7 +57,12 @@
      </column>
      <column>
       <property name="text">
-       <string>Error</string>
+       <string>LOG</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>ERROR</string>
       </property>
      </column>
     </widget>
@@ -65,5 +70,25 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>itemDoubleClicked(QTableWidgetItem*)</signal>
+   <receiver>DepartureControl</receiver>
+   <slot>on_tableWidget_itemDoubleClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>492</x>
+     <y>298</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>492</x>
+     <y>298</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>on_tableWidget_itemDoubleClicked()</slot>
+ </slots>
 </ui>

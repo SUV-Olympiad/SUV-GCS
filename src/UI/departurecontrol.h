@@ -24,6 +24,9 @@ public:
     void updateData(QString data);
     void showWarning(const QMap<int, QString> warning);
 
+private slots:
+    void on_tableWidget_itemDoubleClicked(QTableWidgetItem *item);
+
 private:
     Ui::DepartureControl *ui;
     int warningsec = 0;

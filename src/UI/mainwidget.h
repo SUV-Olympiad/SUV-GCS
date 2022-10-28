@@ -116,7 +116,7 @@ private Q_SLOTS:
     void leapMotionStart3();
     void leapMotionStart4();
     void leapMotionStart5();
-
+    void logControl();
 private slots:
 
     void utmOnOff();
@@ -150,6 +150,7 @@ private:
     QTimer                  mRoadTimer;
     QTimer                  mLeapTimer;
     QTimer                  mUtmTimer;
+    QTimer                  mLogControl;
     CManager*               mManager;
     QThread                 mManagerThread;
     QMap<int, QString>      mPrevStatusText;
@@ -171,9 +172,12 @@ private:
     int                     camera_type = 0;
     QMap<int, QString>      warningData;
     QMap<int, QAction *>    warningAction;
+    QMap<int, QString>      logURL;
     QMap<int, int>          warningIdxMap;
-    int                     warningIdx;
+    int                     warningIdx = 0;
     int                     leapMotionState = -1;
+    dbManager*              mdbManger;
+    QSqlDatabase            db;
 
 };
 

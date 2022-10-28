@@ -15,6 +15,7 @@
 #include <QtMath>
 #include <QList>
 #include <QFile>
+#include <QSqlRecord>
 
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/opencv.hpp>
@@ -100,8 +101,15 @@ MainWidget::MainWidget(QWidget *parent) :
     mLeapTimer.setInterval(200);
     mLeapTimer.start();
 
+    connect(&mLogControl, SIGNAL(timeout()), this, SLOT(logControl()));
+    mLogControl.setInterval(2000);
+    mLogControl.start();
+
     ui->mapView_2->setVisible(false);
     ui->cameraData->setVisible(false);
+
+    dbManager* mdbManger = new dbManager();
+    QSqlDatabase db = mdbManger->db;
 }
 
 MainWidget::~MainWidget()
@@ -167,7 +175,7 @@ void MainWidget::procInitTreeWidget()
 
         QString str2 = QString("%1\t%2").arg(agentsIterator.value()->id()).arg(sysid);
         departureData.append(str2);
-        departureData.append("//");
+        departureData.append("~~~~~~~~");
     }
 
     ui->departureControl->initData(departureData);
@@ -309,6 +317,7 @@ void MainWidget::updateStatusText()
     QMap<int, IVehicle*>::iterator agentsIterator;
 
     ui->statusListWidget->clear();
+    warningData.clear();
 
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         int id = agentsIterator.value()->id();
@@ -316,6 +325,7 @@ void MainWidget::updateStatusText()
         
         QPixmap pix, pix2;
         QImage img;
+
         if(warningAction.contains(id)){
             if(isRoute == false){
                 ui->mainErrorList->removeAction(warningAction[id]);
@@ -352,7 +362,6 @@ void MainWidget::updateStatusText()
                 QAction *action = new QAction(icon,QString("%1").arg(id),this);
 
                 warningIdxMap[warningIdx] = id;
-
                 if(warningIdx == 1){
                     connect(action, &QAction::triggered, this, &MainWidget::leapMotionStart1);
                 }else if(warningIdx == 2){
@@ -374,7 +383,7 @@ void MainWidget::updateStatusText()
 
 		if (isRoute) {
 
-			QString statusText = QString("[Group:%1\t ID:%2]\t Off path").arg(id).arg(id);
+			QString statusText = QString("[Group:%1\t ID:%2]\t Off path").arg(mManager->groupId(id)).arg(id);
 
             ui->statusListWidget->addItem(statusText);
             ui->statusListWidget->scrollToBottom();
@@ -417,7 +426,7 @@ void MainWidget::leapMotionStart(int idx){
     }
 }
 void MainWidget::leapMotionStart1(){
-   leapMotionStart(1);
+    leapMotionStart(1);
 }
 
 void MainWidget::leapMotionStart2(){
@@ -489,9 +498,6 @@ void MainWidget::loadDatabase()
 
 void MainWidget::ResetDatabase()
 {
-    dbManager* mdbManger = new dbManager();
-    QSqlDatabase db = mdbManger->db;
-
     QSqlQuery query(db);
     QString sql = QString("TRUNCATE drone");
     query.exec(sql);
@@ -1107,6 +1113,21 @@ void MainWidget::on_sysList_itemClicked(QListWidgetItem *item)
     ui->mapView->selectVehicle(selectVehicleId);
 }   
 
+void MainWidget::logControl(){
+    const QMap<int, IVehicle*> agentsMap = mManager->agents();
+    QMap<int, IVehicle*>::const_iterator agentsIterator;
+
+    logURL.clear();
+    for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+        QString sysid = agentsIterator.value()->data("SYSID").toString();
+        QSqlQuery query(db);
+        QString sql = QString("select * from log where droneid='%1'").arg(sysid.toInt());
+        query.exec(sql);
+        while(query.next()){
+            logURL[sysid.toInt()] = query.value(2).toString();
+        }
+    }
+}
 
 void MainWidget::updateDeparture()
 {
@@ -1115,7 +1136,8 @@ void MainWidget::updateDeparture()
                 << ""
                 << "MODE"
                 << "Battery"
-                << "LLH_STR";
+                << "LLH_STR"
+                << "";
     int numItem = strItemList.size();
 
     const QMap<int, IVehicle*> agentsMap = mManager->agents();
@@ -1129,11 +1151,15 @@ void MainWidget::updateDeparture()
         departureData.append("\t");
 
         for (int i = 0; i < numItem ; i++ ) {
-            QString value;
+            QString value = "";
             if(i == 0){
                 value = QString("%1").arg(mManager->groupId(sysid.toInt()));
             }else if(i == 1){
                 value = mManager->vehicleType(sysid.toInt());
+            }else if(i == 5){
+                if(logURL.contains(sysid.toInt())){
+                    value = logURL[sysid.toInt()];
+                }
             }else{
                 if ( agentsIterator.value() == NULL )  {
                     qDebug("Error: agent == NULL");

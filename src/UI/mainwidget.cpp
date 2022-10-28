@@ -302,6 +302,9 @@ void MainWidget::updateWindowSize()
     ui->label->setMinimumHeight(he);
     ui->label->setMaximumHeight(he);
 
+    ui->mapView_2->setMinimumHeight(he);
+    ui->mapView_2->setMaximumHeight(he);
+
     ui->mainToolBar->setGeometry(size.width() - 500,20,500,75);
 
     ui->statusListWidget->setMinimumWidth(size.width());

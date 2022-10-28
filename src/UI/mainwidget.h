@@ -54,6 +54,9 @@ public:
     virtual ~MainWidget();
 
 public:
+    float                   x_value = 0;
+    float                   y_value = 0;
+    float                   z_value = 0;
     QString                 point_camera = "";
     int                     selectVehicleId;
     int                     leapState = 0;
@@ -105,6 +108,7 @@ private Q_SLOTS:
     void onScenarioMode(bool aMode);
     void on_actionsendSC_triggered();
     void unmannedTrafficManagement();
+    void leapmotionControl(IVehicle* agent);
     void typeUpload();
 
 private slots:

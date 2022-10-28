@@ -5,6 +5,7 @@
 #include "rosdata.h"
 #include "departurecontrol.h"
 
+#include <QAction>
 #include <QKeyEvent>
 #include <QFileDialog>
 #include <QSignalMapper>
@@ -94,6 +95,10 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(&mRoadTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
     mRoadTimer.setInterval(200);
     mRoadTimer.start();
+
+    connect(&mLeapTimer, SIGNAL(timeout()), this, SLOT(leapmotionControl()));
+    mLeapTimer.setInterval(200);
+    mLeapTimer.start();
 
     ui->mapView_2->setVisible(false);
     ui->cameraData->setVisible(false);
@@ -191,10 +196,8 @@ void MainWidget::colorUpdate(){
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         QColor color = QColor(255, 255, 255);
         if(selectVehicleId == agentsIterator.value()->id()){
-            qDebug() << agentsIterator.value()->id();
             color = QColor(0, 0, 255);
         }else if(warningData.contains(agentsIterator.value()->id())){
-            qDebug() << agentsIterator.value()->id();
             color = QColor(255, 0, 0);
         }
         colorList[agentsIterator.value()->id()] = color;
@@ -311,7 +314,70 @@ void MainWidget::updateStatusText()
         int id = agentsIterator.value()->id();
 		bool isRoute = mManager->agent(id)->data("OFFLINE").toBool();
 
+        if(id == 1 || id == 4 || id == 7){
+            isRoute = true;
+        }
+
+        QPixmap pix, pix2;
+        QImage img;
+        if(warningAction.contains(id)){
+            if(isRoute == false){
+                ui->mainErrorList->removeAction(warningAction[id]);
+                warningAction.remove(id);
+                warningIdxMap.remove(warningIdx);
+                warningIdx--;
+            }
+
+            pix.load(mManager->vehicleImage(mManager->vehicleType(id)));
+            img = pix.toImage();
+            if(leapMotionState == id){
+                img = img.convertToFormat(QImage::Format_Grayscale8);
+            }
+            pix2 = QPixmap::fromImage(img);
+            QIcon icon = QIcon(pix2);
+
+            warningAction[id]->setIcon(icon);
+
+
+        }else{
+            if(isRoute){
+                warningIdx++;
+                QPixmap pix, pix2;
+                QImage img;
+                pix.load(mManager->vehicleImage(mManager->vehicleType(id)));
+                img = pix.toImage();
+                if(leapMotionState == id){
+                    img = img.convertToFormat(QImage::Format_Grayscale8);
+                }
+                pix2 = QPixmap::fromImage(img);
+                
+                QIcon icon = QIcon(pix2);
+
+                QAction *action = new QAction(icon,QString("%1").arg(id),this);
+
+                warningIdxMap[warningIdx] = id;
+
+                if(warningIdx == 1){
+                    connect(action, &QAction::triggered, this, &MainWidget::leapMotionStart1);
+                }else if(warningIdx == 2){
+                    connect(action, &QAction::triggered, this, &MainWidget::leapMotionStart2);
+                }else if(warningIdx == 3){
+                    connect(action, &QAction::triggered, this, &MainWidget::leapMotionStart3);
+                }else if(warningIdx == 4){
+                    connect(action, &QAction::triggered, this, &MainWidget::leapMotionStart4);
+                }else if(warningIdx == 5){
+                    connect(action, &QAction::triggered, this, &MainWidget::leapMotionStart5);
+
+                }
+
+                ui->mainErrorList->addAction(action);
+                warningAction[id] = action;
+            }
+        }
+
+
 		if (isRoute) {
+
 			QString statusText = QString("[Group:%1\t ID:%2]\t Off path").arg(id).arg(id);
 
             ui->statusListWidget->addItem(statusText);
@@ -322,6 +388,48 @@ void MainWidget::updateStatusText()
     }
     ui->departureControl->showWarning(warningData);
 }
+
+void MainWidget::leapMotionStart(int idx){
+    int leapIdx = warningIdxMap[idx];
+    if(leapMotionState == -1){
+        // Leap start
+        leapMotionState = leapIdx;
+
+        IVehicle* agent = mManager->agent(leapMotionState);
+        agent->cmd("POSITION");
+
+    }else if(leapMotionState == leapIdx){
+        // Leap end
+        IVehicle* agent = mManager->agent(leapIdx);
+        agent->cmd("AUTOMISSION");
+        leapMotionState = -1;
+    }else{
+        QMessageBox msgBox;
+        msgBox.setText("Already!");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.exec();
+    }
+}
+void MainWidget::leapMotionStart1(){
+   leapMotionStart(1);
+}
+
+void MainWidget::leapMotionStart2(){
+   leapMotionStart(2);
+}
+
+void MainWidget::leapMotionStart3(){
+   leapMotionStart(3);
+}
+
+void MainWidget::leapMotionStart4(){
+   leapMotionStart(4);
+}
+
+void MainWidget::leapMotionStart5(){
+   leapMotionStart(5);
+}
+
 
 void MainWidget::updateNotifier()
 {
@@ -582,41 +690,44 @@ void MainWidget::on_actionsendSC_triggered()
     }
 }
 
-void MainWidget::leapmotionControl(IVehicle* agent){
-    float manX = 0.0;
-    float manY = 0.0;
-    float manZ = 0.5;
-    float manR = 0.0;
-    float leap_roll = agent->data("LEAP_ROLL").value<qreal>();
-    float leap_pitch = agent->data("LEAP_PITCH").value<qreal>();
-    float leap_yaw = agent->data("LEAP_YAW").value<qreal>();
-    float leap_height = agent->data("LEAP_HEIGHT").value<qreal>();
-    float leap_grip = agent->data("LEAP_GRIP").value<qreal>();
-//    qDebug() << "roll : " << leap_roll;
-//    qDebug() << "pitch : " << leap_pitch;
-//    qDebug() << "yaw : " << leap_yaw;
-    if (leap_roll > 20) {
-        manY = -0.6;
-    } else if (leap_roll < -20) {
-        manY = 0.6;
-    }
+void MainWidget::leapmotionControl(){
+    if(leapMotionState != -1){
+        IVehicle* agent = mManager->agent(leapMotionState);
+        float manX = 0.0;
+        float manY = 0.0;
+        float manZ = 0.5;
+        float manR = 0.0;
+        float leap_roll = agent->data("LEAP_ROLL").value<qreal>();
+        float leap_pitch = agent->data("LEAP_PITCH").value<qreal>();
+        float leap_yaw = agent->data("LEAP_YAW").value<qreal>();
+        float leap_height = agent->data("LEAP_HEIGHT").value<qreal>();
+        float leap_grip = agent->data("LEAP_GRIP").value<qreal>();
+    //    qDebug() << "roll : " << leap_roll;
+    //    qDebug() << "pitch : " << leap_pitch;
+    //    qDebug() << "yaw : " << leap_yaw;
+        if (leap_roll > 20) {
+            manY = -0.6;
+        } else if (leap_roll < -20) {
+            manY = 0.6;
+        }
 
-    if (leap_pitch < -18) {
-        manX = 0.6;
-    } else if (leap_pitch > 20) {
-        manX = -0.6;
-    }
+        if (leap_pitch < -18) {
+            manX = 0.6;
+        } else if (leap_pitch > 20) {
+            manX = -0.6;
+        }
 
-    if (leap_yaw < -20) {
-        manR = -0.3;
-    } else if (leap_yaw > 15) {
-        manR = 0.3;
-    }
+        if (leap_yaw < -20) {
+            manR = -0.3;
+        } else if (leap_yaw > 15) {
+            manR = 0.3;
+        }
 
-    if (leap_height < 150 && leap_grip > 0.9) {
-        agent->cmd("LANDING");
-    } else{
-        agent->cmd("MANUAL_CTL", manX, manY, manZ, manR);
+        if (leap_height < 150 && leap_grip > 0.9) {
+            agent->cmd("LANDING");
+        } else{
+            agent->cmd("MANUAL_CTL", manX, manY, manZ, manR);
+        }
     }
 }
 void MainWidget::unmannedTrafficManagement(){

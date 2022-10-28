@@ -108,8 +108,14 @@ private Q_SLOTS:
     void onScenarioMode(bool aMode);
     void on_actionsendSC_triggered();
     void unmannedTrafficManagement();
-    void leapmotionControl(IVehicle* agent);
+    void leapmotionControl();
     void typeUpload();
+    void leapMotionStart(int idx);
+    void leapMotionStart1();
+    void leapMotionStart2();
+    void leapMotionStart3();
+    void leapMotionStart4();
+    void leapMotionStart5();
 
 private slots:
 
@@ -142,6 +148,7 @@ private:
     QGraphicsScene*         mMainPanelScene;
     QTimer                  mTimer;
     QTimer                  mRoadTimer;
+    QTimer                  mLeapTimer;
     QTimer                  mUtmTimer;
     CManager*               mManager;
     QThread                 mManagerThread;
@@ -163,7 +170,10 @@ private:
 
     int                     camera_type = 0;
     QMap<int, QString>      warningData;
-
+    QMap<int, QAction *>    warningAction;
+    QMap<int, int>          warningIdxMap;
+    int                     warningIdx;
+    int                     leapMotionState = -1;
 
 };
 

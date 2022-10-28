@@ -36,7 +36,7 @@ color:#fff;</string>
   <widget class="QToolBar" name="mainToolBar">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>900</x>
      <y>20</y>
      <width>500</width>
      <height>75</height>
@@ -58,6 +58,28 @@ color:#fff;</string>
    <addaction name="actionPointC"/>
    <addaction name="actionPointD"/>
    <addaction name="actionPointE"/>
+  </widget>
+  <widget class="QToolBar" name="mainErrorList">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>20</y>
+     <width>500</width>
+     <height>75</height>
+    </rect>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>60</width>
+     <height>60</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
   </widget>
   <widget class="QWidget" name="centralWidget" native="true">
    <property name="geometry">
@@ -438,25 +460,6 @@ color:#fff;</string>
      <width>3</width>
      <height>22</height>
     </rect>
-   </property>
-  </widget>
-  <widget class="QToolBar" name="droneList">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>20</y>
-     <width>500</width>
-     <height>75</height>
-    </rect>
-   </property>
-   <property name="movable">
-    <bool>false</bool>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>60</width>
-     <height>60</height>
-    </size>
    </property>
   </widget>
   <action name="actionUTM_On_Off_Btn">

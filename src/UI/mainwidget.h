@@ -75,6 +75,7 @@ private:
     void subscribeROS2Topics();
     void procInitTreeWidget();
     void updateVehicleData();	
+    void colorUpdate();
     void updateDronesInMap();
     void updateStatusText();
     void updateNotifier();
@@ -157,6 +158,7 @@ private:
     float                   DEPLOY_MINIMUM_DIST = 5.0;      // in meter
 
     int                     camera_type = 0;
+    QMap<int, QString>      warningData;
 
 
 };

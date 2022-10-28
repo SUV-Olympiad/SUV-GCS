@@ -143,22 +143,21 @@ void MainWidget::procInitTreeWidget()
     //List Add
     const QMap<int, IVehicle*> agentsMap = mManager->agents();
     QMap<int, IVehicle*>::const_iterator agentsIterator;
-    QMap<int, QColor> colorList;
     
     qsrand(time(0));
     QString departureData{""};
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         int sysid = agentsIterator.value()->data("SYSID").toInt();
-        QColor color = QColor(255, 255, 255);
+        
         QString roadData{""};
         QString str = QString("ID : %1\tSYSID : %2").arg(agentsIterator.value()->id()).arg(sysid);
         QListWidgetItem* pItem =new QListWidgetItem(str);
+
+        QColor color = QColor(255, 255, 255);
+
         pItem->setForeground(color);
         ui->flightList->addItem(pItem);
-        colorList[agentsIterator.value()->id()] = color;
         roadList[agentsIterator.value()->id()] = roadData;
-        mMapView->updateColor(colorList);
-        mMapView2->updateColor(colorList);
 
 
         QString str2 = QString("%1\t%2").arg(agentsIterator.value()->id()).arg(sysid);
@@ -183,6 +182,25 @@ void MainWidget::procInitTreeWidget()
         ui->flightInfo->insertRow(ui->flightInfo->rowCount() );
         ui->flightInfo->setItem(i,0,new QTableWidgetItem(strItemList[i]));
     }
+}
+
+void MainWidget::colorUpdate(){
+    QMap<int, QColor> colorList;
+    const QMap<int, IVehicle*> agentsMap = mManager->agents();
+    QMap<int, IVehicle*>::const_iterator agentsIterator;
+    for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
+        QColor color = QColor(255, 255, 255);
+        if(selectVehicleId == agentsIterator.value()->id()){
+            qDebug() << agentsIterator.value()->id();
+            color = QColor(0, 0, 255);
+        }else if(warningData.contains(agentsIterator.value()->id())){
+            qDebug() << agentsIterator.value()->id();
+            color = QColor(255, 0, 0);
+        }
+        colorList[agentsIterator.value()->id()] = color;
+    }
+    mMapView->updateColor(colorList);
+    mMapView2->updateColor(colorList);
 }
 
 void MainWidget::updateVehicleData(){
@@ -286,7 +304,6 @@ void MainWidget::updateStatusText()
 {
 	QMap<int, IVehicle*> agentsMap = mManager->agents();
     QMap<int, IVehicle*>::iterator agentsIterator;
-    QMap<int, QString> warningData;
 
     ui->statusListWidget->clear();
 
@@ -532,6 +549,7 @@ void MainWidget::updateUI()
     updateDeparture();
     updateWindowSize();
     updatePointCamera();
+    colorUpdate();
 }
 
 bool MainWidget::event(QEvent *event)

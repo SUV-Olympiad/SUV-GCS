@@ -1,8 +1,11 @@
 # SUV-GCS
 
-
+- SUV-GCS 관제시스템
 ![TrafficControl_gif](./images/gif_TrafficControl.gif)
+- 경고기능
 ![UnmannedTrafficControl_gif](./images/gif_UnmannedTrafficControl.gif)
+- DB Log
+![DB](./images/db.gif)
 
 
 ## Build

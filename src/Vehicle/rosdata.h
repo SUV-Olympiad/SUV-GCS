@@ -189,7 +189,7 @@ public:
     virtual float               heading()     {return 0;}
 
     QVariant data(const QString& aItem);
-    QPixmap getCamera();
+    QPixmap getCamera(cv_bridge::CvImagePtr img);
 
 private:
     uint toUInt(const QByteArray& aBuffer);

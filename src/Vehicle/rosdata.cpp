@@ -133,23 +133,19 @@ QString CROSData::log() const
     return QString("");
 }
 
-QPixmap CROSData::getCamera()
+QPixmap CROSData::getCamera(cv_bridge::CvImagePtr img)
 {
-    cv::Mat image_mat = cv::imdecode(cv::Mat(mCameraImage.data), cv::IMREAD_COLOR);
-//    qDebug() << "image_mat" << image_mat;
-    std::cout << "image_mat" << image_mat << endl;
-    qDebug() << "data" << image_mat.data;
-    qDebug() << "cols" << image_mat.cols;
-    qDebug() << "rows" << image_mat.rows;
+    cv::Mat image_mat = img->image;
 
-    return QPixmap::fromImage(
-        QImage(
-            (unsigned char*) image_mat.data,
-            image_mat.cols,
-            image_mat.rows,
-            QImage::Format_RGB888
-        )
+    QPixmap camera = QPixmap::fromImage(
+            QImage(
+                    (unsigned char*) image_mat.data,
+                    image_mat.cols,
+                    image_mat.rows,
+                    QImage::Format_RGB888
+            )
     );
+    return camera;
 }
 
 QVariant CROSData::data(const QString &aItem)
@@ -353,95 +349,25 @@ QVariant CROSData::data(const QString &aItem)
         return is_follow_cam;
     }
     else if (item == "FPV_CAMERA") {
-        cv::Mat image_mat = mFpv_Cv_ptr->image;
-
-        QPixmap camera = QPixmap::fromImage(
-                    QImage(
-                            (unsigned char*) image_mat.data,
-                            image_mat.cols,
-                            image_mat.rows,
-                            QImage::Format_RGB888
-                    )
-                );
-        return camera;
+        return getCamera(mFpv_Cv_ptr);
     }
     else if (item == "FOLLOW_CAMERA") {
-        cv::Mat image_mat = mFollow_Cv_ptr->image;
-
-        QPixmap camera = QPixmap::fromImage(
-                QImage(
-                        (unsigned char*) image_mat.data,
-                        image_mat.cols,
-                        image_mat.rows,
-                        QImage::Format_RGB888
-                )
-        );
-        return camera;
+        return getCamera(mFollow_Cv_ptr);
     }
     else if (item == "POINT_A_CAMERA") {
-        cv::Mat image_mat = mPointA_Cv_ptr->image;
-
-        QPixmap camera = QPixmap::fromImage(
-                QImage(
-                        (unsigned char*) image_mat.data,
-                        image_mat.cols,
-                        image_mat.rows,
-                        QImage::Format_RGB888
-                )
-        );
-        return camera;
+        return getCamera(mPointA_Cv_ptr);
     }
     else if (item == "POINT_B_CAMERA") {
-        cv::Mat image_mat = mPointB_Cv_ptr->image;
-
-        QPixmap camera = QPixmap::fromImage(
-                QImage(
-                        (unsigned char*) image_mat.data,
-                        image_mat.cols,
-                        image_mat.rows,
-                        QImage::Format_RGB888
-                )
-        );
-        return camera;
+        return getCamera(mPointB_Cv_ptr);
     }
     else if (item == "POINT_C_CAMERA") {
-        cv::Mat image_mat = mPointC_Cv_ptr->image;
-
-        QPixmap camera = QPixmap::fromImage(
-                QImage(
-                        (unsigned char*) image_mat.data,
-                        image_mat.cols,
-                        image_mat.rows,
-                        QImage::Format_RGB888
-                )
-        );
-        return camera;
+        return getCamera(mPointC_Cv_ptr);
     }
     else if (item == "POINT_D_CAMERA") {
-        cv::Mat image_mat = mPointD_Cv_ptr->image;
-
-        QPixmap camera = QPixmap::fromImage(
-                QImage(
-                        (unsigned char*) image_mat.data,
-                        image_mat.cols,
-                        image_mat.rows,
-                        QImage::Format_RGB888
-                )
-        );
-        return camera;
+        return getCamera(mPointD_Cv_ptr);
     }
     else if (item == "POINT_E_CAMERA") {
-        cv::Mat image_mat = mPointE_Cv_ptr->image;
-
-        QPixmap camera = QPixmap::fromImage(
-                QImage(
-                        (unsigned char*) image_mat.data,
-                        image_mat.cols,
-                        image_mat.rows,
-                        QImage::Format_RGB888
-                )
-        );
-        return camera;
+        return getCamera(mPointE_Cv_ptr);
     }
     else if ( item == "MSG_INTERVAL_TIME") {
         qint64 t = QDateTime::currentMSecsSinceEpoch();

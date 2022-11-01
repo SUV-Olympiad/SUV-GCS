@@ -1,5 +1,13 @@
 # SUV-GCS
 
+- SUV-GCS 관제시스템
+![TrafficControl_gif](./images/gif_TrafficControl.gif)
+- 경고기능
+![UnmannedTrafficControl_gif](./images/gif_UnmannedTrafficControl.gif)
+- DB Log
+![DB](./images/db.gif)
+
+
 ## Build
 #### 빌드 전
 - [SUV-Tools 빌드](https://github.com/SUV-Olympiad/SUV-Tools/blob/main/ros2/README.md)  
@@ -41,7 +49,6 @@
 ## TrafficControl
 
 ![TrafficControl](./images/TrafficControl.png)
-
 #### 1. 왼쪽의 표에서 원하는 기체 선택시 `vehicle Type`, `Mode`, `Arm` 상태, `Battery`, `LLH` 위치 확인
 #### 2. 왼쪽 하단 fpv camera, follow camera 영상 확인
 #### 3. 우측 지도에서 "[group number]sysid" 형태로 어떤 기체인지 표시
@@ -53,7 +60,7 @@
 
 ## Unmanned Traffic management
 
-![TrafficControl](./images/UnmannedTrafficControl.png)
+![UnmannedTrafficControl](./images/UnmannedTrafficControl.png)
 
 #### 1. 여러 기체의 정보를 한 눈에 파악 가능
 #### 2. 경로 이탈 등 문제 발생 기체 경고 기능

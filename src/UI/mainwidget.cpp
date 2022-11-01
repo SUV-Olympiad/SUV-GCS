@@ -1372,10 +1372,16 @@ void MainWidget::updatePointCamera()
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
         QMap<int, IVehicle*>::const_iterator agentsIterator;
         agentsIterator = agentsMap.begin();
-        QPixmap img;
-        img = agentsIterator.value()->data(point_camera).value<QPixmap>();
-        img = img.scaled(ui->cameraData->width(),ui->cameraData->height(),Qt::KeepAspectRatio);
-        ui->cameraData->setPixmap(img);
+        QString str = QString("IS_%1").arg(point_camera);
+        bool is_cam = agentsIterator.value()->data(str).toBool();
+        if(is_cam){
+            QPixmap img;
+            img = agentsIterator.value()->data(point_camera).value<QPixmap>();
+            img = img.scaled(ui->cameraData->width(),ui->cameraData->height(),Qt::KeepAspectRatio);
+            ui->cameraData->setPixmap(img);
+        }else{
+            ui->cameraData->setText("<html><head/><body><p align='center'>No camera</p></body></html>");
+        }
     }
 }
 

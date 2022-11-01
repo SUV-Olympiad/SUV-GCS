@@ -276,6 +276,11 @@ private:
      double                     init_pos_x = 0, init_pos_y = 0;
      bool                       is_follow_cam = false;
      bool                       is_fpv_cam = false;
+     bool                       is_pointa_cam = false;
+     bool                       is_pointb_cam = false;
+     bool                       is_pointc_cam = false;
+     bool                       is_pointd_cam = false;
+     bool                       is_pointe_cam = false;
 };
 
 Q_DECLARE_METATYPE(CROSData::MissionItem*);

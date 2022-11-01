@@ -20,7 +20,7 @@ CManager::CManager(QObject *parent) :
 
     mAgents_vehicle_type_image["IRIS"] = ":/icon/src/UI/icon/drone.png";
     mAgents_vehicle_type_image["VTOL"] = ":/icon/src/UI/icon/flight.png";
-    mAgents_vehicle_type_image["TYPHOON"] = ":/icon/src/UI/icon/flight.png";
+    mAgents_vehicle_type_image["TYPHOON"] = ":/icon/src/UI/icon/typhoon.png";
     mAgents_vehicle_type_image["ROVER"] = ":/icon/src/UI/icon/car.png";
     mAgents_vehicle_type_image["BOAT"] = ":/icon/src/UI/icon/ship.png";
 }

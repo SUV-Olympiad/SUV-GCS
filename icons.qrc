@@ -33,6 +33,7 @@
         <file>src/UI/icon/test.png</file>
         <file>src/UI/icon/scenario_mode.png</file>
         <file>src/UI/icon/ftp.png</file>
+        <file>src/UI/icon/typhoon.png</file>
         <file>src/UI/icon/utm.png</file>
         <file>src/UI/icon/utm_off.png</file>
     </qresource>

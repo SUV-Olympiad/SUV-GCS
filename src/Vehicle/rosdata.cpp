@@ -352,6 +352,21 @@ QVariant CROSData::data(const QString &aItem)
     else if ( item == "IS_FOLLOW_CAMERA"){
         return is_follow_cam;
     }
+    else if ( item == "IS_POINT_A_CAMERA"){
+        return is_pointa_cam;
+    }
+    else if ( item == "IS_POINT_B_CAMERA"){
+        return is_pointb_cam;
+    }
+    else if ( item == "IS_POINT_C_CAMERA"){
+        return is_pointc_cam;
+    }
+    else if ( item == "IS_POINT_D_CAMERA"){
+        return is_pointd_cam;
+    }
+    else if ( item == "IS_POINT_E_CAMERA"){
+        return is_pointe_cam;
+    }
     else if (item == "FPV_CAMERA") {
         cv::Mat image_mat = mFpv_Cv_ptr->image;
 
@@ -632,6 +647,7 @@ void CROSData::updatePointACamera(const sensor_msgs::msg::Image::SharedPtr msg)
     try
     {
         mPointA_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_pointa_cam = true;
     }
     catch (cv_bridge::Exception& e) {
         qDebug() << "cv_bridge exception: " << e.what();
@@ -643,6 +659,7 @@ void CROSData::updatePointBCamera(const sensor_msgs::msg::Image::SharedPtr msg)
     try
     {
         mPointB_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_pointb_cam = true;
     }
     catch (cv_bridge::Exception& e) {
         qDebug() << "cv_bridge exception: " << e.what();
@@ -654,6 +671,7 @@ void CROSData::updatePointCCamera(const sensor_msgs::msg::Image::SharedPtr msg)
     try
     {
         mPointC_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_pointc_cam = true;
     }
     catch (cv_bridge::Exception& e) {
         qDebug() << "cv_bridge exception: " << e.what();
@@ -665,6 +683,7 @@ void CROSData::updatePointDCamera(const sensor_msgs::msg::Image::SharedPtr msg)
     try
     {
         mPointD_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_pointd_cam = true;
     }
     catch (cv_bridge::Exception& e) {
         qDebug() << "cv_bridge exception: " << e.what();
@@ -676,6 +695,7 @@ void CROSData::updatePointECamera(const sensor_msgs::msg::Image::SharedPtr msg)
     try
     {
         mPointE_Cv_ptr = cv_bridge::toCvCopy(*msg, sensor_msgs::image_encodings::BGR8);
+        is_pointe_cam = true;
     }
     catch (cv_bridge::Exception& e) {
         qDebug() << "cv_bridge exception: " << e.what();

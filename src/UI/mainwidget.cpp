@@ -203,10 +203,10 @@ void MainWidget::colorUpdate(){
     QMap<int, IVehicle*>::const_iterator agentsIterator;
     for (agentsIterator = agentsMap.begin(); agentsIterator != agentsMap.end(); ++agentsIterator){
         QColor color = QColor(255, 255, 255);
-        if(selectVehicleId == agentsIterator.value()->id()){
-            color = QColor(0, 0, 255);
-        }else if(warningData.contains(agentsIterator.value()->id())){
+        if(warningData.contains(agentsIterator.value()->id())){
             color = QColor(255, 0, 0);
+        }else if(selectVehicleId == agentsIterator.value()->id()){
+            color = QColor(0, 0, 255);
         }
         colorList[agentsIterator.value()->id()] = color;
     }
@@ -230,7 +230,7 @@ void MainWidget::updateVehicleData(){
                 }
                 QString is_camtype = QString("IS_%1").arg(type);
 
-                if(agentsIterator.value()->data(is_camtype).toBool()){
+                if(true){
                     img = agentsIterator.value()->data(type).value<QPixmap>();
                     if(leapState == 0){
                         img = img.scaled(ui->label->width(),ui->label->height(),Qt::KeepAspectRatio);

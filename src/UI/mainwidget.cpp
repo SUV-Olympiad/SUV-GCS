@@ -230,7 +230,7 @@ void MainWidget::updateVehicleData(){
                 }
                 QString is_camtype = QString("IS_%1").arg(type);
 
-                if(agentsIterator.value()->data(is_camtype).toBool())
+                if(agentsIterator.value()->data(is_camtype).toBool()){
                     img = agentsIterator.value()->data(type).value<QPixmap>();
                     if(leapState == 0){
                         img = img.scaled(ui->label->width(),ui->label->height(),Qt::KeepAspectRatio);

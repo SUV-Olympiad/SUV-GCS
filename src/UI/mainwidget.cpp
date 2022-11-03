@@ -340,12 +340,6 @@ void MainWidget::updateStatusText()
         QImage img;
 
         if(warningAction.contains(id)){
-            if(isRoute == false){
-                ui->mainErrorList->removeAction(warningAction[id]);
-                warningAction.remove(id);
-                warningIdxMap.remove(warningIdx);
-                warningIdx--;
-            }
 
             pix.load(mManager->vehicleImage(mManager->vehicleType(id)));
             img = pix.toImage();
@@ -356,6 +350,13 @@ void MainWidget::updateStatusText()
             QIcon icon = QIcon(pix2);
 
             warningAction[id]->setIcon(icon);
+
+            if(isRoute == false){
+                ui->mainErrorList->removeAction(warningAction[id]);
+                warningAction.remove(id);
+                warningIdxMap.remove(warningIdx);
+                warningIdx--;
+            }
 
 
         }else{

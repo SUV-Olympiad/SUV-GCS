@@ -342,6 +342,13 @@ QVariant CROSData::data(const QString &aItem)
     else if (item == "MISSION_ITEM") {
         return QVector3D(mMissionItem.latitude, mMissionItem.longitude, mMissionItem.altitude);
     }
+    else if (item == "MISSION_CHECK") {
+        return mission_check;
+    }
+    else if (item == "MISSION_USED") {
+        mission_check = false;
+        return ;
+    }
     else if ( item == "IS_FPV_CAMERA"){
         return is_fpv_cam;
     }
@@ -514,7 +521,8 @@ void CROSData::updateMission(const px4_msgs::msg::Mission::SharedPtr msg)
     mMission = *msg;
     mMissions.clear();
     mMissionSize = 0;
-    qDebug() << "updateMission......";
+    mission_check = true;
+    qDebug() << mAgent->data("SYSID").toInt() << " updateMission......";
 }
 
 void CROSData::updateMissionItem(const px4_msgs::msg::NavigatorMissionItem::SharedPtr msg)

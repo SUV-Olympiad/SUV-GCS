@@ -805,7 +805,7 @@ void MainWidget::unmannedTrafficManagement(){
      //        << "  end : " << QString("(lat : %1, lon : %2)").arg(lItem->lat,8,'f',8).arg(lItem->lon,8,'f',8);
              agent_sets.push_back(agent);
              mission_sets.push_back(QLineF(start, end));
-             if (agent->data("MODE") != "Auto loiter mode") {
+             if (agent->data("MODE") == "Auto mission mode") {
                  line_set.push_back(index);
              }
 
@@ -824,7 +824,7 @@ void MainWidget::unmannedTrafficManagement(){
          qDebug() << "Mission Start to utm";
          for (vector<int> wait_set: ready_list) {
              for (int idx: wait_set) {
-                 if (agent_sets[idx]->data("MODE") == "Auto loiter mode") {
+                 if (agent_sets[idx]->data("MODE") == "Auto loiter mode" && agent_sets[idx]->data("MISSION_CHECK").toBool()) {
                      qDebug() << agent_sets[idx]->data("SYSID").toInt() << " start mission";
                      agent_sets[idx]->cmd("MISSION_START");
                  } else {

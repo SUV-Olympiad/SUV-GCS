@@ -146,6 +146,8 @@ int CUAV::cmd(const char *aCmd, QVariant aArg1, QVariant aArg2, QVariant aArg3, 
 		mSender->planMission();
 	}
     else if ( item == "MISSION_START") {
+        qDebug() << mData->data("SYSID").toInt();
+        mData->data("MISSION_USED");
 		mSender->startMission();
 	}
     else if ( item == "MANUAL_CTL") {

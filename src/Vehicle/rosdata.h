@@ -274,6 +274,7 @@ private:
      std::string                 ros2Header = "/vehicle";
 
      double                     init_pos_x = 0, init_pos_y = 0;
+     bool                       mission_check = true;
      bool                       is_follow_cam = false;
      bool                       is_fpv_cam = false;
      bool                       is_pointa_cam = false;

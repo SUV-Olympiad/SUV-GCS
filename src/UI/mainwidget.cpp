@@ -230,7 +230,7 @@ void MainWidget::updateVehicleData(){
                 }
                 QString is_camtype = QString("IS_%1").arg(type);
 
-                if(true){
+                if(agentsIterator.value()->data(is_camtype).toBool())
                     img = agentsIterator.value()->data(type).value<QPixmap>();
                     if(leapState == 0){
                         img = img.scaled(ui->label->width(),ui->label->height(),Qt::KeepAspectRatio);
@@ -341,6 +341,13 @@ void MainWidget::updateStatusText()
 
         if(warningAction.contains(id)){
 
+            if(isRoute == false){
+                ui->mainErrorList->removeAction(warningAction[id]);
+                warningAction.remove(id);
+                warningIdxMap.remove(warningIdx);
+                warningIdx--;
+            }
+
             pix.load(mManager->vehicleImage(mManager->vehicleType(id)));
             img = pix.toImage();
             if(leapMotionState == id){
@@ -349,13 +356,8 @@ void MainWidget::updateStatusText()
             pix2 = QPixmap::fromImage(img);
             QIcon icon = QIcon(pix2);
 
-            warningAction[id]->setIcon(icon);
-
-            if(isRoute == false){
-                ui->mainErrorList->removeAction(warningAction[id]);
-                warningAction.remove(id);
-                warningIdxMap.remove(warningIdx);
-                warningIdx--;
+            if(warningAction.contains(id)){
+                warningAction[id]->setIcon(icon);
             }
 
 

@@ -37,7 +37,7 @@ public:
     int procReboot();
     void takeoff(double yaw, double altitude);
     void landing();
-    void reposition(double lat, double lng, double yaw, double altitude);
+    void reposition(double lat, double lng, double yaw, double altitude, float is_takeoff);
 	int reboot();
     int offboard();
     int automission();

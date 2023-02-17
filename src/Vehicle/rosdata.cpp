@@ -218,10 +218,11 @@ QVariant CROSData::data(const QString &aItem)
         return QVector3D(mVehicleLocalPosition.x, mVehicleLocalPosition.y, mVehicleLocalPosition.z);
     }
     else if (item == "LPOS_STR" ) {
-		return QString("(%1, %2, %3)")
+		return QString("(%1, %2, %3) (%4)")
 				.arg(mVehicleLocalPosition.x,6,'f',6)
 				.arg(mVehicleLocalPosition.y,6,'f',6)
-				.arg(mVehicleLocalPosition.z,6,'f',6);        
+				.arg(mVehicleLocalPosition.z,6,'f',6)
+                .arg(mVehicleLocalPosition.vz,6,'f',6);        
     }
     else if ( item == "POSVX" ) {
         return mVehicleLocalPosition.vx;

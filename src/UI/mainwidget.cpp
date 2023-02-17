@@ -87,9 +87,9 @@ MainWidget::MainWidget(QWidget *parent) :
     mTimer.setInterval(33);
     mTimer.start();
 
-    connect(&mRoadTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
-    mRoadTimer.setInterval(200);
-    mRoadTimer.start();
+    //connect(&mRoadTimer, SIGNAL(timeout()), this, SLOT(updateMap()));
+    //mRoadTimer.setInterval(200);
+    //mRoadTimer.start();
 }
 
 MainWidget::~MainWidget()
@@ -170,6 +170,7 @@ void MainWidget::procInitTreeWidget()
                 << "LPOS_STR"
                 << "PREFLIGHT_CHECK"
                 << "TIMESTAMP";
+    
     int numItem = strItemList.size();
 
     for (int i = 0; i < numItem ; i++ ) {
@@ -563,8 +564,8 @@ void MainWidget::keyEvent(QKeyEvent *event)
     case Qt::Key_A:
     {
         qDebug() << "TAKEOFF......";
-        mManager->agent(1)->cmd("TAKEOFF", 3 , HEADING);
-        //mManager->agent(4)->cmd("TAKEOFF", 3 , HEADING);
+        mManager->agent(3)->cmd("TAKEOFF", 5 , HEADING);
+        mManager->agent(4)->cmd("TAKEOFF", 5 , HEADING);
         /*
         const QMap<int, IVehicle*> agentsMap = mManager->agents();
         QMap<int, IVehicle*>::const_iterator agentsIterator;
@@ -594,10 +595,10 @@ void MainWidget::keyEvent(QKeyEvent *event)
         break; 
     case Qt::Key_0:
 	{
-        mManager->agent(1)->cmd("MOVE_NED", QVector3D(10, 0, 0), HEADING);
-        mManager->agent(2)->cmd("MOVE_NED", QVector3D(10, 0, 0), HEADING);
-        mManager->agent(3)->cmd("MOVE_NED", QVector3D(10, 0, -3), HEADING);
-        mManager->agent(4)->cmd("MOVE_NED", QVector3D(10, 0, -3), HEADING);
+        mManager->agent(1)->cmd("MOVE_NED", QVector3D(80, 0, 0), HEADING);
+        //mManager->agent(2)->cmd("MOVE_NED", QVector3D(40, 0, 0), HEADING);
+        //mManager->agent(3)->cmd("MOVE_NED", QVector3D(20, 0, -5), HEADING);
+        //mManager->agent(4)->cmd("MOVE_NED", QVector3D(20, 0, -5), HEADING);
 
         /*
         QVector3D target_pos = QVector3D(20, 0, 0);
@@ -613,9 +614,9 @@ void MainWidget::keyEvent(QKeyEvent *event)
     case Qt::Key_1:
 	{
         mManager->agent(1)->cmd("MOVE_NED", QVector3D(0, 0, 0), HEADING);
-        mManager->agent(2)->cmd("MOVE_NED", QVector3D(0, 0, 0), HEADING);
-        mManager->agent(3)->cmd("MOVE_NED", QVector3D(0, 0, -3), HEADING);
-        mManager->agent(4)->cmd("MOVE_NED", QVector3D(0, 0, -3), HEADING);
+        //mManager->agent(2)->cmd("MOVE_NED", QVector3D(0, 0, 0), HEADING);
+        //mManager->agent(3)->cmd("MOVE_NED", QVector3D(0, 0, -5), HEADING);
+        //mManager->agent(4)->cmd("MOVE_NED", QVector3D(0, 0, -5), HEADING);
 
         /*
         QVector3D target_pos = QVector3D(0, 0, 0);
@@ -698,7 +699,7 @@ void MainWidget::keyEvent(QKeyEvent *event)
         break;
     case Qt::Key_F:
 	{
-       HEADING = mManager->agent(1)->data("HEADING").value<qreal>();
+       HEADING = mManager->agent(3)->data("HEADING").value<qreal>();
        qDebug() << "HAEDING FIX...";
        qDebug() << HEADING;
 	}

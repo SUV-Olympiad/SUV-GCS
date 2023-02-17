@@ -95,14 +95,14 @@ void CCModelCmdSender::landing()
     mAgent->dataROS()->publishCommand(landing_cmd);
 }
 
-void CCModelCmdSender::reposition(double lat, double lng, double altitude, double yaw)
+void CCModelCmdSender::reposition(double lat, double lng, double altitude, double yaw , float is_takeoff)
 {
     auto reposition_cmd = px4_msgs::msg::VehicleCommand();
     reposition_cmd.target_system = mAgent->sysID();
     reposition_cmd.command = MAV_CMD_DO_REPOSITION;
     reposition_cmd.param1 = -1.0;
     reposition_cmd.param2 = 1.0;
-    reposition_cmd.param3 = 0.0;
+    reposition_cmd.param3 = is_takeoff;
     reposition_cmd.param4 = yaw ;
     reposition_cmd.param5 = lat;
     reposition_cmd.param6 = lng;
